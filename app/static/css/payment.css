@@ -1,0 +1,53 @@
+/* ==================== PAYMENT DETAILS GRADIENT ==================== */
+.payment-details-bg {
+    background: linear-gradient(135deg, #0f5132 0%, #1a5f3e 25%, #2d6a4f 50%, #40916c 75%, #52b788 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-details-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+    pointer-events: none;
+}
+
+.payment-details-bg .table {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+.payment-details-bg .table thead th {
+    background: #2EAF7D !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+}
+
+.payment-details-bg .table tbody td {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #000000;
+    font-weight: 500;
+}
+
+.payment-details-bg .table tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Override thead-dark-green for payment table */
+.table .thead-dark-green th {
+    background: #2EAF7D !important;
+    color: white !important;
+    font-weight: 700;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

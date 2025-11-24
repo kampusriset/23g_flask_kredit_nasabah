@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}{{ action }} Pengajuan{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header" style="background-color: #2EAF7D; color: #FFFFFF;">
+          <h4 class="mb-0"><i class="bi bi-file-earmark-check"></i> {{ action }} Pengajuan #{{ pengajuan.id }}</h4>
+        </div>
+        <div class="card-body p-4">
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-person"></i> Informasi Nasabah</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <p class="mb-2"><strong>{{ pengajuan.nasabah.nama }}</strong></p>
+                <p class="text-muted small mb-2"><i class="bi bi-card-text"></i> NIK: {{ pengajuan.nasabah.nik }}</p>
+                <p class="text-muted small mb-0"><i class="bi bi-telephone"></i> Telp: {{ pengajuan.nasabah.no_telp }}</p>
+              </div>
+              <div class="col-md-6">
+                <p class="text-muted small"><i class="bi bi-geo-alt"></i> Alamat:</p>
+                <p class="text-muted small">{{ pengajuan.nasabah.alamat }}</p>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-receipt"></i> Rincian Pengajuan</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <p class="mb-2">
+                  <small class="text-muted">Jumlah Pinjaman</small><br>
+                  <strong class="text-success"><span class="currency">Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</span></strong>
+                </p>
+                <p class="mb-0">
+                  <small class="text-muted">Tenor</small><br>
+                  <strong>{{ pengajuan.tenor }} bulan</strong>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p class="mb-2">
+                  <small class="text-muted">Tujuan Pengajuan</small><br>
+                  <strong>{{ pengajuan.tujuan }}</strong>
+                </p>
+                <p class="mb-0">
+                  <small class="text-muted">Tanggal Pengajuan</small><br>
+                  <strong>{{ pengajuan.created_at.strftime('%d-%m-%Y %H:%M') }}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="action-section">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-pencil-square"></i> Catatan {{ action }}</h6>
+            <form method="POST" novalidate>
+              {{ form.hidden_tag() }}
+
+              <div class="mb-3">
+                {{ form.catatan.label(class_='form-label') }}
+                {% if form.catatan.errors %}
+                  {{ form.catatan(class_='form-control is-invalid', rows=4) }}
+                  <div class="invalid-feedback d-block">
+                    {% for e in form.catatan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                  </div>
+                {% else %}
+                  {{ form.catatan(class_='form-control', rows=4, placeholder='Masukkan catatan atau alasan...') }}
+                {% endif %}
+                <small class="form-text text-muted">Catatan atau alasan dalam memproses pengajuan ini</small>
+              </div>
+
+              <div class="d-flex gap-2">
+                {% if action == 'Setujui' %}
+                  <button class="btn btn-success flex-grow-1"><i class="bi bi-check-circle"></i> Setujui Pengajuan</button>
+                {% else %}
+                  <button class="btn btn-danger flex-grow-1"><i class="bi bi-x-circle"></i> Tolak Pengajuan</button>
+                {% endif %}
+                <a href="{{ url_for('pengajuan.index') }}" class="btn btn-secondary flex-grow-1"><i class="bi bi-arrow-left"></i> Kembali</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% block title %}{{ action }} User{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow" style="animation: fadeIn 1s ease-in-out;">
+        <div class="card-header" style="background-color: #2EAF7D; color: #FFFFFF;">
+          <h4 class="mb-0"><i class="bi bi-person-plus"></i> {{ action }} User</h4>
+        </div>
+        <div class="card-body p-4">
+          <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="form-section" id="nasabah-fields">
+              <h5><i class="bi bi-person"></i> Informasi Pribadi</h5>
+              <div class="mb-3">
+                {{ form.nama.label(class_='form-label') }}
+                {% if form.nama.errors %}
+                  {{ form.nama(class_='form-control is-invalid') }}
+                  <div class="invalid-feedback d-block">
+                    {% for e in form.nama.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                  </div>
+                {% else %}
+                  {{ form.nama(class_='form-control', placeholder='Masukkan nama lengkap') }}
+                {% endif %}
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.nik.label(class_='form-label') }}
+                    {% if form.nik.errors %}
+                      {{ form.nik(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.nik.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.nik(class_='form-control', placeholder='Masukkan NIK') }}
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.no_telp.label(class_='form-label') }}
+                    {% if form.no_telp.errors %}
+                      {{ form.no_telp(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.no_telp.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.no_telp(class_='form-control', placeholder='Masukkan no. telepon') }}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                {{ form.alamat.label(class_='form-label') }}
+                {% if form.alamat.errors %}
+                  {{ form.alamat(class_='form-control is-invalid', rows="3") }}
+                  <div class="invalid-feedback d-block">
+                    {% for e in form.alamat.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                  </div>
+                {% else %}
+                  {{ form.alamat(class_='form-control', rows="3", placeholder='Masukkan alamat lengkap') }}
+                {% endif %}
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.pekerjaan.label(class_='form-label') }}
+                    {% if form.pekerjaan.errors %}
+                      {{ form.pekerjaan(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.pekerjaan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.pekerjaan(class_='form-control', placeholder='Masukkan pekerjaan') }}
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.penghasilan.label(class_='form-label') }}
+                    {% if form.penghasilan.errors %}
+                      {{ form.penghasilan(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.penghasilan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.penghasilan(class_='form-control', placeholder='Masukkan penghasilan') }}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h5><i class="bi bi-shield-lock"></i> Informasi Akun</h5>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.username.label(class_='form-label') }}
+                    {% if form.username.errors %}
+                      {{ form.username(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.username.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.username(class_='form-control', placeholder='Masukkan username') }}
+                    {% endif %}
+                    <small class="form-text text-muted">3-150 karakter</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.role.label(class_='form-label') }}
+                    {% if form.role.errors %}
+                      {{ form.role(class_='form-select is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.role.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.role(class_='form-select') }}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.password.label(class_='form-label') }}
+                    {% if form.password.errors %}
+                      {{ form.password(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.password.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.password(class_='form-control', placeholder='Minimal 6 karakter') }}
+                    {% endif %}
+                    <small class="form-text text-muted">{% if action == 'Edit' %}(Kosongkan jika tidak ingin mengubah){% endif %}</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    {{ form.confirm_password.label(class_='form-label') }}
+                    {% if form.confirm_password.errors %}
+                      {{ form.confirm_password(class_='form-control is-invalid') }}
+                      <div class="invalid-feedback d-block">
+                        {% for e in form.confirm_password.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.confirm_password(class_='form-control', placeholder='Konfirmasi password') }}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-success flex-grow-1"><i class="bi bi-check-circle"></i> Simpan</button>
+              <a href="{{ url_for('user.index') }}" class="btn btn-secondary flex-grow-1"><i class="bi bi-x-circle"></i> Batal</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.form-section h5 {
+  color: #2EAF7D;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-control, .form-select {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+  font-weight: 500;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #2EAF7D;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(46, 175, 125, 0.1);
+  outline: none;
+}
+
+.form-control.is-invalid, .form-select.is-invalid {
+  border-color: #ef4444;
+}
+
+.invalid-feedback {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #2EAF7D 0%, #449342 100%);
+  border: none;
+  padding: 0.875rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(46, 175, 125, 0.3);
+}
+
+.btn-secondary {
+  background: #6b7280;
+  border: none;
+  padding: 0.875rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+  transform: translateY(-2px);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const roleSelect = document.querySelector('[name="role"]');
+  const nasabahFields = document.getElementById('nasabah-fields');
+
+  function toggleNasabahFields() {
+    if (roleSelect.value === 'nasabah') {
+      nasabahFields.style.display = 'block';
+    } else {
+      nasabahFields.style.display = 'none';
+    }
+  }
+
+  roleSelect.addEventListener('change', toggleNasabahFields);
+  toggleNasabahFields(); // Initial check
+});
+</script>

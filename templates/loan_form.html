@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h3>{{ action }} Kredit</h3>
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Nasabah</label>
+      <select name="customer_id" class="form-select" required>
+        {% for c in customers %}
+          <option value="{{ c.id }}" {% if loan is defined and loan.customer_id==c.id %}selected{% endif %}>{{ c.nama }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Jumlah Pinjaman (angka)</label>
+      <input class="form-control" name="jumlah_pinjaman" required value="{{ loan.jumlah_pinjaman if loan is defined else '' }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tenor (bulan)</label>
+      <input class="form-control" name="tenor_bulan" required value="{{ loan.tenor_bulan if loan is defined else '' }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Bunga Tahunan (%)</label>
+      <input class="form-control" name="bunga_tahunan" required value="{{ loan.bunga_tahunan if loan is defined else 12.0 }}">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tanggal Mulai (YYYY-MM-DD)</label>
+      <input class="form-control" name="tanggal_mulai" value="{{ loan.tanggal_mulai if loan is defined else '' }}">
+    </div>
+    <button class="btn btn-primary">{{ action }}</button>
+    <a class="btn btn-secondary" href="{{ url_for('loans') }}">Batal</a>
+  </form>
+{% endblock %}

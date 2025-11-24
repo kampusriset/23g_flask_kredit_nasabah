@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Nasabah</h5>
+          <p class="card-text fs-3">{{ total_customers }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Kredit</h5>
+          <p class="card-text fs-3">{{ total_loans }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Outstanding (perkiraan)</h5>
+          <p class="card-text fs-3"><span class="currency">Rp {{ '{:,.2f}'.format(total_outstanding) }}</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

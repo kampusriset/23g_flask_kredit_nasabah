@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Layanan Kredit{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12 mb-3">
+      <h2><i class="bi bi-list-columns-reverse"></i> Jenis Layanan Kredit</h2>
+      <p class="text-muted">Berikut adalah jenis-jenis kredit yang tersedia melalui lembaga kami.</p>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">Layanan Kredit</div>
+        <div class="card-body">
+          <ul>
+            <li><strong>Kredit Modal Kerja</strong> — Pembiayaan untuk kebutuhan modal usaha jangka pendek seperti pembelian bahan baku, persediaan, atau modal operasional.</li>
+            <li><strong>Kredit Investasi</strong> — Pembiayaan untuk investasi jangka menengah atau panjang, mis. pembelian mesin, kendaraan, atau perluasan usaha.</li>
+            <li><strong>Kredit Konsumtif</strong> — Pembiayaan kebutuhan pribadi seperti biaya pendidikan, kesehatan, atau perbaikan rumah.</li>
+            <li><strong>Kredit Mikro</strong> — Pembiayaan dengan nilai kecil dan persyaratan sederhana bagi pelaku usaha mikro.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <aside class="col-lg-4">
+      <div class="list-group mb-4 sticky-top">
+        <a href="#" class="list-group-item list-group-item-action active">Layanan</a>
+        <a href="{{ url_for('info.prosedur') }}" class="list-group-item list-group-item-action">Prosedur & Persyaratan</a>
+        <a href="{{ url_for('info.kontak') }}" class="list-group-item list-group-item-action">Kontak & Lokasi</a>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

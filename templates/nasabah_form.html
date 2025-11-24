@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}{{ action }} Nasabah{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h4 class="mb-4"><i class="bi bi-person-fill"></i> {{ action }} Nasabah</h4>
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.nama.label(class_='form-label') }}
+          {% if form.nama.errors %}
+            {{ form.nama(class_='form-control is-invalid') }}
+            <div class="invalid-feedback d-block">
+              {% for e in form.nama.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+            </div>
+          {% else %}
+            {{ form.nama(class_='form-control', placeholder='Nama lengkap nasabah') }}
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.nik.label(class_='form-label') }}
+          {% if form.nik.errors %}
+            {{ form.nik(class_='form-control is-invalid') }}
+            <div class="invalid-feedback d-block">
+              {% for e in form.nik.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+            </div>
+          {% else %}
+            {{ form.nik(class_='form-control', placeholder='16-20 karakter') }}
+          {% endif %}
+          <small class="form-text text-muted">Nomor Induk Kependudukan</small>
+        </div>
+
+        <div class="mb-3">
+          {{ form.alamat.label(class_='form-label') }}
+          {% if form.alamat.errors %}
+            {{ form.alamat(class_='form-control is-invalid', rows=3) }}
+            <div class="invalid-feedback d-block">
+              {% for e in form.alamat.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+            </div>
+          {% else %}
+            {{ form.alamat(class_='form-control', rows=3, placeholder='Alamat lengkap') }}
+          {% endif %}
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              {{ form.no_telp.label(class_='form-label') }}
+              {% if form.no_telp.errors %}
+                {{ form.no_telp(class_='form-control is-invalid') }}
+                <div class="invalid-feedback d-block">
+                  {% for e in form.no_telp.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                </div>
+              {% else %}
+                {{ form.no_telp(class_='form-control', placeholder='08xxxxxxxxxx') }}
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              {{ form.pekerjaan.label(class_='form-label') }}
+              {% if form.pekerjaan.errors %}
+                {{ form.pekerjaan(class_='form-control is-invalid') }}
+                <div class="invalid-feedback d-block">
+                  {% for e in form.pekerjaan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                </div>
+              {% else %}
+                {{ form.pekerjaan(class_='form-control', placeholder='Jenis pekerjaan') }}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          {{ form.penghasilan.label(class_='form-label') }}
+          {% if form.penghasilan.errors %}
+            {{ form.penghasilan(class_='form-control is-invalid') }}
+            <div class="invalid-feedback d-block">
+              {% for e in form.penghasilan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+            </div>
+          {% else %}
+            {{ form.penghasilan(class_='form-control', placeholder='Penghasilan bulanan dalam rupiah') }}
+          {% endif %}
+          <small class="form-text text-muted">Penghasilan bulanan</small>
+        </div>
+
+        {% if action == 'Tambah' %}
+        <div class="mb-4">
+          {{ form.username.label(class_='form-label') }}
+          {% if form.username.errors %}
+            {{ form.username(class_='form-control is-invalid') }}
+            <div class="invalid-feedback d-block">
+              {% for e in form.username.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+            </div>
+          {% else %}
+            {{ form.username(class_='form-control', placeholder='Username untuk login') }}
+          {% endif %}
+          <small class="form-text text-muted">Username untuk login nasabah</small>
+        </div>
+
+        <div class="mb-4">
+          {{ form.password.label(class_='form-label') }}
+          {% if form.password.errors %}
+            {{ form.password(class_='form-control is-invalid') }}
+            <div class="invalid-feedback d-block">
+              {% for e in form.password.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+            </div>
+          {% else %}
+            {{ form.password(class_='form-control', placeholder='Password minimal 6 karakter') }}
+          {% endif %}
+          <small class="form-text text-muted">Password untuk login nasabah</small>
+        </div>
+        {% else %}
+        <!-- Hidden field for username validation -->
+        <input type="hidden" name="username" value="{{ nasabah.user.username if nasabah.user else '' }}">
+        <input type="hidden" name="password" value="dummy_password">
+        {% endif %}
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-success flex-grow-1"><i class="bi bi-check-circle"></i> Simpan</button>
+          <a href="{{ url_for('nasabah.index') }}" class="btn" style="background-color: #6b7280; color: white; border: 1px solid #6b7280; flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px;"><i class="bi bi-x-circle"></i> Batal</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

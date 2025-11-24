@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h3>Jadwal Angsuran Kredit #{{ loan.id }} - {{ loan.customer.nama }}</h3>
+  <table class="table table-bordered">
+    <thead><tr><th>Bulan</th><th>Angsuran</th><th>Pokok</th><th>Bunga</th><th>Sisa</th></tr></thead>
+    <tbody>
+      {% for s in schedule %}
+        <tr>
+          <td>{{ s.bulan }}</td>
+          <td><span class="currency">Rp {{ '{:,.2f}'.format(s.angsuran) }}</span></td>
+          <td><span class="currency">Rp {{ '{:,.2f}'.format(s.pokok) }}</span></td>
+          <td><span class="currency">Rp {{ '{:,.2f}'.format(s.bunga) }}</span></td>
+          <td><span class="currency">Rp {{ '{:,.2f}'.format(s.sisa) }}</span></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a class="btn btn-secondary" href="{{ url_for('loans') }}">Kembali</a>
+{% endblock %}

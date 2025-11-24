@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Kelola Dokumen Nasabah - {{ pengajuan.nasabah.nama }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Kelola Dokumen</h2>
+      <p class="text-muted mb-0">
+        Nasabah: <strong>{{ pengajuan.nasabah.nama }}</strong> |
+        Jumlah Pinjaman: <strong>Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</strong>
+      </p>
+    </div>
+    <a href="{{ url_for('pengajuan.detail', id=pengajuan.id) }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Kembali ke Detail Pengajuan
+    </a>
+  </div>
+
+  <!-- Document Cards -->
+  <div class="row g-4">
+    {% for dokumen in dokumen_list %}
+    <div class="col-md-6 col-lg-3">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">{{ dokumen.jenis_dokumen_display }}</h6>
+          {% if dokumen.status == 'sudah_diupload' %}
+            <span class="badge bg-success">Sudah Upload</span>
+          {% else %}
+            <span class="badge bg-warning">Belum Upload</span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          {% if dokumen.status == 'sudah_diupload' %}
+            <!-- Document Uploaded -->
+            <div class="text-center mb-3">
+              <i class="bi bi-file-earmark-check text-success" style="font-size: 3rem;"></i>
+            </div>
+            <div class="mb-2">
+              <small class="text-muted">File: {{ dokumen.nama_file }}</small>
+            </div>
+            {% if dokumen.keterangan %}
+            <div class="mb-2">
+              <small class="text-muted">Keterangan: {{ dokumen.keterangan }}</small>
+            </div>
+            {% endif %}
+            {% if dokumen.uploaded_at %}
+            <div class="mb-3">
+              <small class="text-muted">Upload: {{ dokumen.uploaded_at.strftime('%d/%m/%Y %H:%M') }}</small>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2">
+              <a href="{{ url_for('dokumen.view', dokumen_id=dokumen.id) }}"
+                 target="_blank" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye"></i> Lihat
+              </a>
+              <form method="post" action="{{ url_for('dokumen.delete', dokumen_id=dokumen.id) }}"
+                    onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')">
+                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                  <i class="bi bi-trash"></i> Hapus
+                </button>
+              </form>
+            </div>
+          {% else %}
+            <!-- Document Not Uploaded -->
+            <div class="text-center mb-3">
+              <i class="bi bi-file-earmark-x text-warning" style="font-size: 3rem;"></i>
+            </div>
+            <p class="text-muted small mb-3">Dokumen belum diupload</p>
+
+            <!-- Upload Form -->
+            <form method="post" action="{{ url_for('dokumen.upload', dokumen_id=dokumen.id) }}"
+                  enctype="multipart/form-data">
+              <div class="mb-2">
+                <input type="file" name="file" class="form-control form-control-sm"
+                       accept=".pdf,.jpg,.jpeg,.png" required>
+              </div>
+              <div class="mb-2">
+                <input type="text" name="keterangan" class="form-control form-control-sm"
+                       placeholder="Keterangan (opsional)">
+              </div>
+              <button type="submit" class="btn btn-primary btn-sm w-100">
+                <i class="bi bi-upload"></i> Upload
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Completion Status -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Status Kelengkapan Dokumen</h6>
+        </div>
+        <div class="card-body">
+          {% set uploaded_count = dokumen_list|selectattr('status', 'equalto', 'sudah_diupload')|list|length %}
+          {% set total_count = dokumen_list|length %}
+          {% set completion_percentage = (uploaded_count / total_count * 100)|round if total_count > 0 else 0 %}
+
+          <div class="progress mb-2" style="height: 20px;">
+            <div class="progress-bar" role="progressbar"
+                 style="width: {{ completion_percentage }}%;"
+                 aria-valuenow="{{ completion_percentage }}"
+                 aria-valuemin="0" aria-valuemax="100">
+              {{ completion_percentage }}%
+            </div>
+          </div>
+          <p class="mb-0">
+            <strong>{{ uploaded_count }}/{{ total_count }}</strong> dokumen telah diupload
+            {% if completion_percentage == 100 %}
+              <span class="badge bg-success ms-2">Lengkap</span>
+            {% else %}
+              <span class="badge bg-warning ms-2">Belum Lengkap</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Auto-submit form when file is selected (optional enhancement)
+document.querySelectorAll('input[type="file"]').forEach(input => {
+  input.addEventListener('change', function() {
+    // Optional: Auto-submit or show preview
+  });
+});
+</script>
+{% endblock %}

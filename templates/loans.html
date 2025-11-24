@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Daftar Kredit</h3>
+    <a class="btn btn-success" href="{{ url_for('add_loan') }}">+ Tambah Kredit</a>
+  </div>
+  <table class="table table-striped">
+    <thead><tr><th>ID</th><th>Nasabah</th><th>Jumlah</th><th>Tenor (bln)</th><th>Bunga %</th><th>Aksi</th></tr></thead>
+    <tbody>
+      {% for l in loans %}
+        <tr>
+          <td>{{ l.id }}</td>
+          <td>{{ l.customer.nama }}</td>
+          <td><span class="currency">Rp {{ '{:,.2f}'.format(l.jumlah_pinjaman) }}</span></td>
+          <td>{{ l.tenor_bulan }}</td>
+          <td>{{ l.bunga_tahunan }}</td>
+          <td>
+            <a class="btn btn-sm btn-info" href="{{ url_for('loan_schedule', id=l.id) }}">Jadwal</a>
+            <a class="btn btn-sm btn-primary" href="{{ url_for('edit_loan', id=l.id) }}">Edit</a>
+            <form action="{{ url_for('delete_loan', id=l.id) }}" method="post" style="display:inline" onsubmit="return confirm('Yakin hapus kredit?')">
+              <button class="btn btn-sm btn-danger">Hapus</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6">Belum ada kredit.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

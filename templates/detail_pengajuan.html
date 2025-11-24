@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block title %}Detail Pengajuan{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow" style="animation: fadeIn 1s ease-in-out;">
+        <div class="card-header" style="background-color: #2EAF7D; color: #FFFFFF;">
+          <h4 class="mb-0"><i class="bi bi-file-text"></i> Detail Pengajuan #{{ pengajuan.id }}</h4>
+        </div>
+        <div class="card-body p-4">
+          
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-person"></i> Data Nasabah</h6>
+            <div class="card bg-light border-0">
+              <div class="card-body">
+                <p class="mb-2"><strong>{{ pengajuan.nasabah.nama }}</strong></p>
+                <p class="text-muted small mb-2"><i class="bi bi-card-text"></i> NIK: {{ pengajuan.nasabah.nik }}</p>
+                <p class="text-muted small mb-2"><i class="bi bi-telephone"></i> Telp: {{ pengajuan.nasabah.no_telp }}</p>
+                <p class="text-muted small mb-0"><i class="bi bi-geo-alt"></i> Alamat: {{ pengajuan.nasabah.alamat }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-receipt"></i> Rincian Pengajuan</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <p class="mb-3">
+                  <small class="text-muted d-block">Jumlah Pinjaman</small>
+                  <strong class="text-success fs-5"><span class="currency">Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</span></strong>
+                </p>
+                <p class="mb-0">
+                  <small class="text-muted d-block">Tenor</small>
+                  <strong>{{ pengajuan.tenor }} bulan</strong>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p class="mb-3">
+                  <small class="text-muted d-block">Tujuan Pengajuan</small>
+                  <strong>{{ pengajuan.tujuan }}</strong>
+                </p>
+                <p class="mb-0">
+                  <small class="text-muted d-block">Tanggal Pengajuan</small>
+                  <strong>{{ pengajuan.created_at.strftime('%d-%m-%Y %H:%M') }}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-info-circle"></i> Status Pengajuan</h6>
+            <p class="mb-0">
+              {% if pengajuan.status == 'menunggu' %}
+                <span class="badge bg-warning text-white fs-6"><i class="bi bi-clock text-white"></i> Menunggu Verifikasi</span>
+              {% elif pengajuan.status == 'disetujui' %}
+                <span class="badge bg-success fs-6"><i class="bi bi-check-circle"></i> Disetujui</span>
+              {% else %}
+                <span class="badge bg-danger fs-6"><i class="bi bi-x-circle"></i> Ditolak</span>
+              {% endif %}
+            </p>
+          </div>
+
+          {% if pengajuan.catatan %}
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-pencil-square"></i> Catatan Verifikasi</h6>
+            <div class="card bg-light border-warning">
+              <div class="card-body">
+                <p class="mb-0">{{ pengajuan.catatan }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          {% if pengajuan.dokumen %}
+          <div class="info-section mb-4">
+            <h6 class="text-primary fw-bold mb-3"><i class="bi bi-file-earmark-image"></i> Dokumen yang Diupload</h6>
+            <div class="row">
+              {% for dokumen in pengajuan.dokumen %}
+              <div class="col-md-6 mb-3">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0 me-3">
+                        {% if dokumen.jenis_dokumen == 'ktp' %}
+                          <i class="bi bi-person-vcard text-primary" style="font-size: 2rem;"></i>
+                        {% else %}
+                          <i class="bi bi-file-earmark text-secondary" style="font-size: 2rem;"></i>
+                        {% endif %}
+                      </div>
+                      <div class="flex-grow-1">
+                        <h6 class="mb-1">{{ dokumen.jenis_dokumen_display }}</h6>
+                        <small class="text-muted">{{ dokumen.nama_file }}</small>
+                        {% if dokumen.status == 'sudah_diupload' %}
+                          <br><small class="text-success"><i class="bi bi-check-circle"></i> Sudah diupload</small>
+                        {% else %}
+                          <br><small class="text-warning"><i class="bi bi-clock"></i> Belum diupload</small>
+                        {% endif %}
+                      </div>
+                      {% if dokumen.path_file %}
+                      <div class="flex-shrink-0">
+                        <a href="{{ url_for('static', filename=dokumen.path_file) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                          <i class="bi bi-eye"></i> Lihat
+                        </a>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+
+
+          <div class="action-buttons">
+            <div class="d-flex flex-wrap gap-2">
+              <a href="{{ url_for('pengajuan.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali
+              </a>
+
+              {% if pengajuan.status == 'disetujui' %}
+              <a href="{{ url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pengajuan.id) }}" class="btn btn-jadwal-pembayaran">
+                <i class="bi bi-calendar-event"></i> Lihat Jadwal Pembayaran
+              </a>
+              {% endif %}
+
+              {% if current_user.role == 'admin' %}
+              {% if pengajuan.status == 'menunggu' %}
+              <a href="{{ url_for('pengajuan.setujui', id=pengajuan.id) }}" class="btn btn-success">
+                <i class="bi bi-check-circle"></i> Setujui
+              </a>
+              <a href="{{ url_for('pengajuan.tolak', id=pengajuan.id) }}" class="btn btn-danger">
+                <i class="bi bi-x-circle"></i> Tolak
+              </a>
+              {% endif %}
+              {% if pengajuan.status in ['ditolak', 'dibatalkan', 'disetujui', 'lunas'] %}
+              <form method="POST" action="{{ url_for('pengajuan.delete', id=pengajuan.id) }}" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus pengajuan ini?')">
+                  <i class="bi bi-trash"></i> Hapus Pengajuan
+                </button>
+              </form>
+              {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% endblock %}
+

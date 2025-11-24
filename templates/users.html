@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Users{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; animation: fadeIn 1s ease-in-out;">
+  <div>
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-color); margin: 0;">
+      <i class="bi bi-people-fill" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+      Manajemen User
+    </h1>
+  </div>
+  <div>
+    <a href="{{ url_for('user.tambah') }}" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Tambah User
+    </a>
+  </div>
+</div>
+
+<!-- Users Table -->
+<div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
+  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+    <i class="bi bi-table" style="font-size: 1.2rem;"></i>
+    <h5 style="margin: 0; font-size: 0.95rem;">Daftar User ({{ total }} data)</h5>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <div style="overflow-x: auto;">
+      <table class="table-dashboard">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if users %}
+            {% for u in users %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ u.username }}</td>
+              <td>
+                {% if u.role == 'admin' %}
+                  <span class="badge" style="background: rgba(37, 99, 235, 0.2); color: var(--primary-color);">ADMIN</span>
+                {% else %}
+                  <span class="badge" style="background: rgba(107, 114, 128, 0.2); color: var(--gray-600);">USER</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if u.is_active %}
+                  <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green);">AKTIF</span>
+                {% else %}
+                  <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: var(--accent-red);">NONAKTIF</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="display: flex; gap: 0.3rem;">
+                  <a href="{{ url_for('user.edit', id=u.id) }}" class="btn btn-sm" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); padding: 0.3rem 0.6rem;">
+                    <i class="bi bi-pencil"></i> Edit
+                  </a>
+                  <form method="POST" action="{{ url_for('user.hapus', id=u.id) }}" style="display: inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin hapus?')">
+                      <i class="bi bi-trash"></i> Hapus
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 2rem; color: var(--muted);">
+                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                Data user tidak ditemukan
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% endblock %}
