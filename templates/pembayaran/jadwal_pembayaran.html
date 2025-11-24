@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}Jadwal Pembayaran{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/payment.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="page-header" style="animation: fadeIn 1s ease-in-out;">
+    <h2><i class="bi bi-calendar-event"></i> Jadwal Pembayaran</h2>
+    {% if current_user.role == 'nasabah' %}
+    <p class="text-muted">Pengajuan Anda - Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</p>
+    {% else %}
+    <p class="text-muted">Pengajuan: <strong>{{ pengajuan.nasabah.nama }}</strong> - Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Summary Card -->
+  <div class="card mb-4" style="animation: fadeIn 1s ease-in-out 0.2s both;">
+    <div class="card-body">
+      <div class="row text-center">
+        <div class="col-md-3">
+          <h5 class="text-primary">{{ pengajuan.tenor }}</h5>
+          <small class="text-muted">Total Bulan</small>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-success">Rp {{ '{:,.0f}'.format(pengajuan.angsuran_per_bulan) }}</h5>
+          <small class="text-muted">Angsuran/Bulan</small>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-info">Rp {{ '{:,.0f}'.format(pengajuan.total_pinjaman_dengan_bunga) }}</h5>
+          <small class="text-muted">Total + Bunga</small>
+        </div>
+        <div class="col-md-3">
+          <h5 class="text-warning">{{ pembayaran_list|selectattr('status', 'equalto', 'sudah_bayar')|list|length }}</h5>
+          <small class="text-muted">Sudah Dibayar</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="mb-4" style="animation: fadeIn 1s ease-in-out 0.3s both;">
+    <a href="{{ url_for('pengajuan.detail', id=pengajuan.id) }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Kembali ke Detail
+    </a>
+    <a href="{{ url_for('pembayaran.export_jadwal', pengajuan_id=pengajuan.id) }}" class="btn btn-success">
+      <i class="bi bi-download"></i> Export XLSX
+    </a>
+  </div>
+
+  <!-- Payment Schedule Table -->
+  <div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
+    <div class="card-header card-header-notifikasi">
+      <h6 class="mb-0"><i class="bi bi-table"></i> Detail Pembayaran</h6>
+    </div>
+    <div class="card-body p-0 payment-details-bg">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="thead-dark-green">
+            <tr>
+              <th><i class="bi bi-hash"></i> Bulan</th>
+              <th><i class="bi bi-cash-coin"></i> Jumlah Bayar</th>
+              <th><i class="bi bi-calendar"></i> Jatuh Tempo</th>
+              <th><i class="bi bi-calendar-check"></i> Tanggal Bayar</th>
+              <th><i class="bi bi-flag"></i> Status</th>
+              <th><i class="bi bi-exclamation-triangle"></i> Denda</th>
+              <th><i class="bi bi-calculator"></i> Total</th>
+              <th><i class="bi bi-gear"></i> Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in pembayaran_list %}
+            <tr class="{% if p.is_terlambat %}table-danger{% elif p.status == 'sudah_bayar' %}table-success{% endif %}">
+              <td>
+                <strong>Bulan {{ p.bulan_ke }}</strong>
+              </td>
+              <td>
+                <span class="currency">Rp {{ '{:,.0f}'.format(p.jumlah_bayar) }}</span>
+              </td>
+              <td>
+                {{ p.tanggal_jatuh_tempo.strftime('%d-%m-%Y') }}
+              </td>
+              <td>
+                {% if p.tanggal_bayar %}
+                  {{ p.tanggal_bayar.strftime('%d-%m-%Y') }}
+                {% else %}
+                  <span class="text-muted">-</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if p.status == 'sudah_bayar' %}
+                  <span class="badge bg-success">
+                    <i class="bi bi-check-circle"></i> Sudah Bayar
+                  </span>
+                {% elif p.is_terlambat %}
+                  <span class="badge bg-danger">
+                    <i class="bi bi-exclamation-triangle"></i> Terlambat
+                  </span>
+                {% else %}
+                  <span class="badge bg-warning">
+                    <i class="bi bi-clock"></i> Belum Bayar
+                  </span>
+                {% endif %}
+              </td>
+              <td>
+                {% if p.denda > 0 %}
+                  <span class="text-danger fw-bold">Rp {{ '{:,.0f}'.format(p.denda) }}</span>
+                {% else %}
+                  <span class="text-muted">-</span>
+                {% endif %}
+              </td>
+              <td>
+                <strong>Rp {{ '{:,.0f}'.format(p.jumlah_bayar + p.denda) }}</strong>
+              </td>
+              <td>
+                {% if p.status == 'sudah_bayar' %}
+                  <span class="text-success"><i class="bi bi-check-circle"></i> Sudah Bayar</span>
+                {% else %}
+                  <form method="POST" action="{{ url_for('pembayaran.bayar', pembayaran_id=p.id) }}" style="display: inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Tandai pembayaran bulan {{ p.bulan_ke }} sebagai sudah dibayar?')">
+                      <i class="bi bi-cash"></i> Bayar
+                    </button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="card mt-4" style="animation: fadeIn 1s ease-in-out 0.6s both;">
+    <div class="card-body">
+      <h6 class="card-title"><i class="bi bi-info-circle"></i> Keterangan Status</h6>
+      <div class="row">
+        <div class="col-md-3">
+          <span class="badge bg-warning me-2"></span> Belum Bayar
+        </div>
+        <div class="col-md-3">
+          <span class="badge bg-success me-2"></span> Sudah Bayar
+        </div>
+        <div class="col-md-3">
+          <span class="badge bg-danger me-2"></span> Terlambat
+        </div>
+        <div class="col-md-3">
+          <small class="text-muted">Denda: 0.1% per hari keterlambatan</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+

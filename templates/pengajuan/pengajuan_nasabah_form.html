@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Ajukan Kredit{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow" style="animation: fadeIn 1s ease-in-out;">
+        <div class="card-header" style="background-color: #2EAF7D; color: #FFFFFF;">
+          <h4 class="mb-0"><i class="bi bi-file-earmark-text"></i> Pengajuan Kredit Baru</h4>
+        </div>
+        <div class="card-body p-4">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  {{ form.jumlah_pinjaman.label(class_='form-label') }}
+                  {% if form.jumlah_pinjaman.errors %}
+                    {{ form.jumlah_pinjaman(class_='form-control is-invalid') }}
+                    <div class="invalid-feedback d-block">
+                      {% for e in form.jumlah_pinjaman.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form.jumlah_pinjaman(class_='form-control', placeholder='Minimal Rp 100.000') }}
+                  {% endif %}
+                  <small class="form-text text-muted">Jumlah dalam rupiah</small>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="mb-3">
+                  {{ form.tenor.label(class_='form-label') }}
+                  {% if form.tenor.errors %}
+                    {{ form.tenor(class_='form-control is-invalid') }}
+                    <div class="invalid-feedback d-block">
+                      {% for e in form.tenor.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form.tenor(class_='form-control', placeholder='1-360 bulan') }}
+                  {% endif %}
+                  <small class="form-text text-muted">Tenor dalam bulan</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              {{ form.tujuan.label(class_='form-label') }}
+              {% if form.tujuan.errors %}
+                {{ form.tujuan(class_='form-control is-invalid', rows=3) }}
+                <div class="invalid-feedback d-block">
+                  {% for e in form.tujuan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                </div>
+              {% else %}
+                {{ form.tujuan(class_='form-control', rows=3, placeholder='Tujuan penggunaan kredit') }}
+              {% endif %}
+            </div>
+
+            <div class="mb-4">
+              {{ form.foto_ktp.label(class_='form-label') }}
+              {% if form.foto_ktp.errors %}
+                {{ form.foto_ktp(class_='form-control is-invalid') }}
+                <div class="invalid-feedback d-block">
+                  {% for e in form.foto_ktp.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
+                </div>
+              {% else %}
+                {{ form.foto_ktp(class_='form-control', accept='.jpg,.jpeg,.png') }}
+              {% endif %}
+              <small class="form-text text-muted">Upload foto KTP dalam format JPG, JPEG, atau PNG</small>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-success flex-grow-1"><i class="bi bi-check-circle"></i> Ajukan Kredit</button>
+              <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary flex-grow-1"><i class="bi bi-x-circle"></i> Batal</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

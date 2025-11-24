@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Dashboard Header Banner -->
+<div class="dashboard-header-banner" style="animation: fadeIn 1s ease-in-out;">
+  <div class="banner-content">
+    <div class="banner-text">
+      <h2>Dashboard</h2>
+      <p>Selamat datang kembali, <strong>{{ current_user.username }}</strong></p>
+    </div>
+    <div class="banner-illustration">
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="50" width="15" height="40" fill="rgba(255,255,255,0.8)" rx="2"/>
+        <rect x="30" y="35" width="15" height="55" fill="rgba(255,255,255,0.7)" rx="2"/>
+        <rect x="50" y="20" width="15" height="70" fill="rgba(255,255,255,0.9)" rx="2"/>
+        <rect x="70" y="40" width="15" height="50" fill="rgba(255,255,255,0.8)" rx="2"/>
+        <rect x="90" y="30" width="15" height="60" fill="rgba(255,255,255,0.7)" rx="2"/>
+        <circle cx="105" cy="15" r="8" fill="rgba(255,255,255,0.6)"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Stat Cards Grid -->
+<div class="cards-grid" style="margin-bottom: 2rem; animation: fadeIn 1s ease-in-out 0.2s both;">
+  <div class="card-stat">
+    <div style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-file-earmark-text"></i>
+    </div>
+    <div class="label">Total Pengajuan</div>
+    <div class="value">{{ total_pengajuan }}</div>
+    <div class="meta">Semua pengajuan kredit</div>
+  </div>
+
+  <div class="card-stat">
+    <div style="color: var(--accent-green); font-size: 1.6rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+    <div class="label">Disetujui</div>
+    <div class="value" style="color: var(--accent-green);">{{ pengajuan_disetujui }}</div>
+    <div class="meta">Pengajuan diterima</div>
+  </div>
+
+  <div class="card-stat">
+    <div style="color: var(--accent-orange); font-size: 1.6rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-clock-history"></i>
+    </div>
+    <div class="label">Menunggu</div>
+    <div class="value" style="color: var(--accent-orange);">{{ pengajuan_menunggu }}</div>
+    <div class="meta">Dalam verifikasi</div>
+  </div>
+
+  <div class="card-stat">
+    <div style="color: var(--accent-red); font-size: 1.6rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-x-circle-fill"></i>
+    </div>
+    <div class="label">Ditolak</div>
+    <div class="value" style="color: var(--accent-red);">{{ pengajuan_ditolak }}</div>
+    <div class="meta">Pengajuan ditolak</div>
+  </div>
+</div>
+
+<!-- Charts Section -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+  <!-- Outstanding Card -->
+  <div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
+    <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+      <i class="bi bi-cash-coin" style="font-size: 1.2rem;"></i>
+      <h5 style="margin: 0; font-size: 0.95rem;">Total Outstanding</h5>
+    </div>
+    <div class="card-body">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="currency" style="font-size: 1.8rem; display: block; margin-bottom: 0.5rem;">
+          Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}
+        </div>
+        <small style="color: var(--muted);">Total pinjaman yang disetujui</small>
+      </div>
+      <canvas id="statusChart" style="max-height: 160px;"></canvas>
+    </div>
+  </div>
+
+  <!-- Status Chart -->
+  <div class="card" style="animation: fadeIn 1s ease-in-out 0.6s both;">
+    <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+      <i class="bi bi-graph-up" style="font-size: 1.2rem;"></i>
+      <h5 style="margin: 0; font-size: 0.95rem;">Status Pengajuan</h5>
+    </div>
+    <div class="card-body">
+      <canvas id="summaryChart" style="max-height: 160px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Data Scripts -->
+<script type="application/json" id="status-data">{{ [pengajuan_disetujui, pengajuan_ditolak, total_pengajuan - pengajuan_disetujui - pengajuan_ditolak]|tojson }}</script>
+<script type="application/json" id="summary-data">{{ [total_nasabah, total_pengajuan, pengajuan_disetujui, pengajuan_ditolak]|tojson }}</script>
+
+<script>
+const statusData = JSON.parse(document.getElementById('status-data').textContent || '[]');
+const summaryData = JSON.parse(document.getElementById('summary-data').textContent || '[]');
+
+// Status Chart (Doughnut)
+const statusCtx = document.getElementById('statusChart').getContext('2d');
+new Chart(statusCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Disetujui', 'Ditolak', 'Menunggu'],
+    datasets: [{
+      data: statusData,
+      backgroundColor: [
+        '#10b981',  // Green
+        '#ef4444',  // Red
+        '#f59e0b'   // Orange
+      ],
+      borderColor: '#ffffff',
+      borderWidth: 3,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          font: { size: 11, weight: '600' },
+          padding: 15,
+          usePointStyle: true,
+          pointStyle: 'circle'
+        }
+      }
+    }
+  }
+});
+
+// Summary Chart (Bar)
+const summaryCtx = document.getElementById('summaryChart').getContext('2d');
+new Chart(summaryCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Nasabah', 'Pengajuan', 'Disetujui', 'Ditolak'],
+    datasets: [{
+      label: 'Jumlah',
+      data: summaryData,
+      backgroundColor: [
+        '#2563eb',  // Blue
+        '#1e40af',  // Dark Blue
+        '#10b981',  // Green
+        '#ef4444'   // Red
+      ],
+      borderRadius: 6,
+      borderSkipped: false,
+      hoverBackgroundColor: [
+        '#1d4ed8',
+        '#1e3a8a',
+        '#059669',
+        '#dc2626'
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { stepSize: 1, font: { size: 10 } },
+        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+      },
+      x: {
+        ticks: { font: { size: 10, weight: '500' } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% endblock %}

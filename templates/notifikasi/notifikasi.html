@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Notifikasi{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/payment.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow" style="animation: fadeIn 1s ease-in-out;">
+        <div class="card-header card-header-notifikasi">
+          <h4 class="mb-0"><i class="bi bi-bell"></i> Notifikasi Sistem</h4>
+        </div>
+        <div class="card-body p-4">
+
+          <!-- Jatuh Tempo Section -->
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h5 class="mb-3" style="color: black;"><i class="bi bi-calendar-x" style="color: black;"></i> Pembayaran Jatuh Tempo</h5>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead class="thead-dark-green">
+                    <tr>
+                      <th>Nasabah</th>
+                      <th>Jumlah</th>
+                      <th>Jatuh Tempo</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if jatuh_tempo %}
+                      {% for item in jatuh_tempo %}
+                      <tr>
+                        <td>{{ item.nasabah.nama }}</td>
+                        <td>Rp {{ '{:,.0f}'.format(item.jumlah) }}</td>
+                        <td>{{ item.tanggal_jatuh_tempo.strftime('%d/%m/%Y') }}</td>
+                        <td><span class="badge bg-warning">Jatuh Tempo</span></td>
+                        <td>
+                          <button class="btn btn-sm btn-success" onclick="sendReminder({{ item.id }})">
+                            <i class="bi bi-send"></i> Kirim Pengingat
+                          </button>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">Tidak ada pembayaran jatuh tempo</td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Pengajuan Menunggu Section -->
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h5 class="mb-3" style="color: black;"><i class="bi bi-clock" style="color: black;"></i> Pengajuan Menunggu Persetujuan</h5>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Nasabah</th>
+                      <th>Jumlah Pinjaman</th>
+                      <th>Tanggal Pengajuan</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if pengajuan_menunggu %}
+                      {% for item in pengajuan_menunggu %}
+                      <tr>
+                        <td>{{ item.nasabah.nama }}</td>
+                        <td>Rp {{ '{:,.0f}'.format(item.jumlah_pinjaman) }}</td>
+                        <td>{{ item.created_at.strftime('%d/%m/%Y') }}</td>
+                        <td><span class="badge bg-warning">Menunggu</span></td>
+                        <td>
+                          <a href="{{ url_for('pengajuan.detail', id=item.id) }}" class="btn btn-sm btn-info" style="color: white;">
+                            <i class="bi bi-eye"></i> Lihat Detail
+                          </a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">Tidak ada pengajuan menunggu</td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- Pengajuan Disetujui Section -->
+          <div class="row">
+            <div class="col-md-12">
+              <h5 class="mb-3" style="color: black;"><i class="bi bi-check-circle" style="color: black;"></i> Pengajuan Disetujui (Belum Dicairkan)</h5>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Nasabah</th>
+                      <th>Jumlah Pinjaman</th>
+                      <th>Tanggal Persetujuan</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if pengajuan_disetujui %}
+                      {% for item in pengajuan_disetujui %}
+                      <tr>
+                        <td>{{ item.nasabah.nama }}</td>
+                        <td>Rp {{ '{:,.0f}'.format(item.jumlah_pinjaman) }}</td>
+                        <td>{{ item.updated_at.strftime('%d/%m/%Y') if item.updated_at else '-' }}</td>
+                        <td><span class="badge bg-success">Disetujui</span></td>
+                        <td>
+                          <a href="{{ url_for('pengajuan.detail', id=item.id) }}" class="btn btn-sm btn-info" style="color: white;">
+                            <i class="bi bi-eye"></i> Lihat Detail
+                          </a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">Tidak ada pengajuan disetujui</td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Messages -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show mt-3" role="alert">
+                  <i class="bi bi-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function sendReminder(paymentId) {
+    if (confirm('Kirim pengingat pembayaran ke nasabah?')) {
+        // Implementasi kirim reminder - bisa menggunakan AJAX atau redirect
+        alert('Fitur kirim reminder akan diimplementasikan');
+    }
+}
+</script>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% endblock %}
