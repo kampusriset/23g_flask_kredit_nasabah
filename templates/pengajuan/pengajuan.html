@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}Pengajuan{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;" style="animation: fadeIn 1s ease-in-out;">
+  <div>
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-color); margin: 0;">
+      <i class="bi bi-file-earmark-text" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+      {% if current_user.role == 'nasabah' %}Pengajuan Kredit Saya{% else %}Manajemen Pengajuan{% endif %}
+    </h1>
+  </div>
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    {% if current_user.role == 'admin' %}
+    <a href="{{ url_for('pengajuan.export') }}" class="btn btn-success">
+      <i class="bi bi-download"></i> Export XLSX
+    </a>
+    {% endif %}
+    {% if current_user.role == 'nasabah' %}
+    <a href="{{ url_for('pengajuan.ajukan') }}" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Ajukan Kredit Baru
+    </a>
+    {% endif %}
+
+  </div>
+</div>
+
+{% if current_user.role == 'admin' %}
+<!-- Filter Card -->
+<div class="card" style="margin-bottom: 2rem; animation: fadeIn 1s ease-in-out 0.2s both;">
+  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+    <i class="bi bi-funnel" style="font-size: 1.2rem;"></i>
+    <h5 style="margin: 0; font-size: 0.95rem;">Filter Status</h5>
+  </div>
+  <div class="card-body">
+    <form method="GET" action="{{ url_for('pengajuan.index') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+      <div>
+        <label class="form-label">Cari Nasabah</label>
+        <input type="text" name="q" class="form-control" placeholder="Nama atau NIK..." value="{{ q if q else '' }}">
+      </div>
+      <div>
+        <label class="form-label">Status</label>
+        <select name="status" class="form-control">
+          <option value="">Semua Status</option>
+          <option value="menunggu" {% if status == 'menunggu' %}selected{% endif %}>Menunggu</option>
+          <option value="disetujui" {% if status == 'disetujui' %}selected{% endif %}>Disetujui</option>
+          <option value="ditolak" {% if status == 'ditolak' %}selected{% endif %}>Ditolak</option>
+          <option value="dibatalkan" {% if status == 'dibatalkan' %}selected{% endif %}>Dibatalkan</option>
+          <option value="lunas" {% if status == 'lunas' %}selected{% endif %}>Lunas</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">
+          <i class="bi bi-search"></i> Filter
+        </button>
+        <a href="{{ url_for('pengajuan.index') }}" class="btn btn-secondary" style="flex: 1;">
+          <i class="bi bi-arrow-clockwise"></i> Reset
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<!-- Pengajuan Table -->
+<div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
+  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+    <i class="bi bi-table" style="font-size: 1.2rem;"></i>
+    <h5 style="margin: 0; font-size: 0.95rem;">Daftar Pengajuan ({{ total }} data)</h5>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <div style="overflow-x: auto;">
+      <table class="table-dashboard">
+        <thead>
+          <tr>
+            <th>No</th>
+            {% if current_user.role == 'admin' %}<th>Nasabah</th>{% endif %}
+            <th>Jumlah</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if pengajuan %}
+            {% for p in pengajuan %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              {% if current_user.role == 'admin' %}<td>{{ p.nasabah.nama }}</td>{% endif %}
+              <td class="currency">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</td>
+              <td>{{ p.created_at.strftime('%d-%m-%Y') }}</td>
+              <td>
+                {% if p.status == 'disetujui' %}
+                  <span class="badge bg-success">Disetujui</span>
+                {% elif p.status == 'menunggu' %}
+                  <span class="badge bg-warning" style="color: #000;">Menunggu</span>
+                {% elif p.status == 'ditolak' %}
+                  <span class="badge bg-danger">Ditolak</span>
+                {% elif p.status == 'dibatalkan' %}
+                  <span class="badge bg-secondary">Dibatalkan</span>
+                {% elif p.status == 'lunas' %}
+                  <span class="badge bg-info">Lunas</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="display: flex; gap: 0.3rem;">
+                  <a href="{{ url_for('pengajuan.detail', id=p.id) }}" class="btn btn-sm" style="background: rgba(37, 99, 235, 0.1); color: var(--primary-color); padding: 0.3rem 0.6rem;">
+                    <i class="bi bi-eye"></i> Lihat
+                  </a>
+                  {% if current_user.role == 'admin' %}
+                  {% if p.status == 'menunggu' %}
+                    <a href="{{ url_for('pengajuan.setujui', id=p.id) }}" class="btn btn-sm" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); padding: 0.3rem 0.6rem;">
+                      <i class="bi bi-check-circle"></i> Setujui
+                    </a>
+                    <form method="POST" action="{{ url_for('pengajuan.cancel', id=p.id) }}" style="display: inline;">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                      <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin batalkan pengajuan ini?')">
+                        <i class="bi bi-x-circle"></i> Batal
+                      </button>
+                    </form>
+                  {% endif %}
+                  {% if p.status in ['ditolak', 'dibatalkan', 'disetujui', 'lunas'] %}
+                    <form method="POST" action="{{ url_for('pengajuan.delete', id=p.id) }}" style="display: inline;">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                      <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin hapus pengajuan ini?')">
+                        <i class="bi bi-trash"></i> Hapus
+                      </button>
+                    </form>
+                  {% endif %}
+                  {% elif current_user.role == 'nasabah' %}
+                  {% if p.status == 'menunggu' %}
+                    <form method="POST" action="{{ url_for('pengajuan.cancel', id=p.id) }}" style="display: inline;">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                      <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin batalkan pengajuan ini?')">
+                        <i class="bi bi-x-circle"></i> Batal
+                      </button>
+                    </form>
+                  {% endif %}
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="{% if current_user.role == 'admin' %}6{% else %}5{% endif %}" style="text-align: center; padding: 2rem; color: var(--muted);">
+                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                Data pengajuan tidak ditemukan
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% endblock %}

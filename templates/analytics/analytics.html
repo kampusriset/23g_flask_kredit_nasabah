@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block title %}Analytics & Reports{% endblock %}
+
+{% block content %}
+
+<!-- Analytics Header Banner -->
+<div class="dashboard-header-banner" style="animation: fadeIn 1s ease-in-out;">
+  <div class="banner-content">
+    <div class="banner-text">
+      <h2>Analytics & Reports</h2>
+      <p>Business Intelligence dan Performance Insights</p>
+    </div>
+    <div class="banner-illustration">
+      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="10,80 30,60 50,70 70,40 90,50 110,20" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" fill="none"/>
+        <circle cx="10" cy="80" r="3" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="70" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="110" cy="20" r="3" fill="rgba(255,255,255,0.8)"/>
+        <line x1="0" y1="90" x2="120" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Key Metrics Row -->
+<div class="cards-grid" style="margin-bottom: 2rem; animation: fadeIn 1s ease-in-out 0.2s both;">
+  <div class="card-stat">
+    <div style="color: var(--accent-green); font-size: 1.4rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-percent"></i>
+    </div>
+    <div class="label">Approval Rate</div>
+    <div class="value" style="color: var(--accent-green);">{{ approval_rate }}%</div>
+    <div class="meta">{{ total_pengajuan }} pengajuan total</div>
+  </div>
+
+  <div class="card-stat">
+    <div style="color: var(--accent-orange); font-size: 1.4rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-hourglass-split"></i>
+    </div>
+    <div class="label">Pending Rate</div>
+    <div class="value" style="color: var(--accent-orange);">{{ pending_rate }}%</div>
+    <div class="meta">Menunggu verifikasi</div>
+  </div>
+
+  <div class="card-stat">
+    <div style="color: var(--accent-red); font-size: 1.4rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-x-lg"></i>
+    </div>
+    <div class="label">Rejection Rate</div>
+    <div class="value" style="color: var(--accent-red);">{{ rejection_rate }}%</div>
+    <div class="meta">Pengajuan ditolak</div>
+  </div>
+
+  <div class="card-stat">
+    <div style="color: var(--primary-color); font-size: 1.4rem; margin-bottom: 0.5rem;">
+      <i class="bi bi-cash-coin"></i>
+    </div>
+    <div class="label">Total Approved</div>
+    <div class="value currency" style="font-size: 1.5rem; color: var(--primary-color);">Rp {{ '{:,.0f}'.format(total_approved / 1000000) }}M</div>
+    <div class="meta">Total pinjaman disetujui</div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; animation: fadeIn 1s ease-in-out 0.4s both;">
+  <!-- Approval Distribution -->
+  <div class="card">
+    <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+      <i class="bi bi-pie-chart" style="font-size: 1.2rem;"></i>
+      <h5 style="margin: 0; font-size: 0.95rem;">Approval Distribution</h5>
+    </div>
+    <div class="card-body">
+      <canvas id="approvalChart" style="max-height: 200px;"></canvas>
+    </div>
+  </div>
+
+  <!-- Loan Statistics -->
+  <div class="card">
+    <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+      <i class="bi bi-receipt" style="font-size: 1.2rem;"></i>
+      <h5 style="margin: 0; font-size: 0.95rem;">Loan Statistics</h5>
+    </div>
+    <div class="card-body">
+      <div style="margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--surface-border);">
+        <small style="color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600;">Average Loan</small>
+        <div class="currency" style="font-size: 1.4rem; margin-top: 0.3rem;">Rp {{ '{:,.0f}'.format(avg_loan) }}</div>
+      </div>
+      <div style="margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--surface-border);">
+        <small style="color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600;">Max Loan</small>
+        <div class="currency" style="font-size: 1.4rem; margin-top: 0.3rem;">Rp {{ '{:,.0f}'.format(max_loan) }}</div>
+      </div>
+      <div>
+        <small style="color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600;">Min Loan</small>
+        <div class="currency" style="font-size: 1.4rem; margin-top: 0.3rem;">Rp {{ '{:,.0f}'.format(min_loan) }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Applications Table -->
+<div class="card" style="animation: fadeIn 1s ease-in-out 0.6s both;">
+  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+    <i class="bi bi-list-ul" style="font-size: 1.2rem;"></i>
+    <h5 style="margin: 0; font-size: 0.95rem;">Recent Applications</h5>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <div style="overflow-x: auto;">
+      <table class="table-dashboard" style="width: 100%; margin: 0;">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nasabah</th>
+            <th>Jumlah Pinjaman</th>
+            <th>Tanggal Pengajuan</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if pengajuan_list %}
+            {% for p in pengajuan_list|list %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ p.nasabah.nama }}</td>
+              <td class="currency">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</td>
+              <td>{{ p.created_at.strftime('%d-%m-%Y') }}</td>
+              <td>
+                {% if p.status == 'disetujui' %}
+                  <span class="badge bg-success">Disetujui</span>
+                {% elif p.status == 'menunggu' %}
+                  <span class="badge bg-warning" style="color: #000;">Menunggu</span>
+                {% elif p.status == 'ditolak' %}
+                  <span class="badge bg-danger">Ditolak</span>
+                {% elif p.status == 'dibatalkan' %}
+                  <span class="badge bg-secondary">Dibatalkan</span>
+                {% elif p.status == 'lunas' %}
+                  <span class="badge bg-info">Lunas</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" style="text-align: center; color: var(--muted);">No data available</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Data Scripts -->
+<script type="application/json" id="approval-data">{{ [pengajuan_disetujui, pengajuan_menunggu, pengajuan_ditolak]|tojson }}</script>
+
+<script>
+const approvalData = JSON.parse(document.getElementById('approval-data').textContent || '[]');
+
+// Approval Distribution Chart
+const approvalCtx = document.getElementById('approvalChart').getContext('2d');
+new Chart(approvalCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Disetujui', 'Menunggu', 'Ditolak'],
+    datasets: [{
+      data: approvalData,
+      backgroundColor: [
+        '#10b981',  // Green
+        '#f59e0b',  // Orange
+        '#ef4444'   // Red
+      ],
+      borderColor: '#ffffff',
+      borderWidth: 3,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          font: { size: 11, weight: '600' },
+          padding: 15,
+          usePointStyle: true,
+          pointStyle: 'circle'
+        }
+      }
+    }
+  }
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+{% endblock %}

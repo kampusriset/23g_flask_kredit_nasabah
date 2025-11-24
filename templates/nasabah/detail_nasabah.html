@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Detail Nasabah{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;" style="animation: fadeIn 1s ease-in-out;">
+  <div>
+    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-color); margin: 0;">
+      <i class="bi bi-person-circle" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+      Detail Nasabah
+    </h1>
+    <p style="color: var(--muted); margin: 0.25rem 0 0 0;">Informasi lengkap nasabah {{ nasabah.nama }}</p>
+  </div>
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <a href="{{ url_for('nasabah.edit', id=nasabah.id) }}" class="btn btn-primary">
+      <i class="bi bi-pencil"></i> Edit Nasabah
+    </a>
+    <a href="{{ url_for('nasabah.index') }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Kembali
+    </a>
+  </div>
+</div>
+
+<!-- Nasabah Detail Card -->
+<div class="card" style="animation: fadeIn 1s ease-in-out 0.2s both;">
+  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
+    <i class="bi bi-info-circle" style="font-size: 1.2rem;"></i>
+    <h5 style="margin: 0; font-size: 0.95rem;">Informasi Nasabah</h5>
+  </div>
+  <div class="card-body">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+      <!-- Personal Information -->
+      <div>
+        <h6 style="font-weight: 600; color: var(--text-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="bi bi-person" style="color: var(--primary-color);"></i>
+          Informasi Pribadi
+        </h6>
+        <div style="display: grid; gap: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+            <span style="font-weight: 500; color: var(--muted);">Nama Lengkap</span>
+            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.nama }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+            <span style="font-weight: 500; color: var(--muted);">NIK</span>
+            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.nik }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+            <span style="font-weight: 500; color: var(--muted);">No. Telepon</span>
+            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.no_telp }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+            <span style="font-weight: 500; color: var(--muted);">Pekerjaan</span>
+            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.pekerjaan or '-' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Information -->
+      <div>
+        <h6 style="font-weight: 600; color: var(--text-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="bi bi-cash-coin" style="color: var(--primary-color);"></i>
+          Informasi Keuangan
+        </h6>
+        <div style="display: grid; gap: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+            <span style="font-weight: 500; color: var(--muted);">Penghasilan</span>
+            <span style="font-weight: 600; color: var(--accent-green);">Rp {{ '{:,.0f}'.format(nasabah.penghasilan) }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+            <span style="font-weight: 500; color: var(--muted);">Tanggal Dibuat</span>
+            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.created_at.strftime('%d-%m-%Y %H:%M') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Information -->
+    <div style="margin-top: 2rem;">
+      <h6 style="font-weight: 600; color: var(--text-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="bi bi-geo-alt" style="color: var(--primary-color);"></i>
+        Alamat
+      </h6>
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+        <p style="margin: 0; color: var(--text-color); line-height: 1.5;">{{ nasabah.alamat or 'Alamat tidak tersedia' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

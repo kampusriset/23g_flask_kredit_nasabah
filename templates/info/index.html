@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Informasi Umum{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row">
+    <div class="col-12 mb-3">
+      <h1><i class="bi bi-info-circle"></i> Informasi Umum</h1>
+      <p class="text-muted">Pilih topik di bawah untuk melihat informasi detail.</p>
+    </div>
+
+    <div class="col-12 mb-4">
+      <div class="btn-group" role="group" aria-label="Info navigation">
+        <a href="{{ url_for('info.layanan') }}" class="btn btn-outline-primary">Layanan</a>
+        <a href="{{ url_for('info.prosedur') }}" class="btn btn-outline-primary">Prosedur & Persyaratan</a>
+        <a href="{{ url_for('info.kontak') }}" class="btn btn-outline-primary">Kontak & Lokasi</a>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h4>Ringkasan</h4>
+          <p>SIPINA membantu lembaga keuangan dalam mengelola proses pengajuan kredit nasabah secara terstruktur, cepat, dan transparan.</p>
+          <p>Gunakan tautan di atas untuk menavigasi ke topik yang ingin Anda pelajari lebih lanjut.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
