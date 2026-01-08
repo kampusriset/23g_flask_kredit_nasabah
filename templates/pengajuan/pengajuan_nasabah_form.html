@@ -1,96 +1,98 @@
 {% extends 'base.html' %}
 {% block title %}Ajukan Kredit{% endblock %}
+{% block page_title %}Layanan Kredit{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow" style="animation: fadeIn 1s ease-in-out;">
-        <div class="card-header" style="background-color: #2EAF7D; color: #FFFFFF;">
-          <h4 class="mb-0"><i class="bi bi-file-earmark-text"></i> Pengajuan Kredit Baru</h4>
+<div class="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+  
+  <!-- Header -->
+  <div class="mb-8 text-center">
+    <div class="inline-flex items-center justify-center p-3 bg-emerald-500/10 rounded-xl text-emerald-500 mb-4">
+      <i class="bi bi-cash-stack text-2xl"></i>
+    </div>
+    <h2 class="text-2xl font-black text-slate-800 tracking-tight">Pengajuan Kredit Baru</h2>
+    <p class="text-slate-500 font-medium">Dana Cepat, Proses Mudah & Aman.</p>
+  </div>
+
+  <div class="card-glass p-8 md:p-10">
+    <form method="POST" enctype="multipart/form-data" novalidate class="space-y-6">
+      {{ form.hidden_tag() }}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Jumlah Pinjaman -->
+        <div class="space-y-1">
+          {{ form.jumlah_pinjaman.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+          <div class="relative group">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 font-bold group-focus-within:text-emerald-500 transition-colors">Rp</span>
+            {% if form.jumlah_pinjaman.errors %}
+              {{ form.jumlah_pinjaman(class_='w-full pl-12 pr-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 placeholder:text-red-300') }}
+              <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+                {% for e in form.jumlah_pinjaman.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+              </div>
+            {% else %}
+               {{ form.jumlah_pinjaman(class_='w-full pl-12 pr-4 py-3 bg-emerald-50 text-emerald-700 border-none rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all text-sm font-semibold placeholder:text-emerald-300/50', placeholder='Min. 100.000') }}
+            {% endif %}
+          </div>
         </div>
-        <div class="card-body p-4">
-          <form method="POST" enctype="multipart/form-data" novalidate>
-            {{ form.hidden_tag() }}
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  {{ form.jumlah_pinjaman.label(class_='form-label') }}
-                  {% if form.jumlah_pinjaman.errors %}
-                    {{ form.jumlah_pinjaman(class_='form-control is-invalid') }}
-                    <div class="invalid-feedback d-block">
-                      {% for e in form.jumlah_pinjaman.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
-                    </div>
-                  {% else %}
-                    {{ form.jumlah_pinjaman(class_='form-control', placeholder='Minimal Rp 100.000') }}
-                  {% endif %}
-                  <small class="form-text text-muted">Jumlah dalam rupiah</small>
-                </div>
+        <!-- Tenor -->
+        <div class="space-y-1">
+          {{ form.tenor.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+          <div class="relative group">
+            {% if form.tenor.errors %}
+               {{ form.tenor(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 placeholder:text-red-300') }}
+               <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+                {% for e in form.tenor.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
               </div>
-
-              <div class="col-md-6">
-                <div class="mb-3">
-                  {{ form.tenor.label(class_='form-label') }}
-                  {% if form.tenor.errors %}
-                    {{ form.tenor(class_='form-control is-invalid') }}
-                    <div class="invalid-feedback d-block">
-                      {% for e in form.tenor.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
-                    </div>
-                  {% else %}
-                    {{ form.tenor(class_='form-control', placeholder='1-360 bulan') }}
-                  {% endif %}
-                  <small class="form-text text-muted">Tenor dalam bulan</small>
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              {{ form.tujuan.label(class_='form-label') }}
-              {% if form.tujuan.errors %}
-                {{ form.tujuan(class_='form-control is-invalid', rows=3) }}
-                <div class="invalid-feedback d-block">
-                  {% for e in form.tujuan.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
-                </div>
-              {% else %}
-                {{ form.tujuan(class_='form-control', rows=3, placeholder='Tujuan penggunaan kredit') }}
-              {% endif %}
-            </div>
-
-            <div class="mb-4">
-              {{ form.foto_ktp.label(class_='form-label') }}
-              {% if form.foto_ktp.errors %}
-                {{ form.foto_ktp(class_='form-control is-invalid') }}
-                <div class="invalid-feedback d-block">
-                  {% for e in form.foto_ktp.errors %}<i class="bi bi-exclamation-circle"></i> {{ e }}{% endfor %}
-                </div>
-              {% else %}
-                {{ form.foto_ktp(class_='form-control', accept='.jpg,.jpeg,.png') }}
-              {% endif %}
-              <small class="form-text text-muted">Upload foto KTP dalam format JPG, JPEG, atau PNG</small>
-            </div>
-
-            <div class="d-flex gap-2">
-              <button class="btn btn-success flex-grow-1"><i class="bi bi-check-circle"></i> Ajukan Kredit</button>
-              <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary flex-grow-1"><i class="bi bi-x-circle"></i> Batal</a>
-            </div>
-          </form>
+            {% else %}
+              {{ form.tenor(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700 placeholder:text-slate-400', placeholder='Jangka waktu (bulan)') }}
+            {% endif %}
+            <span class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 text-xs font-bold uppercase tracking-wider pointer-events-none">Bulan</span>
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- Tujuan Pinjaman -->
+      <div class="space-y-1">
+        {{ form.tujuan.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+        {% if form.tujuan.errors %}
+          {{ form.tujuan(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 placeholder:text-red-300', rows=3) }}
+          <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+            {% for e in form.tujuan.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+          </div>
+        {% else %}
+           {{ form.tujuan(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700 placeholder:text-slate-400', rows=3, placeholder='Jelaskan tujuan penggunaan dana...') }}
+        {% endif %}
+      </div>
+
+      <!-- Upload KTP -->
+      <div class="space-y-1">
+        {{ form.foto_ktp.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+        {% if form.foto_ktp.errors %}
+          {{ form.foto_ktp(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-red-100 file:text-red-700 hover:file:bg-red-200') }}
+          <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+            {% for e in form.foto_ktp.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+          </div>
+        {% else %}
+          {{ form.foto_ktp(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-navy-50 file:text-navy-700 hover:file:bg-navy-100') }}
+        {% endif %}
+        <p class="text-[10px] text-slate-400 font-medium ml-1">Format: JPG, PNG (Max. 2MB)</p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex items-center gap-4 pt-4 mt-6 border-t border-slate-100">
+        <a href="{{ url_for('dashboard.index') }}" class="flex-1 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-sm text-center">
+          Batal
+        </a>
+        <button type="submit" class="flex-[2] px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-sm flex items-center justify-center gap-2">
+          <i class="bi bi-send-fill"></i>
+          Ajukan Sekarang
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}
 
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
+
+

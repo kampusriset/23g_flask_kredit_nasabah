@@ -1,91 +1,156 @@
 {% extends 'base.html' %}
 {% block title %}Detail Nasabah{% endblock %}
+{% block page_title %}Manajemen Nasabah{% endblock %}
 
 {% block content %}
-
-<!-- Page Header -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;" style="animation: fadeIn 1s ease-in-out;">
-  <div>
-    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-color); margin: 0;">
-      <i class="bi bi-person-circle" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
-      Detail Nasabah
-    </h1>
-    <p style="color: var(--muted); margin: 0.25rem 0 0 0;">Informasi lengkap nasabah {{ nasabah.nama }}</p>
-  </div>
-  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-    <a href="{{ url_for('nasabah.edit', id=nasabah.id) }}" class="btn btn-primary">
-      <i class="bi bi-pencil"></i> Edit Nasabah
-    </a>
-    <a href="{{ url_for('nasabah.index') }}" class="btn btn-secondary">
-      <i class="bi bi-arrow-left"></i> Kembali
-    </a>
-  </div>
-</div>
-
-<!-- Nasabah Detail Card -->
-<div class="card" style="animation: fadeIn 1s ease-in-out 0.2s both;">
-  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
-    <i class="bi bi-info-circle" style="font-size: 1.2rem;"></i>
-    <h5 style="margin: 0; font-size: 0.95rem;">Informasi Nasabah</h5>
-  </div>
-  <div class="card-body">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-      <!-- Personal Information -->
-      <div>
-        <h6 style="font-weight: 600; color: var(--text-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i class="bi bi-person" style="color: var(--primary-color);"></i>
-          Informasi Pribadi
-        </h6>
-        <div style="display: grid; gap: 1rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
-            <span style="font-weight: 500; color: var(--muted);">Nama Lengkap</span>
-            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.nama }}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
-            <span style="font-weight: 500; color: var(--muted);">NIK</span>
-            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.nik }}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
-            <span style="font-weight: 500; color: var(--muted);">No. Telepon</span>
-            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.no_telp }}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
-            <span style="font-weight: 500; color: var(--muted);">Pekerjaan</span>
-            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.pekerjaan or '-' }}</span>
-          </div>
-        </div>
+<div class="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+  
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full bg-navy-500 flex items-center justify-center text-gold-500 font-black text-2xl shadow-lg border-2 border-gold-500">
+        {{ nasabah.nama[:2].upper() }}
       </div>
-
-      <!-- Financial Information -->
       <div>
-        <h6 style="font-weight: 600; color: var(--text-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          <i class="bi bi-cash-coin" style="color: var(--primary-color);"></i>
-          Informasi Keuangan
-        </h6>
-        <div style="display: grid; gap: 1rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
-            <span style="font-weight: 500; color: var(--muted);">Penghasilan</span>
-            <span style="font-weight: 600; color: var(--accent-green);">Rp {{ '{:,.0f}'.format(nasabah.penghasilan) }}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
-            <span style="font-weight: 500; color: var(--muted);">Tanggal Dibuat</span>
-            <span style="font-weight: 600; color: var(--text-color);">{{ nasabah.created_at.strftime('%d-%m-%Y %H:%M') }}</span>
-          </div>
+        <h2 class="text-2xl font-black text-slate-800 tracking-tight">{{ nasabah.nama }}</h2>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="px-2 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wider rounded">Nasabah</span>
+          <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+          <span class="text-slate-400 text-xs font-mono">{{ nasabah.nik }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Address Information -->
-    <div style="margin-top: 2rem;">
-      <h6 style="font-weight: 600; color: var(--text-color); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="bi bi-geo-alt" style="color: var(--primary-color);"></i>
-        Alamat
-      </h6>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--primary-color);">
-        <p style="margin: 0; color: var(--text-color); line-height: 1.5;">{{ nasabah.alamat or 'Alamat tidak tersedia' }}</p>
+    <div class="flex items-center gap-3">
+      <a href="{{ url_for('nasabah.index') }}" class="px-5 py-2.5 bg-white border border-slate-200 text-slate-600 font-bold rounded-xl transition-all hover:bg-slate-50 hover:text-slate-800 shadow-sm text-sm flex items-center gap-2">
+        <i class="bi bi-arrow-left"></i>
+        Kembali
+      </a>
+      <a href="{{ url_for('nasabah.edit', id=nasabah.id) }}" class="px-5 py-2.5 bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold rounded-xl transition-all shadow-lg shadow-gold-500/20 text-sm flex items-center gap-2">
+        <i class="bi bi-pencil-square"></i>
+        Edit Profil
+      </a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left Column: Main Info -->
+    <div class="lg:col-span-2 space-y-6">
+      
+      <!-- Personal Info Card -->
+      <div class="card-glass p-6 md:p-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-5">
+          <i class="bi bi-person-vcard-fill text-9xl"></i>
+        </div>
+        
+        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4 relative z-10">
+          <div class="p-2 bg-navy-50 text-navy-500 rounded-lg">
+            <i class="bi bi-person-lines-fill text-xl"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-800">Informasi Pribadi</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 relative z-10">
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 mb-1">Nama Lengkap</p>
+            <p class="text-base font-bold text-slate-800">{{ nasabah.nama }}</p>
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 mb-1">Nomor Induk (NIK)</p>
+            <p class="text-base font-bold text-slate-800 font-mono tracking-wide">{{ nasabah.nik }}</p>
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 mb-1">Nomor Telepon</p>
+            <p class="text-base font-bold text-slate-800">{{ nasabah.no_telp }}</p>
+          </div>
+          <div>
+            <p class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 mb-1">Pekerjaan</p>
+            <p class="text-base font-bold text-slate-800">{{ nasabah.pekerjaan or '-' }}</p>
+          </div>
+          <div class="col-span-1 md:col-span-2">
+            <p class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 mb-1">Alamat Domisili</p>
+            <p class="text-base font-medium text-slate-700 leading-relaxed">{{ nasabah.alamat or '-' }}</p>
+          </div>
+        </div>
       </div>
+
+      <!-- Financial Info Card -->
+      <div class="card-glass p-6 md:p-8">
+        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+          <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+            <i class="bi bi-wallet2 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-800">Data Keuangan</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 bg-emerald-50/50 rounded-xl border border-emerald-100">
+            <p class="text-[10px] font-black uppercase tracking-[2px] text-emerald-600/70 mb-1">Penghasilan Bulanan</p>
+            <p class="text-2xl font-black text-emerald-600">Rp {{ '{:,.0f}'.format(nasabah.penghasilan) }}</p>
+          </div>
+           <!-- Placeholder for credit score or other financial metrics if available in future -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col justify-center">
+             <p class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 mb-1">Terdaftar Sejak</p>
+             <p class="text-base font-bold text-slate-800">{{ nasabah.created_at.strftime('%d %B %Y') }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Stats / Account -->
+    <div class="space-y-6">
+      
+      <!-- Account Card -->
+      <div class="card-glass p-6">
+        <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Akun Pengguna</h4>
+        
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div class="overflow-hidden">
+             <p class="text-sm font-bold text-slate-800 truncate">{{ nasabah.user.username if nasabah.user else 'Belum ada akun' }}</p>
+             <p class="text-xs text-slate-400">Username Login</p>
+          </div>
+        </div>
+        
+        {% if nasabah.user %}
+        <div class="flex items-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg text-xs font-bold border border-green-100">
+          <i class="bi bi-check-circle-fill"></i>
+          Akun Aktif
+        </div>
+        {% else %}
+        <div class="flex items-center gap-2 px-3 py-2 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold border border-amber-100">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          Belum Terhubung
+        </div>
+        {% endif %}
+      </div>
+      
+      <!-- Quick Stats Card (Placeholder) -->
+      <div class="bg-navy-900 rounded-2xl p-6 text-white relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute -right-6 -top-6 w-24 h-24 bg-gold-500 rounded-full opacity-20 blur-xl"></div>
+        <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-blue-500 rounded-full opacity-20 blur-xl"></div>
+        
+        <h4 class="text-xs font-black uppercase tracking-widest text-white/50 mb-6 relative z-10">Ringkasan Kredit</h4>
+        
+        <div class="space-y-4 relative z-10">
+          <div class="flex justify-between items-center border-b border-white/10 pb-3">
+             <span class="text-sm font-medium text-white/70">Total Pengajuan</span>
+             <span class="text-lg font-bold text-white">{{ nasabah.pengajuan|length }}</span>
+          </div>
+           <!-- You can add more calculated stats here if passed from backend -->
+        </div>
+
+        <a href="{{ url_for('pengajuan.index', q=nasabah.nama) }}" class="mt-6 block w-full py-3 bg-gold-500 hover:bg-gold-400 text-navy-900 font-bold text-center rounded-xl transition-colors text-sm">
+          Lihat Riwayat
+        </a>
+      </div>
+
     </div>
   </div>
 </div>
-
 {% endblock %}
+

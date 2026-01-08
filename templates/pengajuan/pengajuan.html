@@ -1,172 +1,178 @@
 {% extends 'base.html' %}
-{% block title %}Pengajuan{% endblock %}
+{% block title %}Daftar Pengajuan{% endblock %}
+{% block page_title %}{% if current_user.role == 'nasabah' %}Pengajuan Kredit Saya{% else %}Manajemen Pengajuan{% endif %}{% endblock %}
 
 {% block content %}
 
-<!-- Page Header -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;" style="animation: fadeIn 1s ease-in-out;">
+<!-- Header & Quick Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
   <div>
-    <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-color); margin: 0;">
-      <i class="bi bi-file-earmark-text" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
-      {% if current_user.role == 'nasabah' %}Pengajuan Kredit Saya{% else %}Manajemen Pengajuan{% endif %}
-    </h1>
+    <h2 class="text-2xl font-black text-slate-800 tracking-tight">Status & Riwayat Pengajuan</h2>
+    <p class="text-slate-500 font-medium">Pantau progres pengajuan kredit dan detail angsuran Anda.</p>
   </div>
-  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+  <div class="flex gap-3">
     {% if current_user.role == 'admin' %}
-    <a href="{{ url_for('pengajuan.export') }}" class="btn btn-success">
-      <i class="bi bi-download"></i> Export XLSX
+    <a href="{{ url_for('pengajuan.export') }}" class="flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:-translate-y-1">
+      <i class="bi bi-file-earmark-excel-fill"></i>
+      Export XLSX
     </a>
     {% endif %}
     {% if current_user.role == 'nasabah' %}
-    <a href="{{ url_for('pengajuan.ajukan') }}" class="btn btn-primary">
-      <i class="bi bi-plus-circle"></i> Ajukan Kredit Baru
+    <a href="{{ url_for('pengajuan.ajukan') }}" class="flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-600 text-navy-500 font-black rounded-xl transition-all shadow-lg shadow-gold-500/20 hover:-translate-y-1">
+      <i class="bi bi-plus-circle-fill"></i>
+      Ajukan Kredit
     </a>
     {% endif %}
-
   </div>
 </div>
 
 {% if current_user.role == 'admin' %}
-<!-- Filter Card -->
-<div class="card" style="margin-bottom: 2rem; animation: fadeIn 1s ease-in-out 0.2s both;">
-  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
-    <i class="bi bi-funnel" style="font-size: 1.2rem;"></i>
-    <h5 style="margin: 0; font-size: 0.95rem;">Filter Status</h5>
+<!-- Admin Filters -->
+<div class="card-glass p-8 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+  <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+    <div class="p-2 bg-gold-500/10 rounded-lg text-gold-500">
+      <i class="bi bi-funnel-fill text-xl"></i>
+    </div>
+    <h3 class="text-lg font-bold text-slate-800">Filter Status & Nasabah</h3>
   </div>
-  <div class="card-body">
-    <form method="GET" action="{{ url_for('pengajuan.index') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-      <div>
-        <label class="form-label">Cari Nasabah</label>
-        <input type="text" name="q" class="form-control" placeholder="Nama atau NIK..." value="{{ q if q else '' }}">
-      </div>
-      <div>
-        <label class="form-label">Status</label>
-        <select name="status" class="form-control">
-          <option value="">Semua Status</option>
-          <option value="menunggu" {% if status == 'menunggu' %}selected{% endif %}>Menunggu</option>
-          <option value="disetujui" {% if status == 'disetujui' %}selected{% endif %}>Disetujui</option>
-          <option value="ditolak" {% if status == 'ditolak' %}selected{% endif %}>Ditolak</option>
-          <option value="dibatalkan" {% if status == 'dibatalkan' %}selected{% endif %}>Dibatalkan</option>
-          <option value="lunas" {% if status == 'lunas' %}selected{% endif %}>Lunas</option>
-        </select>
-      </div>
-      <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
-        <button type="submit" class="btn btn-primary" style="flex: 1;">
-          <i class="bi bi-search"></i> Filter
-        </button>
-        <a href="{{ url_for('pengajuan.index') }}" class="btn btn-secondary" style="flex: 1;">
-          <i class="bi bi-arrow-clockwise"></i> Reset
-        </a>
-      </div>
-    </form>
-  </div>
+  
+  <form method="GET" action="{{ url_for('pengajuan.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="space-y-1">
+      <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Cari Nasabah</label>
+      <input type="text" name="q" value="{{ q if q else '' }}" placeholder="Nama atau NIK..." 
+             class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold">
+    </div>
+    <div class="space-y-1">
+      <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Status Berkas</label>
+      <select name="status" class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold">
+        <option value="">Semua Status</option>
+        <option value="menunggu" {% if status == 'menunggu' %}selected{% endif %}>Menunggu Verifikasi</option>
+        <option value="disetujui" {% if status == 'disetujui' %}selected{% endif %}>Disetujui</option>
+        <option value="ditolak" {% if status == 'ditolak' %}selected{% endif %}>Ditolak</option>
+        <option value="lunas" {% if status == 'lunas' %}selected{% endif %}>Lunas</option>
+      </select>
+    </div>
+    <div class="flex items-end gap-3 pt-2">
+      <button type="submit" class="flex-1 px-6 py-3 bg-navy-500 hover:bg-navy-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-navy-500/20 text-sm">
+        Filter Data
+      </button>
+      <a href="{{ url_for('pengajuan.index') }}" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-sm">
+        Reset
+      </a>
+    </div>
+  </form>
 </div>
 {% endif %}
 
-<!-- Pengajuan Table -->
-<div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
-  <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
-    <i class="bi bi-table" style="font-size: 1.2rem;"></i>
-    <h5 style="margin: 0; font-size: 0.95rem;">Daftar Pengajuan ({{ total }} data)</h5>
-  </div>
-  <div class="card-body" style="padding: 0;">
-    <div style="overflow-x: auto;">
-      <table class="table-dashboard">
-        <thead>
-          <tr>
-            <th>No</th>
-            {% if current_user.role == 'admin' %}<th>Nasabah</th>{% endif %}
-            <th>Jumlah</th>
-            <th>Tanggal</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if pengajuan %}
-            {% for p in pengajuan %}
-            <tr>
-              <td>{{ loop.index }}</td>
-              {% if current_user.role == 'admin' %}<td>{{ p.nasabah.nama }}</td>{% endif %}
-              <td class="currency">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</td>
-              <td>{{ p.created_at.strftime('%d-%m-%Y') }}</td>
-              <td>
-                {% if p.status == 'disetujui' %}
-                  <span class="badge bg-success">Disetujui</span>
-                {% elif p.status == 'menunggu' %}
-                  <span class="badge bg-warning" style="color: #000;">Menunggu</span>
-                {% elif p.status == 'ditolak' %}
-                  <span class="badge bg-danger">Ditolak</span>
-                {% elif p.status == 'dibatalkan' %}
-                  <span class="badge bg-secondary">Dibatalkan</span>
-                {% elif p.status == 'lunas' %}
-                  <span class="badge bg-info">Lunas</span>
-                {% endif %}
-              </td>
-              <td>
-                <div style="display: flex; gap: 0.3rem;">
-                  <a href="{{ url_for('pengajuan.detail', id=p.id) }}" class="btn btn-sm" style="background: rgba(37, 99, 235, 0.1); color: var(--primary-color); padding: 0.3rem 0.6rem;">
-                    <i class="bi bi-eye"></i> Lihat
-                  </a>
-                  {% if current_user.role == 'admin' %}
-                  {% if p.status == 'menunggu' %}
-                    <a href="{{ url_for('pengajuan.setujui', id=p.id) }}" class="btn btn-sm" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green); padding: 0.3rem 0.6rem;">
-                      <i class="bi bi-check-circle"></i> Setujui
-                    </a>
-                    <form method="POST" action="{{ url_for('pengajuan.cancel', id=p.id) }}" style="display: inline;">
-                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                      <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin batalkan pengajuan ini?')">
-                        <i class="bi bi-x-circle"></i> Batal
-                      </button>
-                    </form>
-                  {% endif %}
-                  {% if p.status in ['ditolak', 'dibatalkan', 'disetujui', 'lunas'] %}
-                    <form method="POST" action="{{ url_for('pengajuan.delete', id=p.id) }}" style="display: inline;">
-                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                      <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin hapus pengajuan ini?')">
-                        <i class="bi bi-trash"></i> Hapus
-                      </button>
-                    </form>
-                  {% endif %}
-                  {% elif current_user.role == 'nasabah' %}
-                  {% if p.status == 'menunggu' %}
-                    <form method="POST" action="{{ url_for('pengajuan.cancel', id=p.id) }}" style="display: inline;">
-                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                      <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red); padding: 0.3rem 0.6rem; border: none; cursor: pointer;" onclick="return confirm('Yakin ingin batalkan pengajuan ini?')">
-                        <i class="bi bi-x-circle"></i> Batal
-                      </button>
-                    </form>
-                  {% endif %}
-                  {% endif %}
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
-          {% else %}
-            <tr>
-              <td colspan="{% if current_user.role == 'admin' %}6{% else %}5{% endif %}" style="text-align: center; padding: 2rem; color: var(--muted);">
-                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
-                Data pengajuan tidak ditemukan
-              </td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
+<!-- Table Container -->
+<div class="card-glass animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+  <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500">
+        <i class="bi bi-file-text-fill text-xl"></i>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800">Riwayat Pengajuan <span class="ml-2 px-2 py-0.5 bg-slate-100 text-slate-400 text-xs rounded-full">{{ total }}</span></h3>
     </div>
+  </div>
+  
+  <div class="overflow-x-auto no-scrollbar">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-slate-50/50">
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">#</th>
+          {% if current_user.role == 'admin' %}
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Nasabah</th>
+          {% endif %}
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Jumlah Pinjaman</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Tanggal Pengajuan</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Status Aktif</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400 text-right">Aksi Layanan</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% if pengajuan %}
+          {% for p in pengajuan %}
+          <tr class="hover:bg-slate-50/80 transition-colors group">
+            <td class="px-6 py-4">
+              <span class="text-sm font-bold text-slate-400">{{ loop.index }}</span>
+            </td>
+            {% if current_user.role == 'admin' %}
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-navy-500 font-black text-[10px]">
+                  {{ p.nasabah.nama[:2].upper() }}
+                </div>
+                <p class="text-sm font-black text-slate-700">{{ p.nasabah.nama }}</p>
+              </div>
+            </td>
+            {% endif %}
+            <td class="px-6 py-4">
+              <p class="text-sm font-black text-emerald-600 tracking-tight">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</p>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ p.tenor }} Bulan Masa Tenor</p>
+            </td>
+            <td class="px-6 py-4">
+              <p class="text-sm font-bold text-slate-600">{{ p.created_at.strftime('%d %b %Y') }}</p>
+            </td>
+            <td class="px-6 py-4">
+              {% if p.status == 'disetujui' %}
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase rounded-full border border-emerald-200">Disetujui</span>
+              {% elif p.status == 'menunggu' %}
+                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-black uppercase rounded-full border border-amber-200">Menunggu</span>
+              {% elif p.status == 'ditolak' %}
+                <span class="px-3 py-1 bg-red-100 text-red-700 text-[10px] font-black uppercase rounded-full border border-red-200">Ditolak</span>
+              {% else %}
+                <span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase rounded-full border border-slate-200">{{ p.status }}</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex justify-end gap-2">
+                <a href="{{ url_for('pengajuan.detail', id=p.id) }}" class="p-2 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all" title="Detail Berkas">
+                  <i class="bi bi-eye-fill"></i>
+                </a>
+                
+                {% if current_user.role == 'admin' and p.status == 'menunggu' %}
+                  <a href="{{ url_for('pengajuan.setujui', id=p.id) }}" class="p-2 text-emerald-500 hover:bg-emerald-500 hover:text-white rounded-lg transition-all shadow-sm" title="Setujui">
+                    <i class="bi bi-check-circle-fill"></i>
+                  </a>
+                  <form method="POST" action="{{ url_for('pengajuan.cancel', id=p.id) }}" class="inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="p-2 text-amber-500 hover:bg-amber-500 hover:text-white rounded-lg transition-all" onclick="return confirm('Tolak/Batalkan pengajuan ini?')">
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </form>
+                {% endif %}
+
+                {% if current_user.role == 'admin' %}
+                  <form method="POST" action="{{ url_for('pengajuan.delete', id=p.id) }}" class="inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="p-2 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all" onclick="return confirm('Hapus data pengajuan ini secara permanen?')">
+                      <i class="bi bi-trash3-fill"></i>
+                    </button>
+                  </form>
+                {% elif p.status == 'menunggu' %}
+                  <form method="POST" action="{{ url_for('pengajuan.cancel', id=p.id) }}" class="inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="flex items-center gap-1 px-3 py-2 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all text-xs font-bold" onclick="return confirm('Yakin ingin membatalkan pengajuan ini?')">
+                      <i class="bi bi-x-lg"></i> Batal
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="6" class="px-6 py-20 text-center text-slate-400 italic">
+              <i class="bi bi-inbox text-4xl block mb-2 opacity-20"></i>
+              Belum ada riwayat pengajuan ditemukan.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
   </div>
 </div>
 
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
-
 {% endblock %}
+

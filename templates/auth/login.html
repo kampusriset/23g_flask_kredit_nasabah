@@ -1,299 +1,114 @@
-{% block title %}Login - SIPINA{% endblock %}
+<!doctype html>
+<html lang="id" class="h-full bg-slate-50">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - SIPINA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: { 500: '#0A192F', 600: '#081426', 900: '#020c1b' },
+              gold: { 500: '#d4af37', 600: '#aa8c2c' }
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+    </style>
+  </head>
+  <body class="h-full overflow-y-auto">
+    <div class="min-h-screen flex items-center justify-center relative bg-navy-500 py-12 px-4 sm:px-6 lg:px-8">
+      <!-- Abstract Background Elements -->
+      <div class="fixed inset-0 w-full h-full overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl mix-blend-screen animate-pulse duration-[5000ms]"></div>
+        <div class="absolute -bottom-24 -right-24 w-128 h-128 bg-blue-500/10 rounded-full blur-3xl mix-blend-screen animate-pulse duration-[7000ms]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_transparent_0%,_#0A192F_100%)] opacity-80"></div>
+      </div>
 
-<!-- Bootstrap Icons CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+      <div class="max-w-md w-full space-y-8 relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out">
+        <div class="text-center">
+          <div class="inline-flex items-center justify-center p-4 bg-gold-500/10 rounded-2xl border border-gold-500/20 mb-6 group hover:scale-105 transition-transform duration-300 shadow-2xl shadow-gold-500/10">
+            <i class="bi bi-bank2 text-5xl text-gold-500 drop-shadow-md"></i>
+          </div>
+          <h1 class="text-4xl font-black text-white tracking-tight">SIPINA</h1>
+          <p class="mt-3 text-slate-400 font-medium">Sistem Informasi Pengajuan Kredit Nasabah</p>
+        </div>
 
-<!-- Full screen login page -->
-<div class="login-page">
-  <div class="login-container">
-    <div class="login-card">
-      <div class="login-header">
-        <div class="login-logo">
-          <div class="logo-container">
-            <div class="bank-logo">
-              <i class="bi bi-bank2"></i>
+        <div class="glass-effect p-10 rounded-[2.5rem] shadow-2xl border border-white/10 ring-1 ring-white/50">
+          <form method="POST" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="space-y-1">
+              <label for="username" class="text-[10px] font-black uppercase tracking-[2px] text-slate-500 ml-1">Username</label>
+              <div class="relative group">
+                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-gold-500 transition-colors">
+                  <i class="bi bi-person-fill text-lg"></i>
+                </span>
+                <input type="text" name="username" required 
+                       class="block w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-slate-800 font-bold placeholder:text-slate-400 placeholder:font-normal text-sm"
+                       placeholder="Username anda">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="password" class="text-[10px] font-black uppercase tracking-[2px] text-slate-500 ml-1">Password</label>
+              <div class="relative group">
+                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-gold-500 transition-colors">
+                  <i class="bi bi-shield-lock-fill text-lg"></i>
+                </span>
+                <input type="password" name="password" required 
+                       class="block w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-slate-800 font-bold placeholder:text-slate-400 placeholder:font-normal text-sm"
+                       placeholder="Password anda">
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" 
+                      class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-xl text-navy-900 bg-gold-500 hover:bg-gold-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 transition-all shadow-xl shadow-gold-500/20 hover:shadow-gold-500/40 hover:-translate-y-1 active:translate-y-0 uppercase tracking-widest">
+                <span class="absolute left-0 inset-y-0 flex items-center pl-4 text-navy-800 opacity-30 group-hover:opacity-100 transition-opacity">
+                  <i class="bi bi-box-arrow-in-right text-lg"></i>
+                </span>
+                Masuk Sekarang
+              </button>
+            </div>
+          </form>
+
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <div class="flex flex-col items-center gap-4">
+              <!-- Demo Account Info -->
+              <div class="px-5 py-3 bg-slate-50/50 rounded-xl border border-slate-200 text-center w-full">
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5"><i class="bi bi-info-circle-fill mr-1"></i> Demo Access</p>
+                <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-600 font-mono">
+                  <span class="bg-white px-2 py-1 rounded border border-slate-100">admin</span>
+                  <span class="text-slate-300">|</span>
+                  <span class="bg-white px-2 py-1 rounded border border-slate-100">admin123</span>
+                </div>
+              </div>
+              
+              <p class="text-sm text-slate-500 font-medium">
+                Belum punya akun? <a href="{{ url_for('auth.register') }}" class="font-bold text-navy-600 hover:text-gold-600 transition-colors underline decoration-2 underline-offset-4 decoration-gold-500/30 hover:decoration-gold-500">Daftar Akun Baru</a>
+              </p>
             </div>
           </div>
         </div>
-        <h2>SIPINA</h2>
-        <p>Sistem Informasi Pengajuan Kredit Nasabah</p>
-      </div>
-
-      <form method="POST" class="login-form" novalidate>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" name="username" class="form-control" placeholder="Masukkan username" required>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
-        </div>
-
-        <button type="submit" class="btn-login">
-          <i class="bi bi-box-arrow-in-right"></i> Login
-        </button>
-      </form>
-
-      <div class="login-footer">
-        <div class="demo-info">
-          <h6><i class="bi bi-info-circle"></i> Demo Account</h6>
-          <p>Username: <code>admin</code></p>
-          <p>Password: <code>admin123</code></p>
-        </div>
-        <div class="register-link">
-          <p>Belum punya akun? <a href="{{ url_for('auth.register') }}">Daftar di sini</a></p>
-        </div>
+        
+        <p class="text-center text-slate-400/60 text-[10px] font-medium tracking-wide">
+          &copy; 2024 <span class="font-bold text-slate-400">SIPINA</span> Digital Banking Solutions
+        </p>
       </div>
     </div>
-  </div>
-</div>
+  </body>
+</html>
 
-<style>
-/* CSS Variables for consistency */
-:root {
-  --color-light: #f4f6f9;
-  --color-dark: #0A192F;
-  --color-green: #2EAF7D;
-  --color-accent: #D4AF37;
-  --color-cyan: #E6C25E;
-  --gradient-main: linear-gradient(135deg, #0A192F 0%, #112240 100%);
-  --text-white: #FFFFFF;
-}
-
-.login-page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--gradient-main);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-}
-
-.login-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(46, 175, 125, 0.25);
-  padding: 2rem;
-  border: 1px solid rgba(46, 175, 125, 0.1);
-  animation: fadeIn 1s ease-in-out;
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 2rem;
-} 
-
-.login-logo {
-  margin: 0 auto 1rem;
-}
-
-.navbar-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: #1f2937;
-  font-weight: 700;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-  background: var(--gradient-main);
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(2, 53, 60, 0.3);
-}
-
-.navbar-logo i {
-  font-size: 1.5rem;
-  color: white;
-}
-
-.navbar-logo span {
-  font-size: 1.2rem;
-  color: white;
-}
-
-.navbar-logo:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(46, 175, 125, 0.4);
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.bank-logo {
-  flex-shrink: 0;
-}
-
-.bank-logo i {
-  font-size: 2.5rem;
-  color: var(--color-accent);
-}
-
-.login-header h2 {
-  color: #1f2937;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  font-size: 1.8rem;
-}
-
-.login-header p {
-  color: #6b7280;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.login-form {
-  margin-bottom: 2rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  background: #f9fafb;
-  font-weight: 500;
-}
-
-.form-control:focus {
-  border-color: var(--color-accent);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(46, 175, 125, 0.1);
-  outline: none;
-}
-
-.form-control.is-invalid {
-  border-color: #ef4444;
-}
-
-.invalid-feedback {
-  color: #ef4444;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
-}
-
-.btn-login {
-  width: 100%;
-  background: var(--gradient-main);
-  color: white;
-  border: none;
-  padding: 0.875rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.btn-login:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(46, 175, 125, 0.3);
-}
-
-.login-footer {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
-}
-
-.demo-info {
-  background: linear-gradient(135deg, rgba(46, 175, 125, 0.08) 0%, rgba(46, 175, 125, 0.04) 100%);
-  border: 1px solid rgba(46, 175, 125, 0.15);
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-}
-
-.demo-info h6 {
-  color: var(--color-accent);
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.demo-info p {
-  margin: 0.25rem 0;
-  font-size: 0.85rem;
-  color: #374151;
-  font-weight: 500;
-}
-
-.demo-info code {
-  background: rgba(46, 175, 125, 0.1);
-  padding: 0.125rem 0.35rem;
-  border-radius: 3px;
-  font-family: 'Courier New', monospace;
-  color: var(--color-accent);
-  font-weight: 600;
-}
-
-.register-link {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.register-link p {
-  margin: 0;
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.register-link a {
-  color: var(--color-accent);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
-
-/* Fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

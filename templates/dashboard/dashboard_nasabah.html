@@ -1,176 +1,182 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard Nasabah{% endblock %}
+{% block page_title %}Beranda{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-  <!-- DASHBOARD HEADER WITH ILLUSTRATION -->
-  <div class="dashboard-header-banner" style="animation: fadeIn 1s ease-in-out;">
-    <div class="banner-content">
-      <div class="banner-text">
-        <h2><i class="bi bi-person-circle"></i> Dashboard Nasabah</h2>
-        <span class="text-muted">Selamat datang, <strong>{{ nasabah.nama }}</strong></span>
-      </div>
-      <svg class="banner-illustration" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-        <!-- Decorative person icon -->
-        <circle cx="100" cy="40" r="25" fill="#7b4a39" opacity="0.7"/>
-        <rect x="85" y="65" width="30" height="40" fill="#a0684f" opacity="0.8" rx="5"/>
-        <circle cx="180" cy="20" r="15" fill="#f4a261" opacity="0.5"/>
-      </svg>
+<div class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+  
+  <!-- Header Banner -->
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-600 to-navy-800 p-8 md:p-12 mb-8 text-white shadow-xl">
+    <div class="relative z-10 max-w-2xl">
+      <h2 class="text-3xl md:text-4xl font-black tracking-tight mb-2">Dashboard Nasabah</h2>
+      <p class="text-navy-100 font-medium text-lg">Selamat datang kembali, <span class="font-bold text-gold-400">{{ nasabah.nama }}</span></p>
     </div>
+    
+    <!-- Abstract Decoration -->
+    <div class="absolute right-0 top-0 h-full w-1/3 opacity-20 pointer-events-none">
+       <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="h-full w-full fill-current text-white">
+         <path d="M0 100 C 20 0 50 0 100 100 Z" />
+       </svg>
+    </div>
+    <div class="absolute -right-10 -bottom-20 w-64 h-64 bg-gold-500 rounded-full blur-[80px] opacity-20"></div>
   </div>
 
-  <div class="page-header">
-    <h2 style="display: none;"><i class="bi bi-person-circle"></i> Dashboard Nasabah</h2>
-    <span class="text-muted" style="display: none;">Selamat datang, <strong>{{ nasabah.nama }}</strong></span>
-  </div>
-
-  <div class="row g-4 mb-4" style="animation: fadeIn 1s ease-in-out 0.2s both;">
-    <!-- Pengajuan Stats -->
-    <div class="col-md-6 col-lg-3">
-      <div class="stat-card">
-        <div class="stat-card-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-          </svg>
+  <!-- Key Metrics Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Pengajuan -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-file-earmark-text text-2xl"></i>
         </div>
-        <h5><i class="bi bi-file-earmark"></i> Total Pengajuan</h5>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="stat-value">{{ total_pengajuan }}</div>
-          <div class="stat-icon">📋</div>
-        </div>
-        <small class="text-muted">Pengajuan kredit Anda</small>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total</span>
+      </div>
+      <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Total Pengajuan</h3>
+      <div class="mt-2 flex items-baseline gap-2">
+        <span class="text-3xl font-black text-slate-800">{{ total_pengajuan }}</span>
+        <span class="text-xs text-slate-400 font-medium tracking-tight">Berkas</span>
       </div>
     </div>
 
-    <div class="col-md-6 col-lg-3">
-      <div class="stat-card">
-        <div class="stat-card-icon success">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
+    <!-- Disetujui -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-check-circle-fill text-2xl"></i>
         </div>
-        <h5><i class="bi bi-check-circle"></i> Disetujui</h5>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="stat-value text-success">{{ pengajuan_disetujui }}</div>
-          <div class="stat-icon">✓</div>
-        </div>
-        <small class="text-muted">Pengajuan diterima</small>
+        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400">Success</span>
+      </div>
+      <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Pengajuan Disetujui</h3>
+      <div class="mt-2 flex items-baseline gap-2">
+        <span class="text-3xl font-black text-emerald-600">{{ pengajuan_disetujui }}</span>
+        <span class="text-xs text-slate-400 font-medium tracking-tight">Diterima</span>
       </div>
     </div>
 
-    <div class="col-md-6 col-lg-3">
-      <div class="stat-card">
-        <div class="stat-card-icon warning">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/>
-          </svg>
+    <!-- Menunggu -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-hourglass-split text-2xl"></i>
         </div>
-        <h5><i class="bi bi-clock-history"></i> Menunggu</h5>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="stat-value text-warning">{{ pengajuan_menunggu }}</div>
-          <div class="stat-icon">⏳</div>
-        </div>
-        <small class="text-muted">Dalam verifikasi</small>
+        <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Pending</span>
+      </div>
+      <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Menunggu Verifikasi</h3>
+      <div class="mt-2 flex items-baseline gap-2">
+        <span class="text-3xl font-black text-amber-600">{{ pengajuan_menunggu }}</span>
+        <span class="text-xs text-slate-400 font-medium tracking-tight">Proses</span>
       </div>
     </div>
 
-    <div class="col-md-6 col-lg-3">
-      <div class="stat-card">
-        <div class="stat-card-icon danger">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path fill="currentColor" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
-          </svg>
+    <!-- Ditolak -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-x-circle-fill text-2xl"></i>
         </div>
-        <h5><i class="bi bi-x-circle"></i> Ditolak</h5>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="stat-value text-danger">{{ pengajuan_ditolak }}</div>
-          <div class="stat-icon">✗</div>
-        </div>
-        <small class="text-muted">Pengajuan ditolak</small>
+        <span class="text-[10px] font-black uppercase tracking-widest text-red-400">Rejected</span>
+      </div>
+      <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Pengajuan Ditolak</h3>
+      <div class="mt-2 flex items-baseline gap-2">
+        <span class="text-3xl font-black text-red-600">{{ pengajuan_ditolak }}</span>
+        <span class="text-xs text-slate-400 font-medium tracking-tight">Gagal</span>
       </div>
     </div>
   </div>
 
-  <!-- Outstanding & Payment Stats -->
-  <div class="row g-4" style="animation: fadeIn 1s ease-in-out 0.4s both;">
-    <div class="col-lg-6">
-      <div class="card compact-chart-card">
-        <div class="card-header">
-          <i class="bi bi-cash-coin"></i> Total Outstanding
-        </div>
-        <div class="card-body">
-          <div class="text-center">
-            <h3 class="text-success"><span class="currency">Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}</span></h3>
-            <small class="text-muted">Total pinjaman yang disetujui</small>
+  <!-- Outstanding & Payment Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Outstanding -->
+    <div class="card-glass p-6">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-navy-50 text-navy-600 rounded-lg">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-800">Total Outstanding</h3>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Sisa Pinjaman</p>
           </div>
         </div>
       </div>
+      <div class="text-center py-4">
+        <p class="text-4xl font-black text-navy-600">Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}</p>
+        <p class="text-sm font-medium text-slate-400 mt-2">Total pinjaman aktif yang belum lunas</p>
+      </div>
     </div>
 
-    <div class="col-lg-6">
-      <div class="card compact-chart-card">
-        <div class="card-header">
-          <i class="bi bi-receipt"></i> Status Pembayaran
-        </div>
-        <div class="card-body">
-          <div class="row text-center">
-            <div class="col-4">
-              <h5 class="text-success">{{ pembayaran_sudah }}</h5>
-              <small class="text-muted">Sudah Bayar</small>
-            </div>
-            <div class="col-4">
-              <h5 class="text-warning">{{ pembayaran_belum }}</h5>
-              <small class="text-muted">Belum Bayar</small>
-            </div>
-            <div class="col-4">
-              <h5 class="text-danger">Rp {{ '{:,.0f}'.format(total_denda or 0) }}</h5>
-              <small class="text-muted">Total Denda</small>
-            </div>
+    <!-- Status Pembayaran -->
+    <div class="card-glass p-6">
+       <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-navy-50 text-navy-600 rounded-lg">
+            <i class="bi bi-receipt"></i>
           </div>
+          <div>
+            <h3 class="font-bold text-slate-800">Status Pembayaran</h3>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Ringkasan Tagihan</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+          <p class="text-2xl font-black text-emerald-600">{{ pembayaran_sudah }}</p>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 mt-1">Lunas</p>
+        </div>
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-100">
+          <p class="text-2xl font-black text-amber-600">{{ pembayaran_belum }}</p>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-amber-400 mt-1">Belum Bayar</p>
+        </div>
+        <div class="p-3 bg-red-50 rounded-xl border border-red-100">
+          <p class="text-lg font-black text-red-600 mt-1">Rp {{ '{:,.0f}'.format(total_denda or 0) }}</p>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-red-400 mt-1">Denda</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Notifikasi Pembayaran Jatuh Tempo -->
+  <!-- Notifikasi Jatuh Tempo -->
   {% if jatuh_tempo %}
-  <div class="row g-4 mt-2" style="animation: fadeIn 1s ease-in-out 0.6s both;">
-    <div class="col-12">
-      <div class="card border-warning">
-        <div class="card-header bg-warning text-dark">
-          <i class="bi bi-exclamation-triangle"></i> Notifikasi Pembayaran Jatuh Tempo
+  <div class="mb-8 animate-in slide-in-from-bottom-2 duration-500">
+    <div class="card-glass border border-amber-200 bg-amber-50/50 p-6 relative overflow-hidden">
+      <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+        <i class="bi bi-exclamation-triangle-fill text-6xl text-amber-600"></i>
+      </div>
+      
+      <div class="relative z-10">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+            <i class="bi bi-bell-fill"></i>
+          </span>
+          <h3 class="font-bold text-amber-800 text-lg">Pembayaran Jatuh Tempo</h3>
         </div>
-        <div class="card-body">
-          <div class="alert alert-warning">
-            <h6><i class="bi bi-calendar-x"></i> Anda memiliki {{ jatuh_tempo|length }} pembayaran yang jatuh tempo</h6>
-            <p class="mb-2">Silakan segera lakukan pembayaran untuk menghindari denda keterlambatan.</p>
-            <div class="table-responsive">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Bulan Ke</th>
-                    <th>Jumlah</th>
-                    <th>Jatuh Tempo</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for item in jatuh_tempo %}
-                  <tr>
-                    <td>{{ item.bulan_ke }}</td>
-                    <td>Rp {{ '{:,.0f}'.format(item.jumlah_bayar) }}</td>
-                    <td>{{ item.tanggal_jatuh_tempo.strftime('%d/%m/%Y') }}</td>
-                    <td>
-                      <button class="btn btn-sm btn-success" onclick="bayarSekarang({{ item.id }})">
-                        <i class="bi bi-credit-card"></i> Bayar Sekarang
-                      </button>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <p class="text-amber-700/80 font-medium mb-4">Anda memiliki <span class="font-bold text-amber-800">{{ jatuh_tempo|length }} pembayaran</span> yang perlu segera diselesaikan.</p>
+        
+        <div class="overflow-x-auto rounded-xl border border-amber-100 bg-white/60">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-amber-100/50 border-b border-amber-200/50">
+                <th class="px-4 py-3 text-[10px] font-black uppercase tracking-[2px] text-amber-800">Bulan Ke</th>
+                <th class="px-4 py-3 text-[10px] font-black uppercase tracking-[2px] text-amber-800">Jumlah</th>
+                <th class="px-4 py-3 text-[10px] font-black uppercase tracking-[2px] text-amber-800">Jatuh Tempo</th>
+                <th class="px-4 py-3 text-[10px] font-black uppercase tracking-[2px] text-amber-800">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-amber-100/50">
+              {% for item in jatuh_tempo %}
+              <tr>
+                <td class="px-4 py-3 font-bold text-slate-700">{{ item.bulan_ke }}</td>
+                <td class="px-4 py-3 font-bold text-slate-700">Rp {{ '{:,.0f}'.format(item.jumlah_bayar) }}</td>
+                <td class="px-4 py-3 font-medium text-red-600">{{ item.tanggal_jatuh_tempo.strftime('%d/%m/%Y') }}</td>
+                <td class="px-4 py-3">
+                  <button class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-xs font-bold rounded-lg shadow-lg shadow-emerald-500/30 transition-all transform active:scale-95 flex items-center gap-2" onclick="bayarSekarang({{ item.id }})">
+                    <i class="bi bi-credit-card-fill"></i> Bayar
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -178,48 +184,56 @@
   {% endif %}
 
   <!-- Quick Actions -->
-  <div class="row g-4 mt-2" style="animation: fadeIn 1s ease-in-out 0.6s both;">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <i class="bi bi-lightning"></i> Aksi Cepat
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-4">
-              <a href="{{ url_for('pengajuan.ajukan') }}" class="btn btn-primary btn-lg w-100">
-                <i class="bi bi-plus-circle"></i> Ajukan Kredit Baru
-              </a>
-            </div>
-            <div class="col-md-4">
-              <a href="{{ url_for('pembayaran.jadwal_pembayaran', pengajuan_id=0) }}" class="btn btn-jadwal-pembayaran btn-lg w-100">
-                <i class="bi bi-calendar-event"></i> Lihat Jadwal Pembayaran
-              </a>
-            </div>
-            <div class="col-md-4">
-              <a href="{{ url_for('info.index') }}" class="btn btn-secondary btn-lg w-100">
-                <i class="bi bi-info-circle"></i> Informasi Layanan
-              </a>
-            </div>
+  <div class="card-glass p-8">
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+      <div class="p-2 bg-purple-50 text-purple-600 rounded-lg">
+        <i class="bi bi-lightning-charge-fill"></i>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800">Aksi Cepat</h3>
+        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Menu Pintas</p>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <a href="{{ url_for('pengajuan.ajukan') }}" class="group p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-gold-500/30 hover:bg-gold-50/10 hover:shadow-lg hover:shadow-gold-500/10 transition-all duration-300">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-gold-100 text-gold-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="bi bi-plus-lg text-lg"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-700 group-hover:text-gold-600 transition-colors">Ajukan Kredit</h4>
+            <p class="text-xs text-slate-400 mt-1">Buat pengajuan baru</p>
           </div>
         </div>
-      </div>
+      </a>
+
+      <a href="{{ url_for('pembayaran.jadwal_pembayaran', pengajuan_id=0) }}" class="group p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-blue-500/30 hover:bg-blue-50/10 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="bi bi-calendar-check text-lg"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-700 group-hover:text-blue-600 transition-colors">Jadwal Bayar</h4>
+            <p class="text-xs text-slate-400 mt-1">Cek tagihan anda</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ url_for('info.index') }}" class="group p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-navy-500/30 hover:bg-navy-50/10 hover:shadow-lg hover:shadow-navy-500/10 transition-all duration-300">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-navy-100 text-navy-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="bi bi-info-lg text-lg"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-700 group-hover:text-navy-600 transition-colors">Informasi</h4>
+            <p class="text-xs text-slate-400 mt-1">Pusat bantuan</p>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 </div>
-
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
 
 <script>
 function bayarSekarang(paymentId) {
@@ -229,5 +243,4 @@ function bayarSekarang(paymentId) {
     }
 }
 </script>
-
 {% endblock %}

@@ -1,172 +1,198 @@
 {% extends 'base.html' %}
 {% block title %}Jadwal Pembayaran{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/payment.css') }}">
-{% endblock %}
+{% block page_title %}Detail Angsuran{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-  <div class="page-header" style="animation: fadeIn 1s ease-in-out;">
-    <h2><i class="bi bi-calendar-event"></i> Jadwal Pembayaran</h2>
-    {% if current_user.role == 'nasabah' %}
-    <p class="text-muted">Pengajuan Anda - Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</p>
-    {% else %}
-    <p class="text-muted">Pengajuan: <strong>{{ pengajuan.nasabah.nama }}</strong> - Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</p>
-    {% endif %}
-  </div>
+<div class="animate-in fade-in slide-in-from-bottom-4 duration-500">
 
-  <!-- Summary Card -->
-  <div class="card mb-4" style="animation: fadeIn 1s ease-in-out 0.2s both;">
-    <div class="card-body">
-      <div class="row text-center">
-        <div class="col-md-3">
-          <h5 class="text-primary">{{ pengajuan.tenor }}</h5>
-          <small class="text-muted">Total Bulan</small>
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+    <div>
+      <div class="flex items-center gap-3 mb-2">
+        <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+           <i class="bi bi-calendar-event-fill text-xl"></i>
         </div>
-        <div class="col-md-3">
-          <h5 class="text-success">Rp {{ '{:,.0f}'.format(pengajuan.angsuran_per_bulan) }}</h5>
-          <small class="text-muted">Angsuran/Bulan</small>
-        </div>
-        <div class="col-md-3">
-          <h5 class="text-info">Rp {{ '{:,.0f}'.format(pengajuan.total_pinjaman_dengan_bunga) }}</h5>
-          <small class="text-muted">Total + Bunga</small>
-        </div>
-        <div class="col-md-3">
-          <h5 class="text-warning">{{ pembayaran_list|selectattr('status', 'equalto', 'sudah_bayar')|list|length }}</h5>
-          <small class="text-muted">Sudah Dibayar</small>
-        </div>
+        <h2 class="text-2xl font-black text-slate-800 tracking-tight">Jadwal Pembayaran</h2>
       </div>
+      {% if current_user.role == 'nasabah' %}
+        <p class="text-slate-500 font-medium ml-1">Pinjaman Pokok: <span class="text-slate-800 font-bold">Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</span></p>
+      {% else %}
+        <p class="text-slate-500 font-medium ml-1">Nasabah: <span class="text-indigo-600 font-bold">{{ pengajuan.nasabah.nama }}</span> • Pinjaman: <span class="text-slate-800 font-bold">Rp {{ '{:,.0f}'.format(pengajuan.jumlah_pinjaman) }}</span></p>
+      {% endif %}
+    </div>
+
+    <div class="flex gap-3">
+      <a href="{{ url_for('pengajuan.detail', id=pengajuan.id) }}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors flex items-center gap-2">
+        <i class="bi bi-arrow-left"></i> Kembali
+      </a>
+      <a href="{{ url_for('pembayaran.export_jadwal', pengajuan_id=pengajuan.id) }}" class="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold text-sm hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2">
+        <i class="bi bi-file-earmark-excel-fill"></i> Export XLSX
+      </a>
     </div>
   </div>
 
-  <!-- Action Buttons -->
-  <div class="mb-4" style="animation: fadeIn 1s ease-in-out 0.3s both;">
-    <a href="{{ url_for('pengajuan.detail', id=pengajuan.id) }}" class="btn btn-secondary">
-      <i class="bi bi-arrow-left"></i> Kembali ke Detail
-    </a>
-    <a href="{{ url_for('pembayaran.export_jadwal', pengajuan_id=pengajuan.id) }}" class="btn btn-success">
-      <i class="bi bi-download"></i> Export XLSX
-    </a>
+  <!-- Loan Summary Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Tenor -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-calendar-range text-xl"></i>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Durasi</span>
+      </div>
+      <h3 class="text-3xl font-black text-slate-800">{{ pengajuan.tenor }} <span class="text-sm font-bold text-slate-400">Bulan</span></h3>
+      <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Total Tenor</p>
+    </div>
+
+    <!-- Monthly Installment -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-wallet2 text-xl"></i>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Cicilan</span>
+      </div>
+      <h3 class="text-3xl font-black text-indigo-600">Rp {{ '{:,.0f}'.format(pengajuan.angsuran_per_bulan / 1000) }}<span class="text-sm">k</span></h3>
+      <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Per Bulan</p>
+    </div>
+
+    <!-- Total Return -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-cash-stack text-xl"></i>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total + Bunga</span>
+      </div>
+      <h3 class="text-3xl font-black text-emerald-600">Rp {{ '{:,.0f}'.format(pengajuan.total_pinjaman_dengan_bunga / 1000000) }}<span class="text-sm">jt</span></h3>
+      <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Total Pengembalian</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="card-glass p-6 group">
+      <div class="flex items-center justify-between mb-4">
+        <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+          <i class="bi bi-pie-chart-fill text-xl"></i>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Progress</span>
+      </div>
+      <h3 class="text-3xl font-black text-amber-500">
+        {{ pembayaran_list|selectattr('status', 'equalto', 'sudah_bayar')|list|length }}<span class="text-slate-300 font-light text-xl">/{{ pengajuan.tenor }}</span>
+      </h3>
+      <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Bulan Terbayar</p>
+    </div>
   </div>
 
-  <!-- Payment Schedule Table -->
-  <div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
-    <div class="card-header card-header-notifikasi">
-      <h6 class="mb-0"><i class="bi bi-table"></i> Detail Pembayaran</h6>
-    </div>
-    <div class="card-body p-0 payment-details-bg">
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead class="thead-dark-green">
-            <tr>
-              <th><i class="bi bi-hash"></i> Bulan</th>
-              <th><i class="bi bi-cash-coin"></i> Jumlah Bayar</th>
-              <th><i class="bi bi-calendar"></i> Jatuh Tempo</th>
-              <th><i class="bi bi-calendar-check"></i> Tanggal Bayar</th>
-              <th><i class="bi bi-flag"></i> Status</th>
-              <th><i class="bi bi-exclamation-triangle"></i> Denda</th>
-              <th><i class="bi bi-calculator"></i> Total</th>
-              <th><i class="bi bi-gear"></i> Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for p in pembayaran_list %}
-            <tr class="{% if p.is_terlambat %}table-danger{% elif p.status == 'sudah_bayar' %}table-success{% endif %}">
-              <td>
-                <strong>Bulan {{ p.bulan_ke }}</strong>
-              </td>
-              <td>
-                <span class="currency">Rp {{ '{:,.0f}'.format(p.jumlah_bayar) }}</span>
-              </td>
-              <td>
-                {{ p.tanggal_jatuh_tempo.strftime('%d-%m-%Y') }}
-              </td>
-              <td>
-                {% if p.tanggal_bayar %}
-                  {{ p.tanggal_bayar.strftime('%d-%m-%Y') }}
-                {% else %}
-                  <span class="text-muted">-</span>
-                {% endif %}
-              </td>
-              <td>
-                {% if p.status == 'sudah_bayar' %}
-                  <span class="badge bg-success">
-                    <i class="bi bi-check-circle"></i> Sudah Bayar
-                  </span>
-                {% elif p.is_terlambat %}
-                  <span class="badge bg-danger">
-                    <i class="bi bi-exclamation-triangle"></i> Terlambat
-                  </span>
-                {% else %}
-                  <span class="badge bg-warning">
-                    <i class="bi bi-clock"></i> Belum Bayar
-                  </span>
-                {% endif %}
-              </td>
-              <td>
-                {% if p.denda > 0 %}
-                  <span class="text-danger fw-bold">Rp {{ '{:,.0f}'.format(p.denda) }}</span>
-                {% else %}
-                  <span class="text-muted">-</span>
-                {% endif %}
-              </td>
-              <td>
-                <strong>Rp {{ '{:,.0f}'.format(p.jumlah_bayar + p.denda) }}</strong>
-              </td>
-              <td>
-                {% if p.status == 'sudah_bayar' %}
-                  <span class="text-success"><i class="bi bi-check-circle"></i> Sudah Bayar</span>
-                {% else %}
-                  <form method="POST" action="{{ url_for('pembayaran.bayar', pembayaran_id=p.id) }}" style="display: inline;">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Tandai pembayaran bulan {{ p.bulan_ke }} sebagai sudah dibayar?')">
-                      <i class="bi bi-cash"></i> Bayar
-                    </button>
-                  </form>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <!-- Payment Table -->
+  <div class="card-glass overflow-hidden shadow-xl mb-6">
+    <div class="p-6 border-b border-slate-100 flex items-center gap-3 bg-slate-50/50">
+      <div class="p-2 bg-slate-100 text-slate-600 rounded-lg">
+        <i class="bi bi-table"></i>
       </div>
+      <h3 class="font-bold text-slate-800">Rincian Pembayaran Bulanan</h3>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-indigo-900 text-white">
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Bulan</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Jumlah Tagihan</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Jatuh Tempo</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Tanggal Bayar</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Status</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Denda</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Total Bayar</th>
+            <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Aksi</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for p in pembayaran_list %}
+          <tr class="transition-colors hover:bg-slate-50 
+              {% if p.is_terlambat %}bg-red-50/30{% elif p.status == 'sudah_bayar' %}bg-emerald-50/30{% endif %}">
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold text-xs">{{ p.bulan_ke }}</span>
+            </td>
+            <td class="px-6 py-4 font-bold text-slate-700">
+              Rp {{ '{:,.0f}'.format(p.jumlah_bayar) }}
+            </td>
+            <td class="px-6 py-4 font-medium text-slate-500">
+              {{ p.tanggal_jatuh_tempo.strftime('%d-%m-%Y') }}
+            </td>
+            <td class="px-6 py-4 font-medium text-slate-600">
+              {% if p.tanggal_bayar %}
+                <span class="text-emerald-600 font-bold">{{ p.tanggal_bayar.strftime('%d-%m-%Y') }}</span>
+              {% else %}
+                <span class="text-slate-300">-</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4">
+              {% if p.status == 'sudah_bayar' %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                  <i class="bi bi-check-circle-fill"></i> Lunas
+                </span>
+              {% elif p.is_terlambat %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-wider animate-pulse">
+                  <i class="bi bi-exclamation-triangle-fill"></i> Terlambat
+                </span>
+              {% else %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                  <i class="bi bi-clock-fill"></i> Belum
+                </span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4">
+              {% if p.denda > 0 %}
+                <span class="text-red-500 font-bold">Rp {{ '{:,.0f}'.format(p.denda) }}</span>
+              {% else %}
+                <span class="text-slate-300">-</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 font-black text-indigo-900">
+              Rp {{ '{:,.0f}'.format(p.jumlah_bayar + p.denda) }}
+            </td>
+            <td class="px-6 py-4">
+              {% if p.status == 'sudah_bayar' %}
+                <span class="text-emerald-500 text-xs font-bold uppercase tracking-wider"><i class="bi bi-check-lg text-lg"></i> Selesai</span>
+              {% else %}
+                <form method="POST" action="{{ url_for('pembayaran.bayar', pembayaran_id=p.id) }}" class="inline-block">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-md shadow-indigo-500/30 transition-all active:scale-95" onclick="return confirm('Tandai pembayaran bulan {{ p.bulan_ke }} sebagai sudah dibayar?')">
+                    <i class="bi bi-credit-card-fill mr-1"></i> Bayar
+                  </button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 
   <!-- Legend -->
-  <div class="card mt-4" style="animation: fadeIn 1s ease-in-out 0.6s both;">
-    <div class="card-body">
-      <h6 class="card-title"><i class="bi bi-info-circle"></i> Keterangan Status</h6>
-      <div class="row">
-        <div class="col-md-3">
-          <span class="badge bg-warning me-2"></span> Belum Bayar
-        </div>
-        <div class="col-md-3">
-          <span class="badge bg-success me-2"></span> Sudah Bayar
-        </div>
-        <div class="col-md-3">
-          <span class="badge bg-danger me-2"></span> Terlambat
-        </div>
-        <div class="col-md-3">
-          <small class="text-muted">Denda: 0.1% per hari keterlambatan</small>
-        </div>
+  <div class="card-glass p-6">
+    <div class="flex items-center gap-2 mb-4">
+      <i class="bi bi-info-circle-fill text-slate-400"></i>
+      <h6 class="font-bold text-slate-700">Keterangan Status</h6>
+    </div>
+    <div class="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-amber-100 border border-amber-300"></span> Belum Bayar
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-emerald-100 border border-emerald-300"></span> Sudah Bayar
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-red-100 border border-red-300"></span> Terlambat
+      </div>
+      <div class="ml-auto text-slate-400 normal-case tracking-normal font-medium">
+        * Denda keterlambatan: 0.1% per hari
       </div>
     </div>
   </div>
+
 </div>
 {% endblock %}
-
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
 

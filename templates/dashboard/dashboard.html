@@ -1,202 +1,197 @@
 {% extends "base.html" %}
 
 {% block title %}Dashboard{% endblock %}
+{% block page_title %}Ringkasan Dashboard{% endblock %}
 
 {% block content %}
 
-<!-- Dashboard Header Banner -->
-<div class="dashboard-header-banner" style="animation: fadeIn 1s ease-in-out;">
-  <div class="banner-content">
-    <div class="banner-text">
-      <h2>Dashboard</h2>
-      <p>Selamat datang kembali, <strong>{{ current_user.username }}</strong></p>
+<!-- Header Banner -->
+<div class="relative overflow-hidden bg-navy-500 rounded-2xl p-8 mb-8 text-white shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="space-y-2">
+      <h2 class="text-3xl font-extrabold tracking-tight">Selamat Datang, {{ current_user.username }}!</h2>
+      <p class="text-navy-100 text-lg opacity-90">Pantau seluruh aktivitas pinjaman dan data nasabah dalam satu platform.</p>
     </div>
-    <div class="banner-illustration">
-      <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="10" y="50" width="15" height="40" fill="rgba(255,255,255,0.8)" rx="2"/>
-        <rect x="30" y="35" width="15" height="55" fill="rgba(255,255,255,0.7)" rx="2"/>
-        <rect x="50" y="20" width="15" height="70" fill="rgba(255,255,255,0.9)" rx="2"/>
-        <rect x="70" y="40" width="15" height="50" fill="rgba(255,255,255,0.8)" rx="2"/>
-        <rect x="90" y="30" width="15" height="60" fill="rgba(255,255,255,0.7)" rx="2"/>
-        <circle cx="105" cy="15" r="8" fill="rgba(255,255,255,0.6)"/>
-      </svg>
+    <div class="flex gap-4">
+      <a href="{{ url_for('pengajuan.index') }}" class="bg-gold-500 hover:bg-gold-600 text-navy-500 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:-translate-y-1 flex items-center gap-2">
+        <i class="bi bi-plus-lg"></i>
+        Buat Pengajuan
+      </a>
     </div>
   </div>
+  <!-- Abstract Shapes -->
+  <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl text-gold-500"></div>
+  <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
 </div>
 
 <!-- Stat Cards Grid -->
-<div class="cards-grid" style="margin-bottom: 2rem; animation: fadeIn 1s ease-in-out 0.2s both;">
-  <div class="card-stat">
-    <div style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.5rem;">
-      <i class="bi bi-file-earmark-text"></i>
-    </div>
-    <div class="label">Total Pengajuan</div>
-    <div class="value">{{ total_pengajuan }}</div>
-    <div class="meta">Semua pengajuan kredit</div>
-  </div>
-
-  <div class="card-stat">
-    <div style="color: var(--accent-green); font-size: 1.6rem; margin-bottom: 0.5rem;">
-      <i class="bi bi-check-circle-fill"></i>
-    </div>
-    <div class="label">Disetujui</div>
-    <div class="value" style="color: var(--accent-green);">{{ pengajuan_disetujui }}</div>
-    <div class="meta">Pengajuan diterima</div>
-  </div>
-
-  <div class="card-stat">
-    <div style="color: var(--accent-orange); font-size: 1.6rem; margin-bottom: 0.5rem;">
-      <i class="bi bi-clock-history"></i>
-    </div>
-    <div class="label">Menunggu</div>
-    <div class="value" style="color: var(--accent-orange);">{{ pengajuan_menunggu }}</div>
-    <div class="meta">Dalam verifikasi</div>
-  </div>
-
-  <div class="card-stat">
-    <div style="color: var(--accent-red); font-size: 1.6rem; margin-bottom: 0.5rem;">
-      <i class="bi bi-x-circle-fill"></i>
-    </div>
-    <div class="label">Ditolak</div>
-    <div class="value" style="color: var(--accent-red);">{{ pengajuan_ditolak }}</div>
-    <div class="meta">Pengajuan ditolak</div>
-  </div>
-</div>
-
-<!-- Charts Section -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-  <!-- Outstanding Card -->
-  <div class="card" style="animation: fadeIn 1s ease-in-out 0.4s both;">
-    <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
-      <i class="bi bi-cash-coin" style="font-size: 1.2rem;"></i>
-      <h5 style="margin: 0; font-size: 0.95rem;">Total Outstanding</h5>
-    </div>
-    <div class="card-body">
-      <div style="text-align: center; margin-bottom: 1.5rem;">
-        <div class="currency" style="font-size: 1.8rem; display: block; margin-bottom: 0.5rem;">
-          Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}
-        </div>
-        <small style="color: var(--muted);">Total pinjaman yang disetujui</small>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <!-- Total Pengajuan -->
+  <div class="card-glass p-6 group">
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+        <i class="bi bi-file-earmark-text text-2xl"></i>
       </div>
-      <canvas id="statusChart" style="max-height: 160px;"></canvas>
+      <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total</span>
+    </div>
+    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Total Pengajuan</h3>
+    <div class="mt-2 flex items-baseline gap-2">
+      <span class="text-3xl font-black text-slate-800">{{ total_pengajuan }}</span>
+      <span class="text-xs text-slate-400 font-medium tracking-tight">Berkas</span>
     </div>
   </div>
 
-  <!-- Status Chart -->
-  <div class="card" style="animation: fadeIn 1s ease-in-out 0.6s both;">
-    <div class="card-header" style="display: flex; align-items: center; gap: 0.8rem;">
-      <i class="bi bi-graph-up" style="font-size: 1.2rem;"></i>
-      <h5 style="margin: 0; font-size: 0.95rem;">Status Pengajuan</h5>
+  <!-- Disetujui -->
+  <div class="card-glass p-6 group">
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+        <i class="bi bi-check-circle-fill text-2xl"></i>
+      </div>
+      <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400">Success</span>
     </div>
-    <div class="card-body">
-      <canvas id="summaryChart" style="max-height: 160px;"></canvas>
+    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Pengajuan Disetujui</h3>
+    <div class="mt-2 flex items-baseline gap-2">
+      <span class="text-3xl font-black text-emerald-600">{{ pengajuan_disetujui }}</span>
+      <span class="text-xs text-slate-400 font-medium tracking-tight">Diterima</span>
+    </div>
+  </div>
+
+  <!-- Menunggu -->
+  <div class="card-glass p-6 group">
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+        <i class="bi bi-clock-history text-2xl"></i>
+      </div>
+      <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Pending</span>
+    </div>
+    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Menunggu Verifikasi</h3>
+    <div class="mt-2 flex items-baseline gap-2">
+      <span class="text-3xl font-black text-amber-600">{{ pengajuan_menunggu }}</span>
+      <span class="text-xs text-slate-400 font-medium tracking-tight">Proses</span>
+    </div>
+  </div>
+
+  <!-- Ditolak -->
+  <div class="card-glass p-6 group">
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-300">
+        <i class="bi bi-x-circle-fill text-2xl"></i>
+      </div>
+      <span class="text-[10px] font-black uppercase tracking-widest text-red-400">Rejected</span>
+    </div>
+    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Pengajuan Ditolak</h3>
+    <div class="mt-2 flex items-baseline gap-2">
+      <span class="text-3xl font-black text-red-600">{{ pengajuan_ditolak }}</span>
+      <span class="text-xs text-slate-400 font-medium tracking-tight">Gagal</span>
     </div>
   </div>
 </div>
 
-<!-- Chart.js Library -->
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+  <!-- Outstanding Chart -->
+  <div class="card-glass p-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h3 class="text-xl font-black text-slate-800 tracking-tight">Total Outstanding</h3>
+        <p class="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">Akumulasi Pinjaman Disetujui</p>
+      </div>
+      <div class="px-4 py-2 bg-navy-50 rounded-lg">
+        <span class="text-navy-500 font-bold text-lg">Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}</span>
+      </div>
+    </div>
+    <div class="h-[250px]">
+      <canvas id="statusChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Status Distribution -->
+  <div class="card-glass p-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h3 class="text-xl font-black text-slate-800 tracking-tight">Statistik Pengajuan</h3>
+        <p class="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">Distribusi Status Berkas</p>
+      </div>
+      <i class="bi bi-graph-up-arrow text-2xl text-gold-500"></i>
+    </div>
+    <div class="h-[250px]">
+      <canvas id="summaryChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Data Scripts -->
+<!-- Data for Charts -->
 <script type="application/json" id="status-data">{{ [pengajuan_disetujui, pengajuan_ditolak, total_pengajuan - pengajuan_disetujui - pengajuan_ditolak]|tojson }}</script>
 <script type="application/json" id="summary-data">{{ [total_nasabah, total_pengajuan, pengajuan_disetujui, pengajuan_ditolak]|tojson }}</script>
 
 <script>
-const statusData = JSON.parse(document.getElementById('status-data').textContent || '[]');
-const summaryData = JSON.parse(document.getElementById('summary-data').textContent || '[]');
+  const statusData = JSON.parse(document.getElementById('status-data').textContent || '[]');
+  const summaryData = JSON.parse(document.getElementById('summary-data').textContent || '[]');
 
-// Status Chart (Doughnut)
-const statusCtx = document.getElementById('statusChart').getContext('2d');
-new Chart(statusCtx, {
-  type: 'doughnut',
-  data: {
-    labels: ['Disetujui', 'Ditolak', 'Menunggu'],
-    datasets: [{
-      data: statusData,
-      backgroundColor: [
-        '#10b981',  // Green
-        '#ef4444',  // Red
-        '#f59e0b'   // Orange
-      ],
-      borderColor: '#ffffff',
-      borderWidth: 3,
-      hoverOffset: 8
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          font: { size: 11, weight: '600' },
-          padding: 15,
-          usePointStyle: true,
-          pointStyle: 'circle'
+  // Doughnut Chart
+  new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Disetujui', 'Ditolak', 'Menunggu'],
+      datasets: [{
+        data: statusData,
+        backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+        borderWidth: 0,
+        hoverOffset: 20
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            padding: 20,
+            font: { size: 12, weight: 'bold' }
+          }
+        }
+      },
+      cutout: '75%'
+    }
+  });
+
+  // Bar Chart
+  new Chart(document.getElementById('summaryChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Nasabah', 'Pengajuan', 'Disetujui', 'Ditolak'],
+      datasets: [{
+        data: summaryData,
+        backgroundColor: ['#0A192F', '#d4af37', '#10b981', '#ef4444'],
+        borderRadius: 8,
+        barThickness: 40
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { display: false },
+          ticks: { font: { weight: 'bold' } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { font: { weight: 'bold' } }
         }
       }
     }
-  }
-});
-
-// Summary Chart (Bar)
-const summaryCtx = document.getElementById('summaryChart').getContext('2d');
-new Chart(summaryCtx, {
-  type: 'bar',
-  data: {
-    labels: ['Nasabah', 'Pengajuan', 'Disetujui', 'Ditolak'],
-    datasets: [{
-      label: 'Jumlah',
-      data: summaryData,
-      backgroundColor: [
-        '#2563eb',  // Blue
-        '#1e40af',  // Dark Blue
-        '#10b981',  // Green
-        '#ef4444'   // Red
-      ],
-      borderRadius: 6,
-      borderSkipped: false,
-      hoverBackgroundColor: [
-        '#1d4ed8',
-        '#1e3a8a',
-        '#059669',
-        '#dc2626'
-      ]
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: { display: false }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: { stepSize: 1, font: { size: 10 } },
-        grid: { color: 'rgba(0, 0, 0, 0.05)' }
-      },
-      x: {
-        ticks: { font: { size: 10, weight: '500' } },
-        grid: { display: false }
-      }
-    }
-  }
-});
+  });
 </script>
 
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
-
 {% endblock %}
+

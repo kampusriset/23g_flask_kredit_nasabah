@@ -1,162 +1,200 @@
 {% extends 'base.html' %}
-{% block title %}Notifikasi{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/payment.css') }}">
-{% endblock %}
+{% block title %}Notifikasi & Sistem{% endblock %}
+{% block page_title %}Pusat Notifikasi{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-  <div class="row justify-content-center">
-    <div class="col-md-10">
-      <div class="card shadow" style="animation: fadeIn 1s ease-in-out;">
-        <div class="card-header card-header-notifikasi">
-          <h4 class="mb-0"><i class="bi bi-bell"></i> Notifikasi Sistem</h4>
-        </div>
-        <div class="card-body p-4">
+<div class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+  
+  <!-- Header -->
+  <div class="mb-8 text-center">
+    <div class="inline-flex items-center justify-center p-3 bg-navy-500/10 rounded-xl text-navy-500 mb-4">
+      <i class="bi bi-bell-fill text-2xl"></i>
+    </div>
+    <h2 class="text-2xl font-black text-slate-800 tracking-tight">Notifikasi Sistem</h2>
+    <p class="text-slate-500 font-medium">Monitoring status pembayaran dan pengajuan.</p>
+  </div>
 
-          <!-- Jatuh Tempo Section -->
-          <div class="row mb-4">
-            <div class="col-md-12">
-              <h5 class="mb-3" style="color: black;"><i class="bi bi-calendar-x" style="color: black;"></i> Pembayaran Jatuh Tempo</h5>
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead class="thead-dark-green">
-                    <tr>
-                      <th>Nasabah</th>
-                      <th>Jumlah</th>
-                      <th>Jatuh Tempo</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if jatuh_tempo %}
-                      {% for item in jatuh_tempo %}
-                      <tr>
-                        <td>{{ item.nasabah.nama }}</td>
-                        <td>Rp {{ '{:,.0f}'.format(item.jumlah) }}</td>
-                        <td>{{ item.tanggal_jatuh_tempo.strftime('%d/%m/%Y') }}</td>
-                        <td><span class="badge bg-warning">Jatuh Tempo</span></td>
-                        <td>
-                          <button class="btn btn-sm btn-success" onclick="sendReminder({{ item.id }})">
-                            <i class="bi bi-send"></i> Kirim Pengingat
-                          </button>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    {% else %}
-                      <tr>
-                        <td colspan="5" class="text-center text-muted">Tidak ada pembayaran jatuh tempo</td>
-                      </tr>
-                    {% endif %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+  <div class="card-glass p-8 md:p-10">
+    
+    <!-- Bagian Jatuh Tempo -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+         <div class="p-2 bg-red-50 text-red-600 rounded-lg">
+           <i class="bi bi-calendar-x-fill"></i>
+         </div>
+         <div>
+           <h3 class="font-bold text-slate-800 text-lg">Pembayaran Jatuh Tempo</h3>
+           <p class="text-xs text-slate-400 font-medium">Segera tindak lanjuti pembayaran yang melewati batas waktu</p>
+         </div>
+      </div>
 
-          <hr>
-
-          <!-- Pengajuan Menunggu Section -->
-          <div class="row mb-4">
-            <div class="col-md-12">
-              <h5 class="mb-3" style="color: black;"><i class="bi bi-clock" style="color: black;"></i> Pengajuan Menunggu Persetujuan</h5>
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nasabah</th>
-                      <th>Jumlah Pinjaman</th>
-                      <th>Tanggal Pengajuan</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if pengajuan_menunggu %}
-                      {% for item in pengajuan_menunggu %}
-                      <tr>
-                        <td>{{ item.nasabah.nama }}</td>
-                        <td>Rp {{ '{:,.0f}'.format(item.jumlah_pinjaman) }}</td>
-                        <td>{{ item.created_at.strftime('%d/%m/%Y') }}</td>
-                        <td><span class="badge bg-warning">Menunggu</span></td>
-                        <td>
-                          <a href="{{ url_for('pengajuan.detail', id=item.id) }}" class="btn btn-sm btn-info" style="color: white;">
-                            <i class="bi bi-eye"></i> Lihat Detail
-                          </a>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    {% else %}
-                      <tr>
-                        <td colspan="5" class="text-center text-muted">Tidak ada pengajuan menunggu</td>
-                      </tr>
-                    {% endif %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <hr>
-
-          <!-- Pengajuan Disetujui Section -->
-          <div class="row">
-            <div class="col-md-12">
-              <h5 class="mb-3" style="color: black;"><i class="bi bi-check-circle" style="color: black;"></i> Pengajuan Disetujui (Belum Dicairkan)</h5>
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nasabah</th>
-                      <th>Jumlah Pinjaman</th>
-                      <th>Tanggal Persetujuan</th>
-                      <th>Status</th>
-                      <th>Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if pengajuan_disetujui %}
-                      {% for item in pengajuan_disetujui %}
-                      <tr>
-                        <td>{{ item.nasabah.nama }}</td>
-                        <td>Rp {{ '{:,.0f}'.format(item.jumlah_pinjaman) }}</td>
-                        <td>{{ item.updated_at.strftime('%d/%m/%Y') if item.updated_at else '-' }}</td>
-                        <td><span class="badge bg-success">Disetujui</span></td>
-                        <td>
-                          <a href="{{ url_for('pengajuan.detail', id=item.id) }}" class="btn btn-sm btn-info" style="color: white;">
-                            <i class="bi bi-eye"></i> Lihat Detail
-                          </a>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    {% else %}
-                      <tr>
-                        <td colspan="5" class="text-center text-muted">Tidak ada pengajuan disetujui</td>
-                      </tr>
-                    {% endif %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- Status Messages -->
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              {% for category, message in messages %}
-                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show mt-3" role="alert">
-                  <i class="bi bi-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
-                  {{ message }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
+      <div class="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50/30">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-red-50/50 border-b border-red-100">
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-red-400">Nasabah</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-red-400">Jumlah</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-red-400">Jatuh Tempo</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-red-400">Status</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-red-400">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+              {% if jatuh_tempo %}
+                {% for item in jatuh_tempo %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="px-6 py-4 text-sm font-bold text-slate-700">{{ item.nasabah.nama }}</td>
+                  <td class="px-6 py-4 text-sm font-bold text-slate-700">Rp {{ '{:,.0f}'.format(item.jumlah) }}</td>
+                  <td class="px-6 py-4 text-sm font-medium text-red-500">{{ item.tanggal_jatuh_tempo.strftime('%d/%m/%Y') }}</td>
+                  <td class="px-6 py-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                      <i class="bi bi-exclamation-circle-fill"></i> Jatuh Tempo
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <button class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-emerald-500/20" onclick="sendReminder({{ item.id }})">
+                      <i class="bi bi-whatsapp"></i> Kirim Pengingat
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="px-6 py-8 text-center text-slate-400 italic bg-white">Tidak ada pembayaran jatuh tempo</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+
+    <!-- Bagian Pengajuan Menunggu -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+         <div class="p-2 bg-amber-50 text-amber-600 rounded-lg">
+           <i class="bi bi-hourglass-split"></i>
+         </div>
+         <div>
+           <h3 class="font-bold text-slate-800 text-lg">Pengajuan Menunggu Persetujuan</h3>
+           <p class="text-xs text-slate-400 font-medium">Verifikasi data pengajuan nasabah baru</p>
+         </div>
+      </div>
+
+      <div class="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50/30">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-amber-50/50 border-b border-amber-100">
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-amber-500">Nasabah</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-amber-500">Jumlah Pinjaman</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-amber-500">Tanggal Pengajuan</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-amber-500">Status</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-amber-500">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+              {% if pengajuan_menunggu %}
+                {% for item in pengajuan_menunggu %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="px-6 py-4 text-sm font-bold text-slate-700">{{ item.nasabah.nama }}</td>
+                  <td class="px-6 py-4 text-sm font-bold text-slate-700">Rp {{ '{:,.0f}'.format(item.jumlah_pinjaman) }}</td>
+                  <td class="px-6 py-4 text-sm font-medium text-slate-500">{{ item.created_at.strftime('%d/%m/%Y') }}</td>
+                  <td class="px-6 py-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                      <i class="bi bi-clock-fill"></i> Menunggu
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <a href="{{ url_for('pengajuan.detail', id=item.id) }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-blue-500/20">
+                      <i class="bi bi-eye-fill"></i> Lihat Detail
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="px-6 py-8 text-center text-slate-400 italic bg-white">Tidak ada pengajuan menunggu</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bagian Pengajuan Disetujui -->
+    <div class="mb-4">
+      <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+         <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+           <i class="bi bi-check-circle-fill"></i>
+         </div>
+         <div>
+           <h3 class="font-bold text-slate-800 text-lg">Pengajuan Disetujui (Belum Dicairkan)</h3>
+           <p class="text-xs text-slate-400 font-medium">Segera proses pencairan dana untuk pengajuan ini</p>
+         </div>
+      </div>
+
+      <div class="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50/30">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-emerald-50/50 border-b border-emerald-100">
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-emerald-600">Nasabah</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-emerald-600">Jumlah Pinjaman</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-emerald-600">Tanggal Disetujui</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-emerald-600">Status</th>
+                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-emerald-600">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+              {% if pengajuan_disetujui %}
+                {% for item in pengajuan_disetujui %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="px-6 py-4 text-sm font-bold text-slate-700">{{ item.nasabah.nama }}</td>
+                  <td class="px-6 py-4 text-sm font-bold text-slate-700">Rp {{ '{:,.0f}'.format(item.jumlah_pinjaman) }}</td>
+                  <td class="px-6 py-4 text-sm font-medium text-slate-500">{{ item.updated_at.strftime('%d/%m/%Y') if item.updated_at else '-' }}</td>
+                  <td class="px-6 py-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                      <i class="bi bi-check-lg"></i> Disetujui
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <a href="{{ url_for('pengajuan.detail', id=item.id) }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-blue-500/20">
+                      <i class="bi bi-eye-fill"></i> Lihat Detail
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="px-6 py-8 text-center text-slate-400 italic bg-white">Tidak ada pengajuan disetujui</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Messages (Handled by base.html usually, but retained here if specific structure needed, though base.html logic is better. Using consistent style) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mt-6 space-y-3">
+        {% for category, message in messages %}
+          <div class="flex items-center gap-3 p-4 rounded-xl border border-{{ 'emerald' if category == 'success' else 'red' }}-200 bg-{{ 'emerald' if category == 'success' else 'red' }}-50 text-{{ 'emerald' if category == 'success' else 'red' }}-700 shadow-sm animate-in slide-in-from-top duration-300">
+            <i class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' }} text-xl opacity-80"></i>
+            <p class="text-sm font-semibold flex-1">{{ message }}</p>
+            <button type="button" class="text-{{ 'emerald' if category == 'success' else 'red' }}-500 hover:text-{{ 'emerald' if category == 'success' else 'red' }}-800 transition-colors" onclick="this.parentElement.remove()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
   </div>
 </div>
 
@@ -168,18 +206,5 @@ function sendReminder(paymentId) {
     }
 }
 </script>
-
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
-
 {% endblock %}
+

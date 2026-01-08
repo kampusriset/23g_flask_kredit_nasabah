@@ -1,127 +1,152 @@
 {% extends 'base.html' %}
-{% block title %}Nasabah{% endblock %}
+{% block title %}Data Nasabah{% endblock %}
+{% block page_title %}Manajemen Nasabah{% endblock %}
 
 {% block content %}
 
-<!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3" style="animation: fadeIn 1s ease-in-out;">
+<!-- Header & Quick Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
   <div>
-    <h1 class="h3 fw-bold text-dark mb-0">
-      <i class="bi bi-people-fill text-primary me-2"></i>
-      Manajemen Nasabah
-    </h1>
-    <p class="text-muted small mb-0 mt-1">Data lengkap nasabah dan profil kredit</p>
+    <h2 class="text-2xl font-black text-slate-800 tracking-tight">Daftar Nasabah Terdaftar</h2>
+    <p class="text-slate-500 font-medium">Kelola profil, verifikasi data, dan pantau kelayakan kredit nasabah.</p>
   </div>
-  <div>
-    <a href="{{ url_for('nasabah.export') }}" class="btn btn-success text-white">
-      <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
+  <div class="flex gap-3">
+    <a href="{{ url_for('nasabah.export') }}" class="flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:-translate-y-1">
+      <i class="bi bi-file-earmark-excel-fill"></i>
+      Export Excel
     </a>
   </div>
 </div>
 
-<!-- Search & Filter Card -->
-<div class="card shadow-sm border-0 mb-4" style="animation: fadeIn 1s ease-in-out 0.2s both;">
-  <div class="card-header bg-white border-bottom py-3 d-flex align-items-center gap-2">
-    <i class="bi bi-funnel text-primary"></i>
-    <h5 class="mb-0 fs-6 fw-bold">Filter Pencarian</h5>
+<!-- Filters Section -->
+<div class="card-glass p-8 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+  <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+    <div class="p-2 bg-gold-500/10 rounded-lg text-gold-500">
+      <i class="bi bi-funnel-fill text-xl"></i>
+    </div>
+    <h3 class="text-lg font-bold text-slate-800">Filter Pencarian</h3>
   </div>
-  <div class="card-body bg-light-subtle">
-    <form method="GET" action="{{ url_for('nasabah.index') }}" class="row g-3">
-      <div class="col-md-3">
-        <label class="form-label small text-muted text-uppercase fw-bold"><i class="bi bi-search me-1"></i> Nama</label>
-        <input type="text" name="q" class="form-control" placeholder="Cari nama..." value="{{ q if q else '' }}">
-      </div>
-      <div class="col-md-3">
-        <label class="form-label small text-muted text-uppercase fw-bold"><i class="bi bi-card-heading me-1"></i> NIK</label>
-        <input type="text" name="nik" class="form-control" placeholder="Cari NIK..." value="{{ nik if nik else '' }}">
-      </div>
-      <div class="col-md-3">
-        <label class="form-label small text-muted text-uppercase fw-bold"><i class="bi bi-telephone me-1"></i> No. Telp</label>
-        <input type="text" name="no_telp" class="form-control" placeholder="Cari telepon..." value="{{ no_telp if no_telp else '' }}">
-      </div>
-      <div class="col-md-3">
-        <label class="form-label small text-muted text-uppercase fw-bold"><i class="bi bi-cash me-1"></i> Min. Penghasilan</label>
-        <input type="number" name="min_penghasilan" class="form-control" placeholder="Rp 0" value="{{ min_penghasilan if min_penghasilan else '' }}">
-      </div>
-      <div class="col-12 text-end mt-3">
-        <a href="{{ url_for('nasabah.index') }}" class="btn btn-light border me-2">
-          <i class="bi bi-arrow-counterclockwise"></i> Reset
-        </a>
-        <button type="submit" class="btn btn-primary">
-          <i class="bi bi-search me-1"></i> Terapkan Filter
-        </button>
-      </div>
-    </form>
-  </div>
+  
+  <form method="GET" action="{{ url_for('nasabah.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="space-y-1">
+      <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Nama Lengkap</label>
+      <input type="text" name="q" value="{{ q if q else '' }}" placeholder="Cari nama..." 
+             class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold">
+    </div>
+    <div class="space-y-1">
+      <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Nomor NIK</label>
+      <input type="text" name="nik" value="{{ nik if nik else '' }}" placeholder="Cari NIK..." 
+             class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold">
+    </div>
+    <div class="space-y-1">
+      <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Telepon</label>
+      <input type="text" name="no_telp" value="{{ no_telp if no_telp else '' }}" placeholder="0812..." 
+             class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold">
+    </div>
+    <div class="space-y-1">
+      <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Min. Penghasilan</label>
+      <input type="number" name="min_penghasilan" value="{{ min_penghasilan if min_penghasilan else '' }}" placeholder="Rp" 
+             class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-emerald-600 font-bold">
+    </div>
+    <div class="lg:col-span-4 flex justify-end gap-3 pt-2">
+      <a href="{{ url_for('nasabah.index') }}" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-sm">
+        Reset
+      </a>
+      <button type="submit" class="px-8 py-3 bg-navy-500 hover:bg-navy-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-navy-500/20 text-sm">
+        Terapkan Filter
+      </button>
+    </div>
+  </form>
 </div>
 
-<!-- Nasabah Table -->
-<div class="card shadow-sm" style="animation: fadeIn 1s ease-in-out 0.4s both;">
-  <div class="card-header bg-white border-bottom py-3 d-flex align-items-center gap-2">
-    <i class="bi bi-table text-primary"></i>
-    <h5 class="mb-0 fs-6 fw-bold">Daftar Nasabah ({{ total }} data)</h5>
-  </div>
-  <div class="card-body p-0">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="bg-light">
-          <tr>
-            <th class="px-4 py-3 text-uppercase small fw-bold text-muted">No</th>
-            <th class="px-4 py-3 text-uppercase small fw-bold text-muted">Nama Lengkap</th>
-            <th class="px-4 py-3 text-uppercase small fw-bold text-muted">NIK</th>
-            <th class="px-4 py-3 text-uppercase small fw-bold text-muted">Telepon</th>
-            <th class="px-4 py-3 text-uppercase small fw-bold text-muted">Penghasilan</th>
-            <th class="px-4 py-3 text-uppercase small fw-bold text-muted text-end">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if nasabah %}
-            {% for n in nasabah %}
-            <tr>
-              <td class="px-4 py-3 text-muted">{{ loop.index }}</td>
-              <td class="px-4 py-3 fw-bold text-dark">{{ n.nama }}</td>
-              <td class="px-4 py-3 font-monospace small">{{ n.nik }}</td>
-              <td class="px-4 py-3">{{ n.no_telp }}</td>
-              <td class="px-4 py-3 fw-bold text-success">Rp {{ '{:,.0f}'.format(n.penghasilan) }}</td>
-              <td class="px-4 py-3 text-end">
-                <div class="d-flex justify-content-end gap-2">
-                  <a href="{{ url_for('nasabah.detail', id=n.id) }}" class="btn btn-sm btn-outline-primary" title="Detail">
-                    <i class="bi bi-eye"></i>
-                  </a>
-                  <a href="{{ url_for('nasabah.edit', id=n.id) }}" class="btn btn-sm btn-outline-success" title="Edit">
-                    <i class="bi bi-pencil"></i>
-                  </a>
-                  <form method="POST" action="{{ url_for('nasabah.hapus', id=n.id) }}" class="d-inline">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin hapus data nasabah ini?')" title="Hapus">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
-          {% else %}
-            <tr>
-              <td colspan="6" class="text-center py-5">
-                <div class="text-muted">
-                  <i class="bi bi-inbox display-1 text-light-emphasis d-block mb-3"></i>
-                  Data nasabah tidak ditemukan
-                </div>
-              </td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
+<!-- Table Container -->
+<div class="card-glass animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+  <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500">
+        <i class="bi bi-table text-xl"></i>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800">Daftar Nasabah <span class="ml-2 px-2 py-0.5 bg-slate-100 text-slate-400 text-xs rounded-full">{{ total }}</span></h3>
     </div>
   </div>
+  
+  <div class="overflow-x-auto no-scrollbar">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-slate-50/50">
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">#</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Profil Nasabah</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Kontak & NIK</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">Penghasilan</th>
+          <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400 text-right">Aksi</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% if nasabah %}
+          {% for n in nasabah %}
+          <tr class="hover:bg-slate-50/80 transition-colors group">
+            <td class="px-6 py-4">
+              <span class="text-sm font-bold text-slate-400">{{ loop.index }}</span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-navy-500 flex items-center justify-center text-gold-500 font-black text-xs shadow-inner">
+                  {{ n.nama[:2].upper() }}
+                </div>
+                <div>
+                  <p class="text-sm font-black text-slate-800">{{ n.nama }}</p>
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ n.pekerjaan or 'NASABAH SIPINA' }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <p class="text-sm font-bold text-slate-600 flex items-center gap-2">
+                <i class="bi bi-telephone text-gold-500"></i>
+                {{ n.no_telp }}
+              </p>
+              <p class="text-[10px] font-medium text-slate-400 font-mono tracking-widest mt-1">{{ n.nik }}</p>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-black">
+                Rp {{ '{:,.0f}'.format(n.penghasilan) }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex justify-end gap-2">
+                <a href="{{ url_for('nasabah.detail', id=n.id) }}" class="p-2 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all" title="Detail Profil">
+                  <i class="bi bi-person-badge-fill text-lg"></i>
+                </a>
+                <a href="{{ url_for('nasabah.edit', id=n.id) }}" class="p-2 text-amber-500 hover:bg-amber-500 hover:text-white rounded-lg transition-all" title="Ubah Data">
+                  <i class="bi bi-pencil-square text-lg"></i>
+                </a>
+                <form method="POST" action="{{ url_for('nasabah.hapus', id=n.id) }}" class="inline">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <button type="submit" class="p-2 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all" 
+                          onclick="return confirm('Apakah Anda yakin ingin menghapus data nasabah ini? Tindakan ini tidak dapat dibatalkan.')" title="Hapus Data">
+                    <i class="bi bi-trash3-fill text-lg"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" class="px-6 py-20 text-center">
+              <div class="flex flex-col items-center">
+                <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                  <i class="bi bi-inbox text-4xl text-slate-300"></i>
+                </div>
+                <h4 class="text-lg font-bold text-slate-800">Tidak ada nasabah ditemukan</h4>
+                <p class="text-slate-400 text-sm mt-1">Coba gunakan kata kunci lain atau reset filter pencarian.</p>
+              </div>
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<style>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
-
 {% endblock %}
+
