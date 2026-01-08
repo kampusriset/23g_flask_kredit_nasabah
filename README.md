@@ -6,24 +6,37 @@ SIPINA adalah platform manajemen pembiayaan dan kredit nasabah modern berbasis w
 
 ## ✨ Fitur Utama
 
+- **🎨 Modern UI/UX**: Desain antarmuka baru yang premium menggunakan **Tailwind CSS**.
 - **📊 Dashboard Interaktif**: Visualisasi data statistik pengajuan untuk Admin dan ringkasan status untuk Nasabah.
-- **📝 Manajemen Pengajuan**: Sistem pengajuan pinjaman digital lengkap dengan upload dokumen pendukung (KTP/Dokumen).
-- **📉 Advanced Analytics**: Analisis data persetujuan, tren bulanan, dan statistik keuangan bagi administrator.
-- **📅 Jadwal Pembayaran Otomatis**: Perhitungan tenor, bunga, dan jadwal jatuh tempo otomatis.
-- **📥 Export Data**: Fitur ekspor jadwal pembayaran dan laporan ke format **Excel (.xlsx)**.
-- **🔔 Sistem Notifikasi**: Pemberitahuan status pengajuan dan peringatan jatuh tempo.
-- **📱 PWA Ready**: Dapat diinstal di perangkat mobile/desktop layaknya aplikasi native.
+- **📝 Manajemen Pengajuan**: Sistem pengajuan kredit digital dengan validasi dokumen otomatis dan pelacakan status realtime.
+- **📉 Advanced Analytics**: Analisis data persetujuan, tren bulanan, dan statistik keuangan berbasis grafik.
+- **📅 Jadwal Pembayaran**: Kalkulasi tenor otomatis dan tabel pembayaran yang responsif.
+- **� PWA Ready**: Aplikasi Web Progresif yang dapat diinstal di desktop dan mobile.
+- **🔔 Sistem Notifikasi**: Pemberitahuan realtime untuk status pengajuan dan jatuh tempo pembayaran.
 
 ---
 
 ## 🛠️ Tech Stack
 
 - **Backend**: Flask (Python 3.11+)
-- **ORM**: Flask-SQLAlchemy
-- **Database**: SQLite (Default) / MySQL Compatible (Script provided)
-- **Frontend**: Jinja2 Templates, Bootstrap 5, Bi-Icons
-- **Assets**: CSS & JS Modular (Palette-based)
-- **Features**: Progressive Web App (PWA)
+- **Database**: SQLite (Development) / MySQL Ready
+- **Frontend**: Tailwind CSS (CDN), Jinja2 Templates
+- **Icons**: Bootstrap Icons (Bi-Icons)
+- **Framework & Libraries**:
+  - Flask-Login (Authentication)
+  - Flask-SQLAlchemy (ORM)
+  - Flask-WTF (Form Handling & Validation)
+  - Chart.js (Data Visualization)
+
+---
+
+## 🔄 Pembaruan Terkini (Januari 2026)
+
+- **Total UI Overhaul**: Migrasi total dari Bootstrap ke **Tailwind CSS** untuk tampilan yang lebih bersih, modern, dan responsif.
+- **Enhanced Performance**: Penghapusan aset CSS/JS legacy yang tidak digunakan (Cleanup).
+- **Glassmorphism Design**: Penerapan efek modern glassmorphism pada kartu dan komponen dashboard.
+- **Improved UX**: Perbaikan alur navigasi, form input yang lebih intuitif, dan feedback visual yang jelas.
+- **Code Optimization**: Refactoring struktur template Jinja2 untuk modularitas yang lebih baik.
 
 ---
 
