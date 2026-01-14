@@ -38,10 +38,68 @@ h6 {
 }
 
 .navbar-landing.scrolled {
-  background: rgba(12, 30, 53, 0.95);
-  padding: 1rem 0;
+  background: rgba(12, 30, 53, 0.98);
+  padding: 0.8rem 0;
   position: fixed;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-toggler {
+  border: none !important;
+  padding: 0;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.navbar-toggler-icon {
+  background-image: none !important;
+  display: block !important;
+  width: 28px;
+  height: 18px;
+  position: relative;
+  border: none;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff !important;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before {
+  top: 4px;
+}
+
+.navbar-toggler-icon::after {
+  bottom: 4px;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: var(--primary-color);
+    margin-top: 1rem;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-link {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .btn-login {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+  }
 }
 
 .navbar-brand-landing {
@@ -177,23 +235,45 @@ h6 {
 .feature-card {
   background: var(--white);
   padding: 40px 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   text-align: center;
   height: 100%;
-  border-bottom: 3px solid transparent;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .feature-card:hover {
   transform: translateY(-10px);
-  border-bottom: 3px solid var(--secondary-color);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover::after {
+  opacity: 1;
 }
 
 .feature-icon {
-  font-size: 3rem;
-  color: var(--primary-color);
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, var(--primary-color), #1a3a5f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
+  display: inline-block;
 }
 
 /* Footer */
@@ -231,13 +311,77 @@ footer {
 }
 
 /* Responsive */
+@media (max-width: 991.98px) {
+  .section-padding {
+    padding: 60px 0;
+  }
+}
+
 @media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2.5rem;
+  .navbar-landing {
+    background: transparent; /* Changed to transparent for full-background effect */
+    padding: 1rem 0;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
   }
 
-  .navbar-landing {
-    background: var(--primary-color); /* Solid background on mobile */
-    padding: 1rem 0;
+  .navbar-landing.scrolled {
+    background: rgba(12, 30, 53, 0.98);
+    padding: 0.8rem 0;
+    position: fixed;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-section {
+    padding-top: 80px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-bottom: 80px;
+    text-align: center;
+    background-attachment: scroll; /* Fixed background often causes issues on mobile browsers */
+    background-position: center right 25%; /* Shift background to better show the handshake on mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-content h1 {
+    font-size: 2.25rem;
+  }
+
+  .hero-content p {
+    font-size: 1.1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-content .btn-primary-custom,
+  .hero-content .btn-secondary-custom {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .section-title h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-content h1 {
+    font-size: 1.85rem;
+  }
+
+  .feature-card {
+    padding: 30px 20px;
   }
 }

@@ -134,6 +134,39 @@
       .delay-100 { animation-delay: 100ms; }
       .delay-200 { animation-delay: 200ms; }
       .delay-300 { animation-delay: 300ms; }
+      /* Responsive Tables */
+      @media (max-width: 1024px) {
+        .responsive-table thead {
+          display: none;
+        }
+        .responsive-table tr {
+          display: block;
+          margin-bottom: 1rem;
+          background: white;
+          border-radius: 0.75rem;
+          border: 1px solid #e2e8f0;
+          padding: 1rem;
+        }
+        .responsive-table td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid #f1f5f9;
+        }
+        .responsive-table td:last-child {
+          border-bottom: none;
+          justify-content: center;
+          padding-top: 1rem;
+        }
+        .responsive-table td::before {
+          content: attr(data-label);
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 0.65rem;
+          color: #94a3b8;
+        }
+      }
     </style>
 
     {% block head %}{% endblock %}
@@ -261,17 +294,31 @@
             </a>
             {% else %}
             <a
+              href="{{ url_for('nasabah.detail', id=current_user.nasabah.id) if current_user.nasabah else '#' }}"
+              class="nav-item {% if 'nasabah.detail' in request.endpoint %}active{% endif %}"
+            >
+              <i class="bi bi-person-bounding-box"></i>
+              <span>Profil Saya</span>
+            </a>
+            <a
               href="{{ url_for('pengajuan.index') }}"
               class="nav-item {% if 'pengajuan' in request.endpoint %}active{% endif %}"
             >
               <i class="bi bi-file-earmark-plus-fill"></i>
               <span>Pengajuan Saya</span>
             </a>
+            <a
+              href="{{ url_for('notifikasi.index') }}"
+              class="nav-item {% if 'notifikasi' in request.endpoint %}active{% endif %}"
+            >
+              <i class="bi bi-bell-fill"></i>
+              <span>Notifikasi</span>
+            </a>
             {% endif %}
           </nav>
 
           <!-- Logout Section -->
-          <div class="p-6 mt-auto border-t border-white/5">
+          <div class="p-6 mt-auto border-t border-white/5 pb-20 lg:pb-6">
             <a
               href="{{ url_for('auth.logout') }}"
               class="flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all group"
@@ -289,7 +336,7 @@
       <!-- MOBILE NAV OVERLAY -->
       <div
         id="mobileOverlay"
-        class="fixed inset-0 z-40 bg-navy-900/50 backdrop-blur-sm hidden lg:hidden"
+        class="fixed inset-0 z-40 bg-navy-900/50 backdrop-blur-sm hidden lg:hidden transition-opacity duration-300 opacity-0"
       ></div>
 
       <!-- MAIN CONTENT AREA -->
@@ -305,7 +352,11 @@
             >
               <i class="bi bi-list text-2xl"></i>
             </button>
-            <h1 class="text-lg font-bold text-slate-800 hidden md:block">
+            <div class="flex items-center gap-2 lg:hidden">
+              <i class="bi bi-bank2 text-2xl text-gold-500"></i>
+              <span class="text-lg font-bold text-navy-500">SIPINA</span>
+            </div>
+            <h1 class="text-lg font-bold text-slate-800 hidden lg:block">
               {% block page_title %}{% endblock %}
             </h1>
           </div>
@@ -343,7 +394,7 @@
                   <h4 class="font-bold text-slate-800">Notifikasi</h4>
                   <a href="{{ url_for('notifikasi.index') }}" class="text-xs text-gold-600 hover:underline">Lihat Semua</a>
                 </div>
-                <div id="notifList" class="max-h-64 overflow-y-auto divide-y divide-slate-100">
+                <div id="notifList" class="max-h-64 overflow-y-auto divide-y divide-slate-100 no-scrollbar">
                   <div class="p-4 text-center text-slate-400 text-sm">
                     <i class="bi bi-bell-slash"></i> Tidak ada notifikasi baru
                   </div>
@@ -355,7 +406,7 @@
             <div class="relative" id="profileDropdown">
               <div
                 id="profileBtn"
-                class="flex items-center gap-3 pl-4 md:pl-6 md:border-l border-slate-200 cursor-pointer"
+                class="flex items-center gap-2 pl-2 md:pl-6 md:border-l border-slate-200 cursor-pointer"
               >
                 <div class="hidden md:block text-right">
                   <p class="text-xs font-bold text-slate-800 leading-none">
@@ -369,7 +420,7 @@
                 </div>
                 <img
                   src="{{ url_for('static', filename=current_user.foto_profil) if current_user.foto_profil else url_for('static', filename='assets/img/default-user.svg') }}"
-                  class="w-9 h-9 rounded-full border-2 border-gold-500 p-0.5 object-cover shadow-sm hover:opacity-80 transition-opacity"
+                  class="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-gold-500 p-0.5 object-cover shadow-sm hover:opacity-80 transition-opacity"
                   onerror="this.src='{{ url_for('static', filename='assets/img/default-user.svg') }}'"
                 />
                 <i class="bi bi-chevron-down text-slate-400 text-xs hidden md:block"></i>
@@ -405,14 +456,14 @@
         </header>
 
         <!-- PAGE CONTENT -->
-        <div class="flex-1 overflow-y-auto p-4 lg:p-8 no-scrollbar">
+        <div class="flex-1 overflow-y-auto p-4 lg:p-8 no-scrollbar pb-24 lg:pb-8">
           <!-- ALERTS SECTION -->
           <div class="max-w-7xl mx-auto space-y-3 mb-6">
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, msg in messages %}
             <div
-              class="flex items-center gap-3 p-4 rounded-xl border border-{{ category if category != 'error' else 'red' }}-200 bg-{{ category if category != 'error' else 'red' }}-50 text-{{ category if category != 'error' else 'red' }}-700 shadow-sm animate-in slide-in-from-top duration-300"
+              class="flex items-center gap-3 p-4 rounded-xl border border-{{ category if category != 'error' and category != 'danger' else 'red' }}-200 bg-{{ category if category != 'error' and category != 'danger' else 'red' }}-50 text-{{ category if category != 'error' and category != 'danger' else 'red' }}-700 shadow-sm animate-in slide-in-from-top duration-300"
             >
               <i
                 class="bi bi-{% if category == 'success' %}check-circle-fill{% elif category == 'danger' or category == 'error' %}exclamation-triangle-fill{% else %}info-circle-fill{% endif %} text-xl opacity-80"
@@ -420,7 +471,7 @@
               <p class="text-sm font-semibold flex-1">{{ msg }}</p>
               <button
                 type="button"
-                class="text-{{ category if category != 'error' else 'red' }}-500 hover:text-{{ category if category != 'error' else 'red' }}-800 transition-colors"
+                class="text-{{ category if category != 'error' and category != 'danger' else 'red' }}-500 hover:text-{{ category if category != 'error' and category != 'danger' else 'red' }}-800 transition-colors"
                 onclick="this.parentElement.remove()"
               >
                 <i class="bi bi-x-lg"></i>
@@ -439,8 +490,8 @@
 
         </div>
 
-        <!-- FOOTER -->
-        <footer class="bg-white border-t border-slate-200 py-6 px-4 lg:px-8">
+        <!-- FOOTER (Desktop only or adjusted for mobile) -->
+        <footer class="bg-white border-t border-slate-200 py-6 px-4 lg:px-8 hidden lg:block">
           <div
             class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500 text-sm"
           >
@@ -464,6 +515,51 @@
       </main>
     </div>
 
+    <!-- BOTTOM NAVIGATION (Mobile Only) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 z-40 lg:hidden flex items-center justify-between shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+      <a href="{{ url_for('dashboard.index') }}" class="flex flex-col items-center gap-1 {{ 'text-gold-500' if request.endpoint == 'dashboard.index' else 'text-slate-400' }}">
+        <i class="bi bi-grid-1x2-fill text-xl"></i>
+        <span class="text-[10px] font-bold">Beranda</span>
+      </a>
+      
+      {% if current_user.is_authenticated %}
+        {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('nasabah.index') }}" class="flex flex-col items-center gap-1 {{ 'text-gold-500' if 'nasabah' in request.endpoint else 'text-slate-400' }}">
+            <i class="bi bi-people-fill text-xl"></i>
+            <span class="text-[10px] font-bold">Nasabah</span>
+          </a>
+          <a href="{{ url_for('pengajuan.index') }}" class="flex flex-col items-center gap-1 {{ 'text-gold-500' if 'pengajuan' in request.endpoint else 'text-slate-400' }}">
+            <i class="bi bi-file-earmark-text-fill text-xl"></i>
+            <span class="text-[10px] font-bold">Pengajuan</span>
+          </a>
+        {% else %}
+          <a href="{{ url_for('pengajuan.index') }}" class="flex flex-col items-center gap-1 {{ 'text-gold-500' if 'pengajuan' in request.endpoint else 'text-slate-400' }}">
+            <i class="bi bi-file-earmark-plus-fill text-xl"></i>
+            <span class="text-[10px] font-bold">Pengajuan</span>
+          </a>
+          <a href="{{ url_for('notifikasi.index') }}" class="flex flex-col items-center gap-1 {{ 'text-gold-500' if 'notifikasi' in request.endpoint else 'text-slate-400' }}">
+            <i class="bi bi-bell-fill text-xl"></i>
+            <span class="text-[10px] font-bold">Notif</span>
+          </a>
+        {% endif %}
+        
+        <a href="{{ url_for('user.edit_profile') }}" class="flex flex-col items-center gap-1 {{ 'text-gold-500' if request.endpoint == 'user.edit_profile' else 'text-slate-400' }}">
+          <i class="bi bi-person-fill text-xl"></i>
+          <span class="text-[10px] font-bold">Profil</span>
+        </a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="flex flex-col items-center gap-1 text-slate-400">
+          <i class="bi bi-box-arrow-in-right text-xl"></i>
+          <span class="text-[10px] font-bold">Masuk</span>
+        </a>
+      {% endif %}
+      
+      <button id="mobileMoreMenu" class="flex flex-col items-center gap-1 text-slate-400">
+        <i class="bi bi-three-dots text-xl"></i>
+        <span class="text-[10px] font-bold">Lainnya</span>
+      </button>
+    </div>
+
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -471,14 +567,28 @@
       const mobileButton = document.getElementById("mobileButton");
       const mobileOverlay = document.getElementById("mobileOverlay");
       const sidebarToggle = document.getElementById("sidebarToggle");
+      const mobileMoreMenu = document.getElementById("mobileMoreMenu");
 
       function toggleMobileSidebar() {
-        sidebar.classList.toggle("hidden");
-        sidebar.classList.toggle("fixed");
-        sidebar.classList.toggle("inset-y-0");
-        sidebar.classList.toggle("left-0");
-        sidebar.classList.toggle("z-50");
-        mobileOverlay.classList.toggle("hidden");
+        if (sidebar.classList.contains("hidden")) {
+          // Open
+          sidebar.classList.remove("hidden");
+          sidebar.classList.add("fixed", "inset-y-0", "left-0", "z-50");
+          mobileOverlay.classList.remove("hidden");
+          setTimeout(() => {
+            mobileOverlay.classList.remove("opacity-0");
+            mobileOverlay.classList.add("opacity-100");
+          }, 10);
+        } else {
+          // Close
+          mobileOverlay.classList.remove("opacity-100");
+          mobileOverlay.classList.add("opacity-0");
+          setTimeout(() => {
+            sidebar.classList.add("hidden");
+            sidebar.classList.remove("fixed", "inset-y-0", "left-0", "z-50");
+            mobileOverlay.classList.add("hidden");
+          }, 300);
+        }
       }
 
       if (mobileButton)
@@ -487,6 +597,8 @@
         sidebarToggle.addEventListener("click", toggleMobileSidebar);
       if (mobileOverlay)
         mobileOverlay.addEventListener("click", toggleMobileSidebar);
+      if (mobileMoreMenu)
+        mobileMoreMenu.addEventListener("click", toggleMobileSidebar);
 
       // PWA Service Worker
       if ("serviceWorker" in navigator) {
@@ -549,14 +661,14 @@
             notifList.innerHTML = '';
             data.forEach(n => {
               notifList.innerHTML += `
-                <a href="${n.url || '#'}" class="block p-3 hover:bg-slate-50 transition-colors">
+                <a href="${n.url || '#'}" class="block p-3 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-none">
                   <div class="flex items-start gap-3">
                     <div class="w-8 h-8 rounded-full ${n.type === 'success' ? 'bg-green-100 text-green-600' : n.type === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'} flex items-center justify-center shrink-0">
                       <i class="bi ${n.icon || 'bi-bell'}"></i>
                     </div>
                     <div class="flex-1 min-w-0">
                       <p class="text-sm font-medium text-slate-800 truncate">${n.title}</p>
-                      <p class="text-xs text-slate-500 truncate">${n.message}</p>
+                      <p class="text-[11px] text-slate-500 break-words">${n.message}</p>
                     </div>
                   </div>
                 </a>

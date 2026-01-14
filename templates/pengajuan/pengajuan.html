@@ -75,8 +75,8 @@
     </div>
   </div>
   
-  <div class="overflow-x-auto no-scrollbar">
-    <table class="w-full text-left border-collapse">
+  <div class="overflow-x-auto no-scrollbar lg:overflow-visible">
+    <table class="w-full text-left border-collapse responsive-table">
       <thead>
         <tr class="bg-slate-50/50">
           <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">#</th>
@@ -93,38 +93,42 @@
         {% if pengajuan %}
           {% for p in pengajuan %}
           <tr class="hover:bg-slate-50/80 transition-colors group">
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="No">
               <span class="text-sm font-bold text-slate-400">{{ loop.index }}</span>
             </td>
             {% if current_user.role == 'admin' %}
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-navy-500 font-black text-[10px]">
+            <td class="px-6 py-4" data-label="Nasabah">
+              <div class="flex items-center gap-3 justify-end lg:justify-start">
+                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-navy-500 font-black text-[10px] shrink-0">
                   {{ p.nasabah.nama[:2].upper() }}
                 </div>
                 <p class="text-sm font-black text-slate-700">{{ p.nasabah.nama }}</p>
               </div>
             </td>
             {% endif %}
-            <td class="px-6 py-4">
-              <p class="text-sm font-black text-emerald-600 tracking-tight">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</p>
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ p.tenor }} Bulan Masa Tenor</p>
+            <td class="px-6 py-4" data-label="Pinjaman">
+              <div class="text-right lg:text-left">
+                <p class="text-sm font-black text-emerald-600 tracking-tight">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ p.tenor }} Bulan Masa Tenor</p>
+              </div>
             </td>
-            <td class="px-6 py-4">
-              <p class="text-sm font-bold text-slate-600">{{ p.created_at.strftime('%d %b %Y') }}</p>
+            <td class="px-6 py-4" data-label="Tanggal">
+              <p class="text-sm font-bold text-slate-600 text-right lg:text-left">{{ p.created_at.strftime('%d %b %Y') }}</p>
             </td>
-            <td class="px-6 py-4">
-              {% if p.status == 'disetujui' %}
-                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase rounded-full border border-emerald-200">Disetujui</span>
-              {% elif p.status == 'menunggu' %}
-                <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-black uppercase rounded-full border border-amber-200">Menunggu</span>
-              {% elif p.status == 'ditolak' %}
-                <span class="px-3 py-1 bg-red-100 text-red-700 text-[10px] font-black uppercase rounded-full border border-red-200">Ditolak</span>
-              {% else %}
-                <span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase rounded-full border border-slate-200">{{ p.status }}</span>
-              {% endif %}
+            <td class="px-6 py-4" data-label="Status">
+              <div class="flex justify-end lg:justify-start">
+                {% if p.status == 'disetujui' %}
+                  <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase rounded-full border border-emerald-200">Disetujui</span>
+                {% elif p.status == 'menunggu' %}
+                  <span class="px-3 py-1 bg-amber-100 text-amber-700 text-[10px] font-black uppercase rounded-full border border-amber-200">Menunggu</span>
+                {% elif p.status == 'ditolak' %}
+                  <span class="px-3 py-1 bg-red-100 text-red-700 text-[10px] font-black uppercase rounded-full border border-red-200">Ditolak</span>
+                {% else %}
+                  <span class="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase rounded-full border border-slate-200">{{ p.status }}</span>
+                {% endif %}
+              </div>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="Aksi">
               <div class="flex justify-end gap-2">
                 <a href="{{ url_for('pengajuan.detail', id=p.id) }}" class="p-2 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all" title="Detail Berkas">
                   <i class="bi bi-eye-fill"></i>

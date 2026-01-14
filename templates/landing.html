@@ -91,7 +91,7 @@
           <i class="bi bi-building"></i> SIPINA
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav align-items-center">
@@ -109,15 +109,15 @@
 
     <!-- Hero Section -->
     <section class="hero-section" id="heroSection">
-      <div class="container">
-        <div class="row">
+      <div class="container px-4 px-md-0">
+        <div class="row align-items-center">
           <div class="col-lg-8">
             <div class="hero-content">
-              <h1 class="scroll-animate visible">SIPINA <br>Mitra Terpercaya Untuk Pinjaman Kredit Anda</h1>
-              <p class="scroll-animate visible delay-1">Solusi pinjaman yang cepat, aman, dan transparan untuk kebutuhan bisnis maupun personal. Wujudkan impian finansial Anda bersama profesional.</p>
-              <div class="d-flex flex-wrap gap-3 scroll-animate visible delay-2">
-                  <a href="{{ url_for('auth.register') }}" class="btn-primary-custom">Ajukan Pinjaman</a>
-                  <a href="#services" class="btn-secondary-custom">Pelajari Lebih Lanjut</a>
+              <h1 class="scroll-animate visible mb-3 mb-md-4">SIPINA <br class="d-none d-md-block">Mitra Terpercaya Untuk Pinjaman Kredit Anda</h1>
+              <p class="scroll-animate visible delay-1 mb-4 mb-md-5">Solusi pinjaman yang cepat, aman, dan transparan untuk kebutuhan bisnis maupun personal. Wujudkan impian finansial Anda bersama profesional.</p>
+              <div class="d-grid d-md-flex flex-wrap gap-3 scroll-animate visible delay-2">
+                  <a href="{{ url_for('auth.register') }}" class="btn-primary-custom text-center">Ajukan Pinjaman</a>
+                  <a href="#services" class="btn-secondary-custom text-center">Pelajari Lebih Lanjut</a>
               </div>
             </div>
           </div>
@@ -127,9 +127,9 @@
 
     <!-- Services / Features Section -->
     <section id="services" class="section-padding bg-light">
-      <div class="container">
+      <div class="container px-4 px-md-0">
         <div class="section-title scroll-animate">
-            <h2>Layanan & Keunggulan</h2>
+            <h2 class="mb-3">Layanan & Keunggulan</h2>
             <p>Mengapa memilih SIPINA sebagai mitra keuangan Anda</p>
         </div>
         <div class="row g-4">
@@ -160,23 +160,31 @@
 
     <!-- Simple Stats / Trust Section -->
     <section class="section-padding" style="background: var(--white);">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-3 mb-4 mb-md-0 scroll-animate delay-1">
-                    <h3 class="fw-bold stat-number" style="color: var(--secondary-color);" data-target="5000">0</h3><span class="fw-bold" style="color: var(--secondary-color);">+</span>
-                    <p class="text-secondary">Nasabah Aktif</p>
+        <div class="container px-4">
+            <div class="row text-center g-4">
+                <div class="col-6 col-md-3 scroll-animate delay-1">
+                    <div class="p-3">
+                        <h3 class="fw-bold stat-number" style="color: var(--secondary-color);" data-target="5000">0</h3><span class="fw-bold" style="color: var(--secondary-color);">+</span>
+                        <p class="text-secondary small mb-0">Nasabah Aktif</p>
+                    </div>
                 </div>
-                <div class="col-md-3 mb-4 mb-md-0 scroll-animate delay-2">
-                    <h3 class="fw-bold" style="color: var(--secondary-color);">Rp <span class="stat-number" data-target="100">0</span>M+</h3>
-                    <p class="text-secondary">Dana Tersalurkan</p>
+                <div class="col-6 col-md-3 scroll-animate delay-2">
+                    <div class="p-3">
+                        <h3 class="fw-bold" style="color: var(--secondary-color);">Rp <span class="stat-number" data-target="100">0</span>M+</h3>
+                        <p class="text-secondary small mb-0">Dana Tersalurkan</p>
+                    </div>
                 </div>
-                <div class="col-md-3 mb-4 mb-md-0 scroll-animate delay-3">
-                    <h3 class="fw-bold" style="color: var(--secondary-color);">24/7</h3>
-                    <p class="text-secondary">Layanan Support</p>
+                <div class="col-6 col-md-3 scroll-animate delay-3">
+                    <div class="p-3">
+                        <h3 class="fw-bold" style="color: var(--secondary-color);">24/7</h3>
+                        <p class="text-secondary small mb-0">Layanan Support</p>
+                    </div>
                 </div>
-                <div class="col-md-3 scroll-animate delay-4">
-                    <h3 class="fw-bold" style="color: var(--secondary-color);"><span class="stat-number" data-target="98">0</span>%</h3>
-                    <p class="text-secondary">Kepuasan Pelanggan</p>
+                <div class="col-6 col-md-3 scroll-animate delay-4">
+                    <div class="p-3">
+                        <h3 class="fw-bold" style="color: var(--secondary-color);"><span class="stat-number" data-target="98">0</span>%</h3>
+                        <p class="text-secondary small mb-0">Kepuasan Pelanggan</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,11 +192,11 @@
 
     <!-- About Us Section -->
     <section id="about" class="section-padding bg-light">
-      <div class="container">
+      <div class="container px-4">
         <div class="row align-items-center">
-            <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="col-lg-6 mb-5 mb-lg-0 text-center text-lg-start">
                 <div class="pe-lg-5 scroll-animate-left">
-                    <div class="section-title text-start mb-4">
+                    <div class="section-title text-center text-lg-start mb-4">
                         <h2 class="mb-3">Mengenal SIPINA Lebih Dekat</h2>
                         <p class="mb-4 text-muted">Platform Keuangan Digital Terdepan di Indonesia</p>
                     </div>
@@ -199,16 +207,18 @@
                 <p class="text-secondary mb-4 scroll-animate-left delay-2">
                     Dengan dukungan teknologi terkini dan tim profesional yang berpengalaman, kami menghadirkan solusi pinjaman yang transparan, tanpa biaya tersembunyi, dan proses yang sangat cepat.
                 </p>
-                <ul class="list-unstyled scroll-animate-left delay-3">
-                    <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Terdaftar dan Diawasi Otoritas Resmi</span></li>
-                    <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Proses Digital 100% & Aman</span></li>
-                    <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Layanan Pelanggan 24/7</span></li>
-                </ul>
-                <a href="#contact" class="btn-primary-custom mt-3 scroll-animate-left delay-4">Hubungi Kami</a>
+                <div class="d-flex flex-column align-items-center align-items-lg-start mb-4">
+                    <ul class="list-unstyled scroll-animate-left delay-3 text-start">
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Terdaftar dan Diawasi Otoritas Resmi</span></li>
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Proses Digital 100% & Aman</span></li>
+                        <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Layanan Pelanggan 24/7</span></li>
+                    </ul>
+                </div>
+                <a href="#contact" class="btn-primary-custom mt-2 scroll-animate-left delay-4">Hubungi Kami</a>
             </div>
             <div class="col-lg-6">
-                <div class="about-image p-2 bg-white rounded shadow-sm text-center scroll-animate-scale">
-                     <img src="{{ url_for('static', filename='assets/img/about-us.png') }}" alt="Tentang SIPINA" class="img-fluid rounded">
+                <div class="about-image p-2 bg-white rounded-3 shadow-sm text-center scroll-animate-scale">
+                     <img src="{{ url_for('static', filename='assets/img/about-us.png') }}" alt="Tentang SIPINA" class="img-fluid rounded-3">
                 </div>
             </div>
         </div>
@@ -217,39 +227,40 @@
 
     <!-- Footer -->
     <footer id="contact" class="scroll-animate">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-5 mb-lg-0">
-                    <h4 class="text-white mb-4"><i class="bi bi-building me-2"></i> SIPINA</h4>
-                    <p style="opacity: 0.7;">Platform layanan keuangan modern yang berkomitmen untuk membantu pertumbuhan ekonomi nasabah melalui solusi kredit yang inovatif.</p>
+        <div class="container px-4">
+            <div class="row g-5">
+                <div class="col-lg-4 text-center text-lg-start">
+                    <h4 class="text-white mb-4"><i class="bi bi-building me-2 text-gold-500"></i> SIPINA</h4>
+                    <p style="opacity: 0.7;" class="px-4 px-lg-0">Platform layanan keuangan modern yang berkomitmen untuk membantu pertumbuhan ekonomi nasabah melalui solusi kredit yang inovatif.</p>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <div class="col-6 col-lg-2 text-center text-lg-start">
                     <div class="footer-widget">
                         <h5>Menu</h5>
                         <a href="#" class="footer-link">Beranda</a>
-                        <a href="#" class="footer-link">Layanan</a>
-                        <a href="#" class="footer-link">Tentang Kami</a>
-                        <a href="#" class="footer-link">Kebijakan Privasi</a>
+                        <a href="#services" class="footer-link">Layanan</a>
+                        <a href="#about" class="footer-link">Tentang Kami</a>
+                        <a href="#" class="footer-link">Kebijakan</a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                <div class="col-6 col-lg-2 text-center text-lg-start">
                     <div class="footer-widget">
                         <h5>Layanan</h5>
-                        <a href="#" class="footer-link">Pinjaman Usaha</a>
-                        <a href="#" class="footer-link">Kredit Personal</a>
-                        <a href="#" class="footer-link">Simulasi Kredit</a>
+                        <a href="#" class="footer-link">Pinjaman</a>
+                        <a href="#" class="footer-link">Kredit</a>
+                        <a href="#" class="footer-link">Simulasi</a>
+                        <a href="#" class="footer-link">Bantuan</a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
+                <div class="col-lg-4 text-center text-lg-start">
                     <div class="footer-widget">
                         <h5>Hubungi Kami</h5>
-                        <p style="color: rgba(255,255,255,0.7);"><i class="bi bi-geo-alt me-2"></i> Jl. Jendral Sudirman No. 1, Jakarta</p>
-                        <p style="color: rgba(255,255,255,0.7);"><i class="bi bi-telephone me-2"></i> +62 21 1234 5678</p>
-                        <p style="color: rgba(255,255,255,0.7);"><i class="bi bi-envelope me-2"></i> support@sipina.co.id</p>
+                        <p style="color: rgba(255,255,255,0.7);" class="mb-2"><i class="bi bi-geo-alt me-2 text-gold-500"></i> Jl. Jendral Sudirman No. 1, Jakarta</p>
+                        <p style="color: rgba(255,255,255,0.7);" class="mb-2"><i class="bi bi-telephone me-2 text-gold-500"></i> +62 21 1234 5678</p>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;"><i class="bi bi-envelope me-2 text-gold-500"></i> support@sipina.co.id</p>
                     </div>
                 </div>
             </div>
-            <div class="copyright">
+            <div class="copyright mt-5 pt-4 border-top border-white border-opacity-10">
                 <p class="mb-0">&copy; 2024 SIPINA. All rights reserved.</p>
             </div>
         </div>

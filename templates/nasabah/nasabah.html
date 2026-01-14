@@ -70,8 +70,8 @@
     </div>
   </div>
   
-  <div class="overflow-x-auto no-scrollbar">
-    <table class="w-full text-left border-collapse">
+  <div class="overflow-x-auto no-scrollbar lg:overflow-visible">
+    <table class="w-full text-left border-collapse responsive-table">
       <thead>
         <tr class="bg-slate-50/50">
           <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] text-slate-400">#</th>
@@ -85,33 +85,35 @@
         {% if nasabah %}
           {% for n in nasabah %}
           <tr class="hover:bg-slate-50/80 transition-colors group">
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="No">
               <span class="text-sm font-bold text-slate-400">{{ loop.index }}</span>
             </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-navy-500 flex items-center justify-center text-gold-500 font-black text-xs shadow-inner">
+            <td class="px-6 py-4" data-label="Profil">
+              <div class="flex items-center gap-3 justify-end lg:justify-start">
+                <div class="w-10 h-10 rounded-full bg-navy-500 flex items-center justify-center text-gold-500 font-black text-xs shadow-inner shrink-0">
                   {{ n.nama[:2].upper() }}
                 </div>
-                <div>
+                <div class="text-right lg:text-left">
                   <p class="text-sm font-black text-slate-800">{{ n.nama }}</p>
                   <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ n.pekerjaan or 'NASABAH SIPINA' }}</p>
                 </div>
               </div>
             </td>
-            <td class="px-6 py-4">
-              <p class="text-sm font-bold text-slate-600 flex items-center gap-2">
-                <i class="bi bi-telephone text-gold-500"></i>
-                {{ n.no_telp }}
-              </p>
-              <p class="text-[10px] font-medium text-slate-400 font-mono tracking-widest mt-1">{{ n.nik }}</p>
+            <td class="px-6 py-4" data-label="Kontak">
+              <div class="text-right lg:text-left">
+                <p class="text-sm font-bold text-slate-600 flex items-center justify-end lg:justify-start gap-2">
+                  <i class="bi bi-telephone text-gold-500"></i>
+                  {{ n.no_telp }}
+                </p>
+                <p class="text-[10px] font-medium text-slate-400 font-mono tracking-widest mt-1">{{ n.nik }}</p>
+              </div>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="Penghasilan">
               <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-black">
                 Rp {{ '{:,.0f}'.format(n.penghasilan) }}
               </span>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4" data-label="Aksi">
               <div class="flex justify-end gap-2">
                 <a href="{{ url_for('nasabah.detail', id=n.id) }}" class="p-2 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all" title="Detail Profil">
                   <i class="bi bi-person-badge-fill text-lg"></i>
