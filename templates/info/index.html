@@ -1,31 +1,108 @@
-{% extends 'base.html' %}
-{% block title %}Informasi Umum{% endblock %}
-
-{% block content %}
-<div class="container py-5">
-  <div class="row">
-    <div class="col-12 mb-3">
-      <h1><i class="bi bi-info-circle"></i> Informasi Umum</h1>
-      <p class="text-muted">Pilih topik di bawah untuk melihat informasi detail.</p>
+{% extends 'base.html' %} {% block title %}Informasi Umum{% endblock %} {% block
+content %}
+<div class="space-y-8 animate-in fade-in zoom-in duration-500">
+  <!-- Header -->
+  <div class="text-center space-y-4 mb-10">
+    <div
+      class="inline-flex items-center justify-center p-3 bg-navy-50 rounded-full mb-4"
+    >
+      <i class="bi bi-info-circle text-3xl text-navy-500"></i>
     </div>
+    <h1 class="text-3xl font-bold text-slate-800">Pusat Informasi</h1>
+    <p class="text-slate-500 max-w-2xl mx-auto text-lg">
+      Semua informasi yang Anda butuhkan tentang layanan, prosedur, dan cara
+      menghubungi kami dalam satu tempat.
+    </p>
+  </div>
 
-    <div class="col-12 mb-4">
-      <div class="btn-group" role="group" aria-label="Info navigation">
-        <a href="{{ url_for('info.layanan') }}" class="btn btn-outline-primary">Layanan</a>
-        <a href="{{ url_for('info.prosedur') }}" class="btn btn-outline-primary">Prosedur & Persyaratan</a>
-        <a href="{{ url_for('info.kontak') }}" class="btn btn-outline-primary">Kontak & Lokasi</a>
+  <!-- Cards Grid -->
+  <div class="grid md:grid-cols-3 gap-6">
+    <!-- Layanan Card -->
+    <a
+      href="{{ url_for('info.layanan') }}"
+      class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"
+      >
+        <i class="bi bi-briefcase text-9xl"></i>
       </div>
-    </div>
-
-    <div class="col-12">
-      <div class="card mb-4">
-        <div class="card-body">
-          <h4>Ringkasan</h4>
-          <p>SIPINA membantu lembaga keuangan dalam mengelola proses pengajuan kredit nasabah secara terstruktur, cepat, dan transparan.</p>
-          <p>Gunakan tautan di atas untuk menavigasi ke topik yang ingin Anda pelajari lebih lanjut.</p>
-        </div>
+      <div
+        class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors duration-300"
+      >
+        <i
+          class="bi bi-briefcase text-2xl text-blue-600 group-hover:text-white transition-colors"
+        ></i>
       </div>
-    </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-3">Layanan Kredit</h3>
+      <p class="text-slate-500 mb-6 leading-relaxed">
+        Temukan berbagai solusi pembiayaan yang dirancang khusus untuk memenuhi
+        kebutuhan modal usaha maupun investasi Anda.
+      </p>
+      <div
+        class="flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all"
+      >
+        Selengkapnya <i class="bi bi-arrow-right ml-2"></i>
+      </div>
+    </a>
+
+    <!-- Prosedur Card -->
+    <a
+      href="{{ url_for('info.prosedur') }}"
+      class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"
+      >
+        <i class="bi bi-file-text text-9xl"></i>
+      </div>
+      <div
+        class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-500 transition-colors duration-300"
+      >
+        <i
+          class="bi bi-file-earmark-text text-2xl text-amber-600 group-hover:text-white transition-colors"
+        ></i>
+      </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-3">Prosedur & Syarat</h3>
+      <p class="text-slate-500 mb-6 leading-relaxed">
+        Panduan lengkap langkah demi langkah pengajuan kredit beserta dokumen
+        persyaratan yang diperlukan agar proses berjalan lancar.
+      </p>
+      <div
+        class="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all"
+      >
+        Selengkapnya <i class="bi bi-arrow-right ml-2"></i>
+      </div>
+    </a>
+
+    <!-- Kontak Card -->
+    <a
+      href="{{ url_for('info.kontak') }}"
+      class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"
+      >
+        <i class="bi bi-headset text-9xl"></i>
+      </div>
+      <div
+        class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 transition-colors duration-300"
+      >
+        <i
+          class="bi bi-chat-dots text-2xl text-emerald-600 group-hover:text-white transition-colors"
+        ></i>
+      </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-3">Kontak & Lokasi</h3>
+      <p class="text-slate-500 mb-6 leading-relaxed">
+        Butuh bantuan? Hubungi tim support kami atau kunjungi kantor cabang
+        terdekat untuk konsultasi langsung.
+      </p>
+      <div
+        class="flex items-center text-emerald-600 font-semibold group-hover:gap-2 transition-all"
+      >
+        Selengkapnya <i class="bi bi-arrow-right ml-2"></i>
+      </div>
+    </a>
   </div>
 </div>
 {% endblock %}

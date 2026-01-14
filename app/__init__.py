@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf import CSRFProtect
 from werkzeug.security import generate_password_hash
+from flask_socketio import SocketIO
 from dotenv import load_dotenv
 import os
 import logging
@@ -13,6 +14,7 @@ load_dotenv()
 db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+socketio = SocketIO(cors_allowed_origins="*", async_mode='threading')
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -28,13 +30,14 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+    socketio.init_app(app)
 
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Silakan login terlebih dahulu.'
 
     with app.app_context():
         # Import models so SQLAlchemy knows about them
-        from .models import user, nasabah, pengajuan, dokumen
+        from .models import user, nasabah, pengajuan, dokumen, chat
         db.create_all()
 
         # Seed a default admin user if none exists
@@ -54,8 +57,11 @@ def create_app():
             except Exception as e2:
                 print(f"Error creating admin: {e2}")
 
+    # Import events for SocketIO
+    from . import events
+
     # Import controllers
-    from .controllers import auth_controller, nasabah_controller, pengajuan_controller, dashboard_controller, user_controller, info_controller, pembayaran_controller, notifikasi_controller, dokumen_controller
+    from .controllers import auth_controller, nasabah_controller, pengajuan_controller, dashboard_controller, user_controller, info_controller, pembayaran_controller, notifikasi_controller, dokumen_controller, chat_controller
 
     # Register blueprints
     app.register_blueprint(auth_controller.bp)
@@ -67,6 +73,7 @@ def create_app():
     app.register_blueprint(pembayaran_controller.bp)
     app.register_blueprint(notifikasi_controller.bp)
     app.register_blueprint(dokumen_controller.bp)
+    app.register_blueprint(chat_controller.bp)
 
     # Add root route to show landing page
     @app.route('/')

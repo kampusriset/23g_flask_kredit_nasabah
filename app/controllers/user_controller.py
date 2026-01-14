@@ -143,3 +143,46 @@ def hapus(id):
     return redirect(url_for('user.index'))
 
 
+@bp.route('/profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    from flask_login import current_user
+    import os
+    from werkzeug.utils import secure_filename
+    
+    user = User.query.get_or_404(current_user.id)
+    
+    if request.method == 'POST':
+        # Update password if provided
+        new_password = request.form.get('password')
+        if new_password:
+            if len(new_password) < 6:
+                flash('Password minimal 6 karakter.', 'danger')
+                return redirect(url_for('user.edit_profile'))
+            user.password = generate_password_hash(new_password)
+        
+        # Update profile photo if uploaded
+        if 'foto_profil' in request.files:
+            file = request.files['foto_profil']
+            if file and file.filename:
+                filename = secure_filename(file.filename)
+                # Create unique filename
+                ext = filename.rsplit('.', 1)[-1].lower() if '.' in filename else 'jpg'
+                new_filename = f"profile_{user.id}.{ext}"
+                upload_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'app', 'static', 'uploads', 'profiles')
+                os.makedirs(upload_folder, exist_ok=True)
+                filepath = os.path.join(upload_folder, new_filename)
+                file.save(filepath)
+                user.foto_profil = f"uploads/profiles/{new_filename}"
+        
+        # Update nasabah info if applicable
+        if user.role == 'nasabah' and user.nasabah:
+            user.nasabah.nama = request.form.get('nama', user.nasabah.nama)
+            user.nasabah.alamat = request.form.get('alamat', user.nasabah.alamat)
+            user.nasabah.no_telp = request.form.get('no_telp', user.nasabah.no_telp)
+        
+        db.session.commit()
+        flash('Profil berhasil diperbarui.', 'success')
+        return redirect(url_for('user.edit_profile'))
+    
+    return render_template('user/edit_profile.html', user=user)

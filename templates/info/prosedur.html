@@ -2,41 +2,134 @@
 {% block title %}Prosedur Pengajuan{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="row">
-    <div class="col-12 mb-3">
-      <h2><i class="bi bi-gear-wide-connected"></i> Prosedur & Persyaratan</h2>
-      <p class="text-muted">Langkah-langkah umum dan persyaratan untuk melakukan pengajuan kredit.</p>
-    </div>
-
-    <div class="col-lg-8">
-      <div class="card mb-4">
-        <div class="card-header bg-primary text-white">Prosedur Pengajuan</div>
-        <div class="card-body">
-          <ol>
-            <li>Isi formulir pengajuan dengan lengkap melalui menu Pengajuan.</li>
-            <li>Unggah dokumen pendukung seperti KTP, NPWP (jika ada), dan bukti kepemilikan usaha.</li>
-            <li>Tim kami akan meninjau dokumen dan melakukan verifikasi lapangan jika diperlukan.</li>
-            <li>Keputusan akan diberitahukan melalui dashboard atau kontak yang tercantum.</li>
-          </ol>
-
-          <h5 class="mt-4">Persyaratan Umum</h5>
-          <ul>
-            <li>Usaha yang berjalan minimal 6 bulan.</li>
-            <li>Memiliki identitas yang jelas (KTP) dan dokumen pendukung lainnya.</li>
-            <li>Kebutuhan anggaran yang jelas dan rencana penggunaan dana.</li>
-          </ul>
+<div class="grid lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+  <!-- Content Area -->
+  <div class="lg:col-span-2 space-y-6">
+    <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm relative overflow-hidden">
+      <!-- Decorative background -->
+      <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full opacity-50 -mr-8 -mt-8"></div>
+      
+      <div class="relative z-10 flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 bg-amber-100/50 rounded-xl flex items-center justify-center text-amber-600">
+            <i class="bi bi-file-earmark-text text-2xl"></i>
+        </div>
+        <div>
+           <h2 class="text-2xl font-bold text-slate-800">Prosedur & Persyaratan</h2>
+           <p class="text-slate-500">Panduan langkah demi langkah pengajuan kredit</p>
         </div>
       </div>
-    </div>
 
-    <aside class="col-lg-4">
-      <div class="list-group mb-4 sticky-top">
-        <a href="{{ url_for('info.layanan') }}" class="list-group-item list-group-item-action">Layanan</a>
-        <a href="#" class="list-group-item list-group-item-action active">Prosedur & Persyaratan</a>
-        <a href="{{ url_for('info.kontak') }}" class="list-group-item list-group-item-action">Kontak & Lokasi</a>
+      <!-- Timeline/Steps -->
+      <div class="relative pl-8 border-l-2 border-slate-100 space-y-10 ml-4">
+        <!-- Step 1 -->
+        <div class="relative group">
+          <div class="absolute -left-[41px] top-1 w-8 h-8 rounded-full bg-white border-2 border-amber-500 flex items-center justify-center text-amber-600 font-bold shadow-sm z-10 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+            1
+          </div>
+          <div>
+            <h4 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600 transition-colors">Isi Formulir Pengajuan</h4>
+            <p class="text-slate-500 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+              Lengkapi formulir pengajuan kredit melalui menu <strong>Pengajuan</strong>. Pastikan data yang dimasukkan valid dan sesuai dengan identitas asli Anda.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative group">
+          <div class="absolute -left-[41px] top-1 w-8 h-8 rounded-full bg-white border-2 border-amber-500 flex items-center justify-center text-amber-600 font-bold shadow-sm z-10 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+            2
+          </div>
+          <div>
+            <h4 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600 transition-colors">Unggah Dokumen</h4>
+            <p class="text-slate-500 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+              Siapkan dan unggah dokumen pendukung wajib dalam format digital (PDF/JPG):
+            </p>
+             <ul class="mt-3 space-y-2 text-sm text-slate-600 ml-4">
+                <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-green-500"></i> KTP (Kartu Tanda Penduduk)</li>
+                <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-green-500"></i> KK (Kartu Keluarga)</li>
+                <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-green-500"></i> NPWP (jika ada)</li>
+                 <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-green-500"></i> Bukti Kepemilikan Usaha / Slip Gaji</li>
+              </ul>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative group">
+          <div class="absolute -left-[41px] top-1 w-8 h-8 rounded-full bg-white border-2 border-amber-500 flex items-center justify-center text-amber-600 font-bold shadow-sm z-10 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+            3
+          </div>
+          <div>
+            <h4 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600 transition-colors">Proses Verifikasi</h4>
+            <p class="text-slate-500 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+              Tim analis kami akan meninjau dokumen Anda. Jika diperlukan, kami akan melakukan survei lapangan ke lokasi usaha atau tempat tinggal Anda untuk validasi data.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="relative group">
+           <div class="absolute -left-[41px] top-1 w-8 h-8 rounded-full bg-white border-2 border-amber-500 flex items-center justify-center text-amber-600 font-bold shadow-sm z-10 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+            4
+          </div>
+          <div>
+            <h4 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600 transition-colors">Keputusan Kredit</h4>
+            <p class="text-slate-500 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+              Status pengajuan Anda akan diupdate secara real-time di Dashboard. Jika disetujui, dana akan segera dicairkan ke rekening Anda setelah penandatanganan akad.
+            </p>
+          </div>
+        </div>
       </div>
-    </aside>
+
+       <div class="mt-10 pt-8 border-t border-slate-100">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="bi bi-exclamation-circle text-amber-500"></i> Syarat & Ketentuan Umum
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+            <div class="p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                <h5 class="font-bold text-slate-700 text-sm mb-1">Masa Usaha</h5>
+                <p class="text-xs text-slate-500">Usaha telah berjalan efektif minimal 6 bulan.</p>
+            </div>
+             <div class="p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                <h5 class="font-bold text-slate-700 text-sm mb-1">Dokumen Lengkap</h5>
+                <p class="text-xs text-slate-500">Memiliki identitas KTP dan dokumen pendukung yang sah.</p>
+            </div>
+             <div class="p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                <h5 class="font-bold text-slate-700 text-sm mb-1">Riwayat Kredit</h5>
+                <p class="text-xs text-slate-500">Tidak memiliki riwayat kredit macet (BI Checking bersih).</p>
+            </div>
+             <div class="p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                <h5 class="font-bold text-slate-700 text-sm mb-1">Tujuan Jelas</h5>
+                <p class="text-xs text-slate-500">Memiliki rencana penggunaan dana yang jelas dan terukur.</p>
+            </div>
+        </div>
+       </div>
+
+    </div>
   </div>
+
+  <!-- Sidebar -->
+  <aside class="space-y-6">
+    <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-100 sticky top-24">
+      <nav class="flex flex-col space-y-1">
+        <a href="{{ url_for('info.layanan') }}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+          <i class="bi bi-briefcase"></i> Layanan
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-amber-50 text-amber-700 font-semibold rounded-xl">
+          <i class="bi bi-file-text"></i> Prosedur & Syarat
+        </a>
+        <a href="{{ url_for('info.kontak') }}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+          <i class="bi bi-headset"></i> Kontak & Lokasi
+        </a>
+      </nav>
+      
+      <div class="mt-4 bg-gradient-to-br from-navy-600 to-navy-800 rounded-xl p-6 text-white text-center mx-2 mb-2">
+        <h4 class="font-bold mb-2">Butuh Bantuan?</h4>
+        <p class="text-sm text-navy-100 mb-4 opacity-80">Tim kami siap membantu Anda 24/7</p>
+        <a href="{{ url_for('info.kontak') }}" class="inline-block w-full py-2 bg-gold-500 text-navy-900 font-bold rounded-lg hover:bg-gold-400 transition-colors shadow-lg shadow-gold-500/20 text-sm">
+          Hubungi Kami
+        </a>
+      </div>
+    </div>
+  </aside>
 </div>
 {% endblock %}

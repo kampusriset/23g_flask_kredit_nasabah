@@ -26,6 +26,29 @@
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
       }
+      
+      /* Animation Definitions */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(2rem); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .animate-in {
+        animation-fill-mode: both;
+      }
+      .fade-in {
+        animation-name: fadeIn;
+      }
+      .slide-in-from-bottom-8 {
+        animation-name: slideInUp;
+      }
+      .duration-700 {
+        animation-duration: 700ms;
+      }
     </style>
   </head>
   <body class="h-full overflow-y-auto">

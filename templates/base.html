@@ -97,6 +97,43 @@
         -ms-overflow-style: none; /* IE and Edge */
         scrollbar-width: none; /* Firefox */
       }
+      
+      /* Custom Animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes zoomIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      
+      .animate-in {
+        animation-duration: 0.6s;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-fill-mode: both;
+      }
+      
+      .fade-in {
+        animation-name: fadeIn;
+      }
+      
+      .slide-in-from-bottom-4 {
+        animation-name: slideUp;
+      }
+      
+      .zoom-in {
+        animation-name: zoomIn;
+      }
+      
+      /* Stagger delays */
+      .delay-100 { animation-delay: 100ms; }
+      .delay-200 { animation-delay: 200ms; }
+      .delay-300 { animation-delay: 300ms; }
     </style>
 
     {% block head %}{% endblock %}
@@ -215,6 +252,13 @@
               <i class="bi bi-person-gear"></i>
               <span>Manajemen User</span>
             </a>
+            <a
+              href="{{ url_for('chat.admin_index') }}"
+              class="nav-item {% if 'chat' in request.endpoint %}active{% endif %}"
+            >
+              <i class="bi bi-chat-dots-fill"></i>
+              <span>Live Chat</span>
+            </a>
             {% else %}
             <a
               href="{{ url_for('pengajuan.index') }}"
@@ -281,35 +325,81 @@
               />
             </div>
 
-            <!-- Notifications -->
-            <button
-              class="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors"
-            >
-              <i class="bi bi-bell text-xl"></i>
-              <span
-                class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"
-              ></span>
-            </button>
-
-            <!-- User Avatar (Mini) -->
-            <div
-              class="flex items-center gap-3 pl-4 md:pl-6 md:border-l border-slate-200"
-            >
-              <div class="hidden md:block text-right">
-                <p class="text-xs font-bold text-slate-800 leading-none">
-                  {{ current_user.username }}
-                </p>
-                <p
-                  class="text-[10px] text-slate-500 font-medium mt-1 uppercase tracking-wider"
-                >
-                  {{ current_user.role }}
-                </p>
+            <!-- Notifications Dropdown -->
+            <div class="relative" id="notifDropdown">
+              <button
+                id="notifBtn"
+                class="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors"
+              >
+                <i class="bi bi-bell text-xl"></i>
+                <span
+                  id="notifBadge"
+                  class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full hidden"
+                ></span>
+              </button>
+              <!-- Dropdown Panel -->
+              <div id="notifPanel" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden">
+                <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+                  <h4 class="font-bold text-slate-800">Notifikasi</h4>
+                  <a href="{{ url_for('notifikasi.index') }}" class="text-xs text-gold-600 hover:underline">Lihat Semua</a>
+                </div>
+                <div id="notifList" class="max-h-64 overflow-y-auto divide-y divide-slate-100">
+                  <div class="p-4 text-center text-slate-400 text-sm">
+                    <i class="bi bi-bell-slash"></i> Tidak ada notifikasi baru
+                  </div>
+                </div>
               </div>
-              <img
-                src="{{ url_for('static', filename=current_user.foto_profil) if current_user.foto_profil else url_for('static', filename='assets/img/default-user.svg') }}"
-                class="w-9 h-9 rounded-full border-2 border-gold-500 p-0.5 object-cover shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
-                onerror="this.src='{{ url_for('static', filename='assets/img/default-user.svg') }}'"
-              />
+            </div>
+
+            <!-- User Profile Dropdown -->
+            <div class="relative" id="profileDropdown">
+              <div
+                id="profileBtn"
+                class="flex items-center gap-3 pl-4 md:pl-6 md:border-l border-slate-200 cursor-pointer"
+              >
+                <div class="hidden md:block text-right">
+                  <p class="text-xs font-bold text-slate-800 leading-none">
+                    {{ current_user.username }}
+                  </p>
+                  <p
+                    class="text-[10px] text-slate-500 font-medium mt-1 uppercase tracking-wider"
+                  >
+                    {{ current_user.role }}
+                  </p>
+                </div>
+                <img
+                  src="{{ url_for('static', filename=current_user.foto_profil) if current_user.foto_profil else url_for('static', filename='assets/img/default-user.svg') }}"
+                  class="w-9 h-9 rounded-full border-2 border-gold-500 p-0.5 object-cover shadow-sm hover:opacity-80 transition-opacity"
+                  onerror="this.src='{{ url_for('static', filename='assets/img/default-user.svg') }}'"
+                />
+                <i class="bi bi-chevron-down text-slate-400 text-xs hidden md:block"></i>
+              </div>
+              <!-- Dropdown Panel -->
+              <div id="profilePanel" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden">
+                <div class="p-4 border-b border-slate-100 flex items-center gap-3">
+                  <img
+                    src="{{ url_for('static', filename=current_user.foto_profil) if current_user.foto_profil else url_for('static', filename='assets/img/default-user.svg') }}"
+                    class="w-10 h-10 rounded-full border-2 border-gold-500 object-cover"
+                    onerror="this.src='{{ url_for('static', filename='assets/img/default-user.svg') }}'"
+                  />
+                  <div>
+                    <p class="font-bold text-slate-800">{{ current_user.username }}</p>
+                    <p class="text-xs text-slate-500">{{ current_user.role|capitalize }}</p>
+                  </div>
+                </div>
+                <div class="py-2">
+                  <a href="{{ url_for('user.edit_profile') }}" class="flex items-center gap-3 px-4 py-2.5 text-slate-600 hover:bg-slate-50 transition-colors">
+                    <i class="bi bi-person-gear text-lg"></i>
+                    <span class="text-sm">Edit Profil</span>
+                  </a>
+                </div>
+                <div class="border-t border-slate-100 py-2">
+                  <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-4 py-2.5 text-red-500 hover:bg-red-50 transition-colors">
+                    <i class="bi bi-box-arrow-right text-lg"></i>
+                    <span class="text-sm font-medium">Keluar</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </header>
@@ -343,7 +433,7 @@
 
 
           <!-- WRAPPER -->
-          <div class="max-w-7xl mx-auto">
+          <div class="max-w-7xl mx-auto animate-in fade-in duration-700">
             {% block content %}{% endblock %}
           </div>
 
@@ -407,6 +497,87 @@
             .catch((err) => console.log("SW failed", err));
         });
       }
+
+      // Dropdown Toggle Logic
+      const notifBtn = document.getElementById('notifBtn');
+      const notifPanel = document.getElementById('notifPanel');
+      const profileBtn = document.getElementById('profileBtn');
+      const profilePanel = document.getElementById('profilePanel');
+
+      function closeAllDropdowns() {
+        if (notifPanel) notifPanel.classList.add('hidden');
+        if (profilePanel) profilePanel.classList.add('hidden');
+      }
+
+      if (notifBtn) {
+        notifBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          profilePanel?.classList.add('hidden');
+          notifPanel.classList.toggle('hidden');
+          if (!notifPanel.classList.contains('hidden')) {
+            loadNotifications();
+          }
+        });
+      }
+
+      if (profileBtn) {
+        profileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          notifPanel?.classList.add('hidden');
+          profilePanel.classList.toggle('hidden');
+        });
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#notifDropdown') && !e.target.closest('#profileDropdown')) {
+          closeAllDropdowns();
+        }
+      });
+
+      // Load notifications dynamically
+      function loadNotifications() {
+        const notifList = document.getElementById('notifList');
+        fetch('/notifikasi/api/notifications')
+          .then(res => res.json())
+          .then(data => {
+            if (data.length === 0) {
+              notifList.innerHTML = '<div class="p-4 text-center text-slate-400 text-sm"><i class="bi bi-bell-slash"></i> Tidak ada notifikasi baru</div>';
+              document.getElementById('notifBadge')?.classList.add('hidden');
+              return;
+            }
+            notifList.innerHTML = '';
+            data.forEach(n => {
+              notifList.innerHTML += `
+                <a href="${n.url || '#'}" class="block p-3 hover:bg-slate-50 transition-colors">
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full ${n.type === 'success' ? 'bg-green-100 text-green-600' : n.type === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'} flex items-center justify-center shrink-0">
+                      <i class="bi ${n.icon || 'bi-bell'}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium text-slate-800 truncate">${n.title}</p>
+                      <p class="text-xs text-slate-500 truncate">${n.message}</p>
+                    </div>
+                  </div>
+                </a>
+              `;
+            });
+          })
+          .catch(() => {
+            notifList.innerHTML = '<div class="p-4 text-center text-slate-400 text-sm"><i class="bi bi-bell-slash"></i> Tidak ada notifikasi</div>';
+          });
+      }
+
+      // Check for notifications on page load
+      fetch('/notifikasi/api/notifications/count')
+        .then(res => res.json())
+        .then(data => {
+          const badge = document.getElementById('notifBadge');
+          if (badge && data.count > 0) {
+            badge.classList.remove('hidden');
+          }
+        })
+        .catch(() => {});
     </script>
   </body>
 </html>

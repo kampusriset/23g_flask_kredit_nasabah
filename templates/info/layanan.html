@@ -2,34 +2,102 @@
 {% block title %}Layanan Kredit{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="row">
-    <div class="col-12 mb-3">
-      <h2><i class="bi bi-list-columns-reverse"></i> Jenis Layanan Kredit</h2>
-      <p class="text-muted">Berikut adalah jenis-jenis kredit yang tersedia melalui lembaga kami.</p>
-    </div>
+<div class="grid lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+  <!-- Content Area -->
+  <div class="lg:col-span-2 space-y-6">
+    <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm relative overflow-hidden">
+      <!-- Decorative background -->
+      <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full opacity-50 -mr-8 -mt-8"></div>
+      
+      <div class="relative z-10 flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 bg-blue-100/50 rounded-xl flex items-center justify-center text-blue-600">
+            <i class="bi bi-briefcase text-2xl"></i>
+        </div>
+        <div>
+           <h2 class="text-2xl font-bold text-slate-800">Jenis Layanan Kredit</h2>
+           <p class="text-slate-500">Pilihan produk pembiayaan yang sesuai kebutuhan Anda</p>
+        </div>
+      </div>
 
-    <div class="col-lg-8">
-      <div class="card mb-4">
-        <div class="card-header bg-primary text-white">Layanan Kredit</div>
-        <div class="card-body">
-          <ul>
-            <li><strong>Kredit Modal Kerja</strong> — Pembiayaan untuk kebutuhan modal usaha jangka pendek seperti pembelian bahan baku, persediaan, atau modal operasional.</li>
-            <li><strong>Kredit Investasi</strong> — Pembiayaan untuk investasi jangka menengah atau panjang, mis. pembelian mesin, kendaraan, atau perluasan usaha.</li>
-            <li><strong>Kredit Konsumtif</strong> — Pembiayaan kebutuhan pribadi seperti biaya pendidikan, kesehatan, atau perbaikan rumah.</li>
-            <li><strong>Kredit Mikro</strong> — Pembiayaan dengan nilai kecil dan persyaratan sederhana bagi pelaku usaha mikro.</li>
-          </ul>
+      <div class="grid gap-4">
+        <!-- Item 1 -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 hover:bg-white hover:shadow-md transition-all group">
+          <div class="flex gap-4">
+            <div class="shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+              <i class="bi bi-shop text-xl"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-700 mb-1 group-hover:text-blue-600 transition-colors">Kredit Modal Kerja</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">Pembiayaan untuk kebutuhan modal usaha jangka pendek seperti pembelian bahan baku, persediaan, atau modal operasional harian.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 hover:bg-white hover:shadow-md transition-all group">
+          <div class="flex gap-4">
+             <div class="shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+              <i class="bi bi-buildings text-xl"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-700 mb-1 group-hover:text-blue-600 transition-colors">Kredit Investasi</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">Pembiayaan untuk investasi jangka menengah atau panjang, misal pembelian mesin, kendaraan, pengadaan alat berat, atau perluasan tempat usaha.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 hover:bg-white hover:shadow-md transition-all group">
+          <div class="flex gap-4">
+             <div class="shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+              <i class="bi bi-house-heart text-xl"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-700 mb-1 group-hover:text-blue-600 transition-colors">Kredit Konsumtif</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">Solusi pembiayaan untuk kebutuhan pribadi mendesak seperti biaya pendidikan, kesehatan, renovasi rumah, atau pembelian kendaraan pribadi.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-blue-200 hover:bg-white hover:shadow-md transition-all group">
+          <div class="flex gap-4">
+             <div class="shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-blue-500 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+              <i class="bi bi-basket text-xl"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-700 mb-1 group-hover:text-blue-600 transition-colors">Kredit Mikro</h4>
+              <p class="text-sm text-slate-500 leading-relaxed">Pembiayaan dengan plafon kecil dan persyaratan yang lebih sederhana, didedikasikan khusus untuk membantu pertumbuhan pelaku usaha mikro.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <aside class="col-lg-4">
-      <div class="list-group mb-4 sticky-top">
-        <a href="#" class="list-group-item list-group-item-action active">Layanan</a>
-        <a href="{{ url_for('info.prosedur') }}" class="list-group-item list-group-item-action">Prosedur & Persyaratan</a>
-        <a href="{{ url_for('info.kontak') }}" class="list-group-item list-group-item-action">Kontak & Lokasi</a>
-      </div>
-    </aside>
   </div>
+
+  <!-- Sidebar -->
+  <aside class="space-y-6">
+    <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-100 sticky top-24">
+      <nav class="flex flex-col space-y-1">
+        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 font-semibold rounded-xl">
+          <i class="bi bi-briefcase"></i> Layanan
+        </a>
+        <a href="{{ url_for('info.prosedur') }}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+          <i class="bi bi-file-text"></i> Prosedur & Syarat
+        </a>
+        <a href="{{ url_for('info.kontak') }}" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+          <i class="bi bi-headset"></i> Kontak & Lokasi
+        </a>
+      </nav>
+      
+      <div class="mt-4 bg-gradient-to-br from-navy-600 to-navy-800 rounded-xl p-6 text-white text-center mx-2 mb-2">
+        <h4 class="font-bold mb-2">Butuh Bantuan?</h4>
+        <p class="text-sm text-navy-100 mb-4 opacity-80">Tim kami siap membantu Anda 24/7</p>
+        <a href="{{ url_for('info.kontak') }}" class="inline-block w-full py-2 bg-gold-500 text-navy-900 font-bold rounded-lg hover:bg-gold-400 transition-colors shadow-lg shadow-gold-500/20 text-sm">
+          Hubungi Kami
+        </a>
+      </div>
+    </div>
+  </aside>
 </div>
 {% endblock %}

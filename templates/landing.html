@@ -12,8 +12,77 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/landing.css') }}">
     
     <meta name="theme-color" content="#0c1e35">
+    
+    <style>
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .fade-in {
+        animation: fadeIn 0.8s ease-in-out forwards;
+      }
+      
+      /* Scroll Animation Classes */
+      .scroll-animate {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .scroll-animate-left {
+        opacity: 0;
+        transform: translateX(-60px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .scroll-animate-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      
+      .scroll-animate-right {
+        opacity: 0;
+        transform: translateX(60px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .scroll-animate-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      
+      .scroll-animate-scale {
+        opacity: 0;
+        transform: scale(0.9);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .scroll-animate-scale.visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+      
+      /* Stagger delays */
+      .delay-1 { transition-delay: 0.1s; }
+      .delay-2 { transition-delay: 0.2s; }
+      .delay-3 { transition-delay: 0.3s; }
+      .delay-4 { transition-delay: 0.4s; }
+      
+      /* Parallax Hero Background */
+      .hero-section {
+        background-attachment: fixed;
+        background-position: center center;
+        background-size: cover;
+      }
+      
+      /* Stats counter animation */
+      .stat-number {
+        display: inline-block;
+      }
+    </style>
   </head>
-  <body>
+  <body class="fade-in">
     
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-landing">
@@ -39,14 +108,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" id="heroSection">
       <div class="container">
         <div class="row">
           <div class="col-lg-8">
             <div class="hero-content">
-              <h1>Mitra Terpercaya <br>Untuk Pertumbuhan Finansial Anda</h1>
-              <p>Solusi pinjaman yang cepat, aman, dan transparan untuk kebutuhan bisnis maupun personal. Wujudkan impian finansial Anda bersama profesional.</p>
-              <div class="d-flex flex-wrap gap-3">
+              <h1 class="scroll-animate visible">SIPINA <br>Mitra Terpercaya Untuk Pinjaman Kredit Anda</h1>
+              <p class="scroll-animate visible delay-1">Solusi pinjaman yang cepat, aman, dan transparan untuk kebutuhan bisnis maupun personal. Wujudkan impian finansial Anda bersama profesional.</p>
+              <div class="d-flex flex-wrap gap-3 scroll-animate visible delay-2">
                   <a href="{{ url_for('auth.register') }}" class="btn-primary-custom">Ajukan Pinjaman</a>
                   <a href="#services" class="btn-secondary-custom">Pelajari Lebih Lanjut</a>
               </div>
@@ -59,27 +128,27 @@
     <!-- Services / Features Section -->
     <section id="services" class="section-padding bg-light">
       <div class="container">
-        <div class="section-title">
+        <div class="section-title scroll-animate">
             <h2>Layanan & Keunggulan</h2>
             <p>Mengapa memilih SIPINA sebagai mitra keuangan Anda</p>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="feature-card">
+                <div class="feature-card scroll-animate delay-1">
                     <i class="bi bi-speedometer2 feature-icon"></i>
                     <h4>Proses Cepat</h4>
                     <p>Persetujuan pinjaman dalam hitungan jam dengan persyaratan yang mudah dan jelas.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="feature-card">
+                <div class="feature-card scroll-animate delay-2">
                     <i class="bi bi-shield-lock feature-icon"></i>
                     <h4>Aman & Terpercaya</h4>
                     <p>Data Anda dilindungi dengan enkripsi tingkat tinggi dan diawasi oleh otoritas terkait.</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="feature-card">
+                <div class="feature-card scroll-animate delay-3">
                     <i class="bi bi-percent feature-icon"></i>
                     <h4>Bunga Kompetitif</h4>
                     <p>Penawaran suku bunga terbaik yang disesuaikan dengan profil dan kebutuhan pinjaman Anda.</p>
@@ -93,20 +162,20 @@
     <section class="section-padding" style="background: var(--white);">
         <div class="container">
             <div class="row text-center">
-                <div class="col-md-3 mb-4 mb-md-0">
-                    <h3 class="fw-bold" style="color: var(--secondary-color);">5000+</h3>
+                <div class="col-md-3 mb-4 mb-md-0 scroll-animate delay-1">
+                    <h3 class="fw-bold stat-number" style="color: var(--secondary-color);" data-target="5000">0</h3><span class="fw-bold" style="color: var(--secondary-color);">+</span>
                     <p class="text-secondary">Nasabah Aktif</p>
                 </div>
-                <div class="col-md-3 mb-4 mb-md-0">
-                    <h3 class="fw-bold" style="color: var(--secondary-color);">Rp 100M+</h3>
+                <div class="col-md-3 mb-4 mb-md-0 scroll-animate delay-2">
+                    <h3 class="fw-bold" style="color: var(--secondary-color);">Rp <span class="stat-number" data-target="100">0</span>M+</h3>
                     <p class="text-secondary">Dana Tersalurkan</p>
                 </div>
-                <div class="col-md-3 mb-4 mb-md-0">
+                <div class="col-md-3 mb-4 mb-md-0 scroll-animate delay-3">
                     <h3 class="fw-bold" style="color: var(--secondary-color);">24/7</h3>
                     <p class="text-secondary">Layanan Support</p>
                 </div>
-                <div class="col-md-3">
-                    <h3 class="fw-bold" style="color: var(--secondary-color);">98%</h3>
+                <div class="col-md-3 scroll-animate delay-4">
+                    <h3 class="fw-bold" style="color: var(--secondary-color);"><span class="stat-number" data-target="98">0</span>%</h3>
                     <p class="text-secondary">Kepuasan Pelanggan</p>
                 </div>
             </div>
@@ -118,27 +187,27 @@
       <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <div class="pe-lg-5">
+                <div class="pe-lg-5 scroll-animate-left">
                     <div class="section-title text-start mb-4">
                         <h2 class="mb-3">Mengenal SIPINA Lebih Dekat</h2>
                         <p class="mb-4 text-muted">Platform Keuangan Digital Terdepan di Indonesia</p>
                     </div>
                 </div>
-                <p class="text-secondary mb-3">
+                <p class="text-secondary mb-3 scroll-animate-left delay-1">
                     SIPINA adalah perusahaan teknologi finansial yang berdedikasi untuk memberikan akses keuangan yang inklusif, aman, dan mudah bagi seluruh masyarakat Indonesia. Kami percaya bahwa setiap orang berhak mendapatkan kesempatan untuk tumbuh dan berkembang secara finansial.
                 </p>
-                <p class="text-secondary mb-4">
+                <p class="text-secondary mb-4 scroll-animate-left delay-2">
                     Dengan dukungan teknologi terkini dan tim profesional yang berpengalaman, kami menghadirkan solusi pinjaman yang transparan, tanpa biaya tersembunyi, dan proses yang sangat cepat.
                 </p>
-                <ul class="list-unstyled">
+                <ul class="list-unstyled scroll-animate-left delay-3">
                     <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Terdaftar dan Diawasi Otoritas Resmi</span></li>
                     <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Proses Digital 100% & Aman</span></li>
                     <li class="mb-2 d-flex align-items-center"><i class="bi bi-check-circle-fill" style="color: var(--secondary-color);"></i> <span class="ms-2">Layanan Pelanggan 24/7</span></li>
                 </ul>
-                <a href="#contact" class="btn-primary-custom mt-3">Hubungi Kami</a>
+                <a href="#contact" class="btn-primary-custom mt-3 scroll-animate-left delay-4">Hubungi Kami</a>
             </div>
             <div class="col-lg-6">
-                <div class="about-image p-2 bg-white rounded shadow-sm text-center">
+                <div class="about-image p-2 bg-white rounded shadow-sm text-center scroll-animate-scale">
                      <img src="{{ url_for('static', filename='assets/img/about-us.png') }}" alt="Tentang SIPINA" class="img-fluid rounded">
                 </div>
             </div>
@@ -147,7 +216,7 @@
     </section>
 
     <!-- Footer -->
-    <footer id="contact">
+    <footer id="contact" class="scroll-animate">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-5 mb-lg-0">
@@ -196,6 +265,61 @@
                 document.querySelector('.navbar-landing').classList.remove('scrolled');
             }
         });
+
+        // Scroll-triggered animations using Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate numbers if stat-number
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(num => {
+                        animateNumber(num);
+                    });
+                } else {
+                    // Reverse animation when scrolling out of view
+                    entry.target.classList.remove('visible');
+                    
+                    // Reset number values for re-animation
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(num => {
+                        num.textContent = '0';
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll-animate elements
+        document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right, .scroll-animate-scale').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Number animation function
+        function animateNumber(element) {
+            const target = parseInt(element.dataset.target);
+            if (!target) return;
+            
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
     </script>
   </body>
 </html>

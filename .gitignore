@@ -3,6 +3,9 @@
 .env.local
 .env.production
 
+# Uploads
+app/static/uploads/
+
 # Python
 __pycache__/
 *.py[cod]

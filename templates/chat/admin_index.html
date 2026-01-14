@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% block title %}Live Chat Support{% endblock %}
+
+{% block content %}
+<div class="space-y-6 animate-in fade-in duration-500">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Live Chat Support</h1>
+      <p class="text-slate-500">Kelola percakapan dengan nasabah secara real-time</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-600 text-sm font-medium rounded-full">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+        Online
+      </span>
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <!-- Chat List -->
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div class="p-4 border-b border-slate-100">
+        <h3 class="font-bold text-slate-700">Daftar Percakapan</h3>
+      </div>
+      <div id="chatList" class="divide-y divide-slate-100 max-h-[500px] overflow-y-auto">
+        {% if chat_users %}
+          {% for user in chat_users %}
+          <div class="chat-user-item p-4 hover:bg-slate-50 cursor-pointer transition-colors" data-user-id="{{ user.id }}" data-username="{{ user.username }}">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-navy-100 flex items-center justify-center text-navy-600 font-bold">
+                {{ user.username[0]|upper }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-slate-800 truncate">{{ user.username }}</p>
+                <p class="text-xs text-slate-400">Klik untuk membuka chat</p>
+              </div>
+              <span class="unread-badge hidden w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center font-bold">!</span>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="p-8 text-center text-slate-400">
+            <i class="bi bi-chat-left-dots text-4xl mb-2"></i>
+            <p>Belum ada percakapan</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col min-h-[550px]">
+      <!-- Chat Header -->
+      <div id="chatHeader" class="p-4 border-b border-slate-100 flex items-center gap-3">
+        <div id="chatAvatar" class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">
+          <i class="bi bi-person"></i>
+        </div>
+        <div>
+          <p id="chatUsername" class="font-bold text-slate-800">Pilih Percakapan</p>
+          <p id="chatStatus" class="text-xs text-slate-400">Klik user di sebelah kiri untuk memulai</p>
+        </div>
+      </div>
+
+      <!-- Chat Messages -->
+      <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/50">
+        <div class="text-center text-slate-400 py-10">
+          <i class="bi bi-chat-square-text text-5xl mb-3"></i>
+          <p>Pilih percakapan untuk menampilkan pesan</p>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="p-4 border-t border-slate-100">
+        <form id="chatForm" class="flex items-center gap-3">
+          <input type="text" id="messageInput" placeholder="Ketik pesan..." disabled
+                 class="flex-1 px-4 py-3 bg-slate-100 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm disabled:opacity-50">
+          <button type="submit" id="sendBtn" disabled
+                  class="px-5 py-3 bg-gold-500 text-navy-900 font-bold rounded-xl hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="bi bi-send-fill"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const socket = io();
+    let selectedUserId = null;
+    let lastSentMessage = null; // Track to avoid echo
+
+    // When connected
+    socket.on('connect', function() {
+        console.log('Admin connected to chat server');
+    });
+
+    // Listen for new messages
+    socket.on('receive_message', function(data) {
+        // Ignore our own messages (already appended locally)
+        if (data.role === 'admin' && data.message === lastSentMessage) {
+            lastSentMessage = null;
+            return;
+        }
+        
+        // Only show messages from nasabah for the selected user
+        if (data.role === 'nasabah' && data.sender_id == selectedUserId) {
+            appendMessage(data.message, 'user', data.timestamp);
+        }
+    });
+
+    // Listen for new chat notifications
+    socket.on('new_chat_notification', function(data) {
+        const userItem = document.querySelector(`[data-user-id="${data.sender_id}"]`);
+        if (userItem && data.sender_id != selectedUserId) {
+            const badge = userItem.querySelector('.unread-badge');
+            if (badge) {
+                badge.classList.remove('hidden');
+            }
+        }
+    });
+
+    // Click on user to select chat
+    document.querySelectorAll('.chat-user-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const username = this.dataset.username;
+            
+            selectedUserId = userId;
+            
+            // Update UI
+            document.querySelectorAll('.chat-user-item').forEach(i => i.classList.remove('bg-gold-50', 'border-l-4', 'border-gold-500'));
+            this.classList.add('bg-gold-50', 'border-l-4', 'border-gold-500');
+            
+            // Hide unread badge
+            const badge = this.querySelector('.unread-badge');
+            if (badge) badge.classList.add('hidden');
+            
+            // Update header
+            document.getElementById('chatAvatar').innerHTML = username[0].toUpperCase();
+            document.getElementById('chatUsername').textContent = username;
+            document.getElementById('chatStatus').textContent = 'Aktif sekarang';
+            
+            // Enable input
+            document.getElementById('messageInput').disabled = false;
+            document.getElementById('sendBtn').disabled = false;
+            
+            // Join user's room
+            socket.emit('join_chat', { user_id: userId });
+            
+            // Load history
+            loadChatHistory(userId);
+        });
+    });
+
+    // Load chat history
+    function loadChatHistory(userId) {
+        const messagesDiv = document.getElementById('chatMessages');
+        messagesDiv.innerHTML = '<div class="text-center py-4"><i class="bi bi-arrow-repeat animate-spin"></i> Memuat...</div>';
+        
+        fetch(`/api/chat/history/${userId}`)
+            .then(res => res.json())
+            .then(messages => {
+                messagesDiv.innerHTML = '';
+                if (messages.length === 0) {
+                    messagesDiv.innerHTML = '<div class="text-center text-slate-400 py-10"><p>Belum ada pesan</p></div>';
+                    return;
+                }
+                messages.forEach(msg => {
+                    const role = msg.receiver_id ? 'admin' : 'user';
+                    const time = msg.timestamp.split(' ')[1].substring(0, 5);
+                    appendMessage(msg.message, role, time);
+                });
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
+    }
+
+    // Append message to chat
+    function appendMessage(message, role, time) {
+        const messagesDiv = document.getElementById('chatMessages');
+        const isAdmin = role === 'admin';
+        
+        const msgHtml = `
+            <div class="flex ${isAdmin ? 'justify-end' : 'justify-start'}">
+                <div class="max-w-[70%] ${isAdmin ? 'bg-gold-500 text-navy-900' : 'bg-white border border-slate-200 text-slate-800'} px-4 py-2.5 rounded-2xl ${isAdmin ? 'rounded-br-md' : 'rounded-bl-md'} shadow-sm">
+                    <p class="text-sm">${message}</p>
+                    <p class="text-[10px] ${isAdmin ? 'text-navy-700' : 'text-slate-400'} mt-1 text-right">${time}</p>
+                </div>
+            </div>
+        `;
+        messagesDiv.insertAdjacentHTML('beforeend', msgHtml);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Send message
+    document.getElementById('chatForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        
+        if (!message || !selectedUserId) return;
+        
+        lastSentMessage = message; // Track to avoid echo
+        
+        socket.emit('send_message', {
+            message: message,
+            recipient_id: selectedUserId
+        });
+        
+        // Append locally immediately
+        const now = new Date();
+        const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        appendMessage(message, 'admin', time);
+        
+        input.value = '';
+    });
+});
+</script>
+{% endblock %}
