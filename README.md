@@ -35,13 +35,12 @@ SIPINA adalah platform manajemen pembiayaan dan kredit nasabah modern berbasis w
 
 ## 🔄 Pembaruan Terkini (Januari 2026)
 
-- **Total UI Overhaul**: Migrasi total dari Bootstrap ke **Tailwind CSS** untuk tampilan yang lebih bersih, modern, dan responsif.
-- **Real-time Live Chat**: Implementasi fitur chat bantuan langsung dengan sistem room dan tracking pesan yang efisien.
+- **Mobile-First Optimization**: Implementasi **Bottom Navigation Bar** khusus perangkat mobile untuk kemudahan akses utama (Dashboard, Pengajuan, Profil) secara cepat.
+- **Responsive Data Tables**: Transformasi otomatis tabel data (Nasabah & Pengajuan) menjadi tampilan **"Card Mode"** pada layar kecil untuk pembacaan informasi yang lebih intuitif tanpa horizontal scroll.
+- **Immersive Hero Experience**: Penyesuaian Landing Page menjadi _full-screen immersion_ (100dvh) dengan background kustom yang tetap proporsional dan estetis di layar mobile.
+- **Smart Navbar & Menu**: Integrasi navbar transparan yang beradaptasi secara dinamis saat di-scroll, lengkap dengan desain **Custom 2-Line Burger Menu** berwarna putih kontras.
+- **Premium UI Refinements**: Optimasi tata letak grid statistik (2 kolom di mobile), penyelarasan konten tengah, serta perbaikan _padding_ dan _margin_ global untuk pengalaman pengguna yang lebih halus.
 - **Advanced Profile Systems**: Halaman edit profil mandiri dengan dukungan unggah foto (Avatar), manajemen keamanan user, serta fitur **Hapus Akun** dan **Hapus Foto Profil**.
-- **Dynamic Topbar**: Integrasi dropdown notifikasi dan profil yang fungsional untuk memudahkan navigasi user.
-- **Enhanced Data Integrity**: Implementasi `cascade delete` pada level database untuk memastikan penghapusan data secara bersih (clean delete) pada entitas User, Nasabah, Pengajuan, dan Pembayaran.
-- **Smooth Content Animations**: Penerapan efek parallax dan Intersection Observer API untuk animasi landing page yang interaktif.
-- **Code Optimization**: Sinkronisasi `.gitignore` untuk keamanan data sensitif dan refactoring SocketIO events.
 
 ---
 
