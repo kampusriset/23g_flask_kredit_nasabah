@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     foto_profil = db.Column(db.String(255), nullable=True)  # Path to profile photo
 
     # Relationship to Nasabah
-    nasabah = db.relationship('Nasabah', backref='user', uselist=False)
+    nasabah = db.relationship('Nasabah', backref='user', uselist=False, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<User {self.username}>'

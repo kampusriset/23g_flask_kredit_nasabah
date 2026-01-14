@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_required
+from flask_login import login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash
 from .. import db
 from ..models.user import User
@@ -146,7 +146,6 @@ def hapus(id):
 @bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    from flask_login import current_user
     import os
     from werkzeug.utils import secure_filename
     
@@ -186,3 +185,38 @@ def edit_profile():
         return redirect(url_for('user.edit_profile'))
     
     return render_template('user/edit_profile.html', user=user)
+
+@bp.route('/profile/hapus-foto', methods=['POST'])
+@login_required
+def hapus_foto():
+    import os
+    user = User.query.get_or_404(current_user.id)
+    if user.foto_profil:
+        # Delete the file
+        file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'app', 'static', user.foto_profil)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        
+        user.foto_profil = None
+        db.session.commit()
+        flash('Foto profil berhasil dihapus.', 'success')
+    else:
+        flash('Anda tidak memiliki foto profil untuk dihapus.', 'info')
+    
+    return redirect(url_for('user.edit_profile'))
+    
+@bp.route('/profile/hapus', methods=['POST'])
+@login_required
+def hapus_profil():
+    user = User.query.get_or_404(current_user.id)
+    
+    if user.id == 1:
+        flash('Akun administrator utama tidak dapat dihapus.', 'danger')
+        return redirect(url_for('user.edit_profile'))
+        
+    logout_user()
+    db.session.delete(user)
+    db.session.commit()
+    
+    flash('Akun Anda telah berhasil dihapus.', 'success')
+    return redirect(url_for('auth.login'))

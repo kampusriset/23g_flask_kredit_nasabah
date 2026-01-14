@@ -55,7 +55,7 @@ class Pembayaran(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship
-    pengajuan = db.relationship('Pengajuan', backref=db.backref('pembayaran', lazy=True))
+    pengajuan = db.relationship('Pengajuan', backref=db.backref('pembayaran', lazy=True, cascade="all, delete-orphan"))
 
     def __repr__(self):
         return f'<Pembayaran {self.id} bulan_ke={self.bulan_ke} status={self.status}>'
