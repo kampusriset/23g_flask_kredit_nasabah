@@ -27,62 +27,62 @@
 <!-- Stat Cards Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
   <!-- Total Pengajuan -->
-  <div class="card-glass p-6 group">
+  <div class="card-glass p-6 group dark:bg-navy-800/50">
     <div class="flex items-center justify-between mb-4">
-      <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+      <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
         <i class="bi bi-file-earmark-text text-2xl"></i>
       </div>
-      <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Total</span>
+      <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Total</span>
     </div>
-    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Total Pengajuan</h3>
+    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wide">Total Pengajuan</h3>
     <div class="mt-2 flex items-baseline gap-2">
-      <span class="text-3xl font-black text-slate-800">{{ total_pengajuan }}</span>
-      <span class="text-xs text-slate-400 font-medium tracking-tight">Berkas</span>
+      <span class="text-3xl font-black text-slate-800 dark:text-white">{{ total_pengajuan }}</span>
+      <span class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-tight">Berkas</span>
     </div>
   </div>
 
   <!-- Disetujui -->
-  <div class="card-glass p-6 group">
+  <div class="card-glass p-6 group dark:bg-navy-800/50">
     <div class="flex items-center justify-between mb-4">
-      <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+      <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
         <i class="bi bi-check-circle-fill text-2xl"></i>
       </div>
       <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400">Success</span>
     </div>
-    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Pengajuan Disetujui</h3>
+    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wide">Pengajuan Disetujui</h3>
     <div class="mt-2 flex items-baseline gap-2">
-      <span class="text-3xl font-black text-emerald-600">{{ pengajuan_disetujui }}</span>
-      <span class="text-xs text-slate-400 font-medium tracking-tight">Diterima</span>
+      <span class="text-3xl font-black text-emerald-600 dark:text-emerald-400">{{ pengajuan_disetujui }}</span>
+      <span class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-tight">Diterima</span>
     </div>
   </div>
 
   <!-- Menunggu -->
-  <div class="card-glass p-6 group">
+  <div class="card-glass p-6 group dark:bg-navy-800/50">
     <div class="flex items-center justify-between mb-4">
-      <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+      <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
         <i class="bi bi-clock-history text-2xl"></i>
       </div>
       <span class="text-[10px] font-black uppercase tracking-widest text-amber-400">Pending</span>
     </div>
-    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Menunggu Verifikasi</h3>
+    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wide">Menunggu Verifikasi</h3>
     <div class="mt-2 flex items-baseline gap-2">
-      <span class="text-3xl font-black text-amber-600">{{ pengajuan_menunggu }}</span>
-      <span class="text-xs text-slate-400 font-medium tracking-tight">Proses</span>
+      <span class="text-3xl font-black text-amber-600 dark:text-amber-400">{{ pengajuan_menunggu }}</span>
+      <span class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-tight">Proses</span>
     </div>
   </div>
 
   <!-- Ditolak -->
-  <div class="card-glass p-6 group">
+  <div class="card-glass p-6 group dark:bg-navy-800/50">
     <div class="flex items-center justify-between mb-4">
-      <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-300">
+      <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-300">
         <i class="bi bi-x-circle-fill text-2xl"></i>
       </div>
       <span class="text-[10px] font-black uppercase tracking-widest text-red-400">Rejected</span>
     </div>
-    <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wide">Pengajuan Ditolak</h3>
+    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wide">Pengajuan Ditolak</h3>
     <div class="mt-2 flex items-baseline gap-2">
-      <span class="text-3xl font-black text-red-600">{{ pengajuan_ditolak }}</span>
-      <span class="text-xs text-slate-400 font-medium tracking-tight">Gagal</span>
+      <span class="text-3xl font-black text-red-600 dark:text-red-400">{{ pengajuan_ditolak }}</span>
+      <span class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-tight">Gagal</span>
     </div>
   </div>
 </div>
@@ -90,14 +90,14 @@
 <!-- Charts Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
   <!-- Outstanding Chart -->
-  <div class="card-glass p-8">
+  <div class="card-glass p-8 dark:bg-navy-800/50">
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h3 class="text-xl font-black text-slate-800 tracking-tight">Total Outstanding</h3>
-        <p class="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">Akumulasi Pinjaman Disetujui</p>
+        <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">Total Outstanding</h3>
+        <p class="text-slate-400 dark:text-slate-500 text-xs font-medium uppercase tracking-widest mt-1">Akumulasi Pinjaman Disetujui</p>
       </div>
-      <div class="px-4 py-2 bg-navy-50 rounded-lg">
-        <span class="text-navy-500 font-bold text-lg">Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}</span>
+      <div class="px-4 py-2 bg-navy-50 dark:bg-white/5 rounded-lg">
+        <span class="text-navy-500 dark:text-gold-500 font-bold text-lg">Rp {{ '{:,.0f}'.format(total_outstanding or 0) }}</span>
       </div>
     </div>
     <div class="h-[250px]">
@@ -106,11 +106,11 @@
   </div>
 
   <!-- Status Distribution -->
-  <div class="card-glass p-8">
+  <div class="card-glass p-8 dark:bg-navy-800/50">
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h3 class="text-xl font-black text-slate-800 tracking-tight">Statistik Pengajuan</h3>
-        <p class="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">Distribusi Status Berkas</p>
+        <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">Statistik Pengajuan</h3>
+        <p class="text-slate-400 dark:text-slate-500 text-xs font-medium uppercase tracking-widest mt-1">Distribusi Status Berkas</p>
       </div>
       <i class="bi bi-graph-up-arrow text-2xl text-gold-500"></i>
     </div>
@@ -190,6 +190,26 @@
         }
       }
     }
+  });
+  // simulated skeleton loading
+  document.addEventListener('DOMContentLoaded', () => {
+      const statsGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2');
+      if (statsGrid) {
+          const originalContent = statsGrid.innerHTML;
+          window.SIPINA_Loading.showSkeleton(statsGrid.id || 'stats-loading-container', 'card', 4);
+          
+          // Re-render original content after a delay
+          // Since statsGrid might not have an ID, let's wrap it
+          const wrapper = document.createElement('div');
+          wrapper.id = 'stats-loading-container';
+          wrapper.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8';
+          statsGrid.parentNode.replaceChild(wrapper, statsGrid);
+          window.SIPINA_Loading.showSkeleton('stats-loading-container', 'card', 4);
+          
+          setTimeout(() => {
+              wrapper.innerHTML = originalContent;
+          }, 800);
+      }
   });
 </script>
 

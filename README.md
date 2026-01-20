@@ -35,13 +35,13 @@ SIPINA adalah platform manajemen pembiayaan dan kredit nasabah modern berbasis w
 
 ## 🔄 Pembaruan Terkini (Januari 2026 - Versi Terbaru)
 
-- **💳 Integrated Payment Gateway Simulation**: Implementasi fitur pilihan metode pembayaran untuk cicilan. Nasabah kini dapat memilih antara **Transfer Virtual Account** (dengan nomor VA otomatis) atau **QRIS Scan-to-Pay** yang dilengkapi dengan instruksi pembayaran langkah-demi-langkah.
-- **✨ Immersive Handshake Experience**: Redesain total Landing Page dengan mengadopsi _pervasive background image_ (tangan berjabat) yang terlihat di seluruh halaman. Menggunakan teknik **Glassmorphism** tingkat lanjut (20px blur) pada kartu fitur agar konten tetap terbaca jelas namun tetap mempertahankan estetika latar belakang yang luas.
-- **🛠️ UI Simplification & Security**: Penghapusan fitur pencarian global pada Top Bar untuk tampilan yang lebih minimalis. Membatasi visibilitas kolom "Aksi" pada tabel pembayaran hanya untuk nasabah, guna menjaga integritas data dari sisi administratif (Admin hanya dapat memantau).
-- **📈 Enhanced Credit Intelligence**: Perbaikan bug pada statistik nasabah di halaman profil serta penambahan metrik baru seperti total dana yang disetujui, rasio persetujuan pengajuan, dan total limit pinjaman aktif.
-- **🇮🇩 Indonesian Locale Optimization**: Penyesuaian abreviasi nominal keuangan dari format internasional ("k" & "M") menjadi lokal (**"jt"**) pada seluruh bagian dashboard, analytics, dan rincian angsuran untuk kenyamanan pembacaan pengguna.
-- **Profile & Security**: Sistem edit profil mandiri dengan dukungan foto profil (Avatar), manajemen keamanan user, serta fitur **Hapus Akun dan Foto**.
-- **Mobile-First UX**: Penambahan Bottom Navigation khusus perangkat mobile dan optimasi tabel ke bentuk kartu (Card Mode) untuk akses yang lebih intuitif di layar kecil.
+- **🌓 Ultra-Adaptive Dark Mode**: Implementasi sistem Mode Gelap yang komprehensif di seluruh interior aplikasi. Dilengkapi dengan _global CSS overrides_ untuk memastikan keterbacaan teks, kontras tabel, dan visibilitas badge status tetap optimal dalam kondisi cahaya rendah. Tema tersimpan secara permanen melalui _localStorage_.
+- **💀 Premium Skeleton State loading**: Integrasi pemuatan data berbasis _Skeleton Loader_ menggunakan sistem manager `SIPINA_Loading`. Memberikan pengalaman transisi data yang mulus (zero layout shift) pada dashboard dan sistem notifikasi, meningkatkan persepsi kecepatan aplikasi.
+- **💎 Refined Dark Glassmorphism**: Pengaplikasian efek _Frosted Glass_ yang lebih dalam pada kartu dashboard khusus untuk mode gelap, memberikan estetika visual yang modern dan eksklusif.
+- **✨ High-Contrast UI Overrides**: Optimalisasi elemen UI di seluruh modul (Daftar Pengajuan & Manajemen User) untuk mode gelap, termasuk pembaharuan otomatis warna input form, dropdown, dan penetrasi teks putih pada elemen-elemen berkontras rendah.
+- **🎨 Premium Landing Page Animations**: Implementasi animasi _scroll-triggered_ (staggered), efek shimmer pada kartu fitur, dan transisi navigasi yang responsif untuk kesan pertama yang memukau.
+- **💳 Payment Gateway Simulation**: Pilihan metode pembayaran modern (VA & QRIS) dengan instruksi interaktif untuk memudahkan simulasi transaksi cicilan nasabah.
+- **📱 Mobile-First UX Architecture**: Optimalisasi navigasi bawah (bottom-nav) dan transformasi tabel otomatis ke mode kartu pada perangkat mobile untuk penggunaan satu tangan yang lebih nyaman.
 
 ---
 
