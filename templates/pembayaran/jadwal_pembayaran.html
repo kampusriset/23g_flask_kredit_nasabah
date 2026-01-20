@@ -53,7 +53,7 @@
         </div>
         <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Cicilan</span>
       </div>
-      <h3 class="text-3xl font-black text-indigo-600">Rp {{ '{:,.0f}'.format(pengajuan.angsuran_per_bulan / 1000) }}<span class="text-sm">k</span></h3>
+      <h3 class="text-3xl font-black text-indigo-600">Rp {{ '{:,.1f}'.format(pengajuan.angsuran_per_bulan / 1000000) }}<span class="text-sm">jt</span></h3>
       <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Per Bulan</p>
     </div>
 
@@ -104,7 +104,9 @@
             <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Status</th>
             <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Denda</th>
             <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Total Bayar</th>
+            {% if current_user.role == 'nasabah' %}
             <th class="px-6 py-4 text-[10px] font-black uppercase tracking-[2px] opacity-80">Aksi</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
@@ -152,18 +154,17 @@
             <td class="px-6 py-4 font-black text-indigo-900">
               Rp {{ '{:,.0f}'.format(p.jumlah_bayar + p.denda) }}
             </td>
+            {% if current_user.role == 'nasabah' %}
             <td class="px-6 py-4">
               {% if p.status == 'sudah_bayar' %}
                 <span class="text-emerald-500 text-xs font-bold uppercase tracking-wider"><i class="bi bi-check-lg text-lg"></i> Selesai</span>
               {% else %}
-                <form method="POST" action="{{ url_for('pembayaran.bayar', pembayaran_id=p.id) }}" class="inline-block">
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                  <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-md shadow-indigo-500/30 transition-all active:scale-95" onclick="return confirm('Tandai pembayaran bulan {{ p.bulan_ke }} sebagai sudah dibayar?')">
-                    <i class="bi bi-credit-card-fill mr-1"></i> Bayar
-                  </button>
-                </form>
+                <a href="{{ url_for('pembayaran.bayar', pembayaran_id=p.id) }}" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all active:scale-95 gap-2">
+                  <i class="bi bi-credit-card-fill"></i> Bayar
+                </a>
               {% endif %}
             </td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>

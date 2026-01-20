@@ -130,8 +130,18 @@ def edit(id):
 @login_required
 def detail(id):
     nasabah = Nasabah.query.get_or_404(id)
+    
+    # Hitung ringkasan kredit
+    pengajuan_list = nasabah.pengajuans
+    total_pengajuan = len(pengajuan_list)
+    pengajuan_disetujui = len([p for p in pengajuan_list if p.status == 'disetujui' or p.status == 'lunas'])
+    total_pinjaman = sum([p.jumlah_pinjaman for p in pengajuan_list if p.status == 'disetujui' or p.status == 'lunas'])
 
-    return render_template('nasabah/detail_nasabah.html', nasabah=nasabah)
+    return render_template('nasabah/detail_nasabah.html', 
+                           nasabah=nasabah, 
+                           total_pengajuan=total_pengajuan,
+                           pengajuan_disetujui=pengajuan_disetujui,
+                           total_pinjaman=total_pinjaman)
 
 
 @bp.route('/hapus/<int:id>', methods=['POST'])

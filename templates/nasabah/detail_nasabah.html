@@ -139,9 +139,16 @@
         <div class="space-y-4 relative z-10">
           <div class="flex justify-between items-center border-b border-white/10 pb-3">
              <span class="text-sm font-medium text-white/70">Total Pengajuan</span>
-             <span class="text-lg font-bold text-white">{{ nasabah.pengajuan|length }}</span>
+             <span class="text-lg font-bold text-white">{{ total_pengajuan }}</span>
           </div>
-           <!-- You can add more calculated stats here if passed from backend -->
+          <div class="flex justify-between items-center border-b border-white/10 pb-3">
+             <span class="text-sm font-medium text-white/70">Disetujui/Lunas</span>
+             <span class="text-lg font-bold text-emerald-400">{{ pengajuan_disetujui }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+             <span class="text-sm font-medium text-white/70">Total Pinjaman</span>
+             <span class="text-lg font-bold text-gold-400">Rp {{ '{:,.0f}'.format(total_pinjaman) }}</span>
+          </div>
         </div>
 
         <a href="{{ url_for('pengajuan.index', q=nasabah.nama) }}" class="mt-6 block w-full py-3 bg-gold-500 hover:bg-gold-400 text-navy-900 font-bold text-center rounded-xl transition-colors text-sm">

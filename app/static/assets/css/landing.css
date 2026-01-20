@@ -14,6 +14,12 @@ body {
   font-family: var(--font-body);
   color: var(--text-color);
   overflow-x: hidden;
+  background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.9)),
+    url("../img/hero-bg.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 h1,
@@ -143,12 +149,7 @@ h6 {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(rgba(10, 25, 47, 0.65), rgba(10, 25, 47, 0.75)),
-    url("../img/hero-bg.png");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: transparent;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -225,24 +226,38 @@ h6 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 15px;
+  color: var(--white);
 }
 
 .section-title p {
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 1.1rem;
 }
 
 .feature-card {
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
   padding: 40px 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 28px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   text-align: center;
   height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
+  color: var(--white);
+}
+
+.feature-card h4 {
+  color: var(--white);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.feature-card p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
 }
 
 .feature-card::after {
@@ -268,12 +283,49 @@ h6 {
 
 .feature-icon {
   font-size: 3.5rem;
-  background: linear-gradient(135deg, var(--primary-color), #1a3a5f);
+  background: linear-gradient(135deg, var(--secondary-color), #c5a028);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 25px;
   display: inline-block;
+}
+
+/* Stats and About Sections on Dark Background */
+.stat-number, .stat-number + span {
+  color: var(--secondary-color) !important;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.stat-number ~ p, .stat-number ~ span ~ p {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500;
+}
+
+#about h2 {
+  color: var(--white) !important;
+}
+
+#about .text-muted {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+#about p, #about li span {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+#about .about-image {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+footer .footer-link {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+footer p {
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 /* Footer */

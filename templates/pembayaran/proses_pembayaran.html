@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}Instruksi Pembayaran{% endblock %}
+{% block page_title %}Proses Bayar{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+  
+  <!-- Back Button -->
+  <a href="{{ url_for('pembayaran.pilih_metode', pembayaran_id=pembayaran.id) }}" class="inline-flex items-center text-slate-500 hover:text-indigo-600 font-bold mb-6 transition-colors">
+    <i class="bi bi-arrow-left mr-2"></i> Kembali ke Pilihan Metode
+  </a>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Left: Instruction Card -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card-glass p-8">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="w-14 h-14 rounded-2xl {% if metode == 'transfer' %}bg-indigo-50 text-indigo-600{% else %}bg-emerald-50 text-emerald-600{% endif %} flex items-center justify-center shadow-inner">
+            <i class="bi {% if metode == 'transfer' %}bi-bank2{% else %}bi-qr-code-scan{% endif %} text-2xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-slate-800">
+              {% if metode == 'transfer' %}Instruksi Transfer Bank{% else %}Instruksi Pembayaran QRIS{% endif %}
+            </h3>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Langkah-langkah Pembayaran</p>
+          </div>
+        </div>
+
+        {% if metode == 'transfer' %}
+        <!-- Transfer Bank Instructions -->
+        <div class="space-y-6">
+          <div class="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Nomor Virtual Account (VA)</p>
+            <div class="flex items-center justify-between">
+              <span class="text-2xl font-black text-indigo-900 tracking-wider" id="vaNumber">8839 {{ pembayaran.pengajuan.nasabah.nik[-8:] }}</span>
+              <button onclick="copyToClipboard('vaNumber')" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm flex items-center gap-1">
+                <i class="bi bi-copy"></i> Salin
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-2 font-medium">Bank Mandiri / BCA / BNI / BRI (Penyedia: SIPINA FINTECH)</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">1</span>
+              <div>
+                <p class="font-bold text-slate-700">Pilih menu Transfer / VA</p>
+                <p class="text-sm text-slate-500">Buka aplikasi mobile banking Anda dan pilih menu Virtual Account.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">2</span>
+              <div>
+                <p class="font-bold text-slate-700">Masukkan Nomor VA</p>
+                <p class="text-sm text-slate-500">Masukkan nomor yang tertera di atas dan klik Lanjut.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">3</span>
+              <div>
+                <p class="font-bold text-slate-700">Konfirmasi Nominal</p>
+                <p class="text-sm text-slate-500">Pastikan nominal sesuai dengan tagihan Anda (Rp {{ '{:,.0f}'.format(pembayaran.jumlah_bayar + pembayaran.denda) }}).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <!-- QRIS Instructions -->
+        <div class="space-y-6">
+          <div class="text-center p-6 bg-white rounded-2xl border border-slate-100 shadow-inner">
+            <img src="{{ url_for('static', filename='assets/img/payments/qris_qr.png') }}" class="w-48 h-48 mx-auto mb-4 rounded-xl border-4 border-white shadow-xl" alt="QRIS QR">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Scan QR di atas dengan aplikasi favorit Anda</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">1</span>
+              <div>
+                <p class="font-bold text-slate-700">Simpan QR Code</p>
+                <p class="text-sm text-slate-500">Screenshot atau download kode QR di atas.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">2</span>
+              <div>
+                <p class="font-bold text-slate-700">Scan & Bayar</p>
+                <p class="text-sm text-slate-500">Buka aplikasi Dana, OVO, atau M-Banking, lalu pilih menu Scan/Pay.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">3</span>
+              <div>
+                <p class="font-bold text-slate-700">Selesaikan Pembayaran</p>
+                <p class="text-sm text-slate-500">Masukkan PIN Anda dan pastikan transaksi berhasil.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right: Sticky Summary & Confirmation -->
+    <div class="space-y-6">
+      <div class="card-glass p-6 sticky top-24">
+        <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-6">Ringkasan Pembayaran</h4>
+        
+        <div class="space-y-3 mb-8">
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">Cicilan Pokok</span>
+            <span class="font-bold text-slate-800">Rp {{ '{:,.0f}'.format(pembayaran.jumlah_bayar) }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-slate-500">Denda Terlambat</span>
+            <span class="font-bold text-red-500">Rp {{ '{:,.0f}'.format(pembayaran.denda) }}</span>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex justify-between items-center">
+            <span class="font-black text-slate-800">Total</span>
+            <span class="text-xl font-black text-indigo-600">Rp {{ '{:,.0f}'.format(pembayaran.jumlah_bayar + pembayaran.denda) }}</span>
+          </div>
+        </div>
+
+        <div class="p-4 bg-amber-50 rounded-xl border border-amber-100 mb-8">
+          <p class="text-[10px] text-amber-700 font-bold leading-relaxed italic">
+            * Klik konfirmasi di bawah ini jika Anda sudah merasa berhasil melakukan transfer melalui aplikasi Anda.
+          </p>
+        </div>
+
+        <form action="{{ url_for('pembayaran.konfirmasi_pembayaran', pembayaran_id=pembayaran.id) }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <button type="submit" class="w-full py-4 rounded-2xl {% if metode == 'transfer' %}bg-indigo-600 hover:bg-indigo-700 shadow-indigo-500/30{% else %}bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/30{% endif %} text-white font-black text-sm shadow-xl transition-all active:scale-95">
+            Konfirmasi Pembayaran
+          </button>
+        </form>
+      </div>
+
+      <div class="card-glass p-4 bg-slate-50 border-none">
+        <p class="text-[10px] text-slate-400 font-medium text-center">
+          Punya kendala? <a href="#" class="text-indigo-600 hover:underline">Hubungi CS</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard(elementId) {
+  const text = document.getElementById(elementId).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Nomor VA berhasil disalin!');
+  });
+}
+</script>
+{% endblock %}

@@ -47,13 +47,47 @@ def jadwal_pembayaran(pengajuan_id):
     return render_template('pembayaran/jadwal_pembayaran.html', pengajuan=pengajuan, pembayaran_list=pembayaran_list)
 
 
-@bp.route('/bayar/<int:pembayaran_id>', methods=['POST'])
+@bp.route('/bayar/<int:pembayaran_id>')
 @login_required
 def bayar(pembayaran_id):
-    """Mencatat pembayaran yang sudah dilakukan"""
+    """Mengarahkan ke pilihan metode pembayaran"""
+    pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
+    
+    # Hanya nasabah yang terkait atau admin yang bisa mengakses
+    if current_user.role == 'nasabah':
+        if pembayaran.pengajuan.nasabah.user_id != current_user.id:
+            flash('Akses ditolak.', 'danger')
+            return redirect(url_for('dashboard.index'))
+            
+    return redirect(url_for('pembayaran.pilih_metode', pembayaran_id=pembayaran_id))
+
+@bp.route('/pilih-metode/<int:pembayaran_id>')
+@login_required
+def pilih_metode(pembayaran_id):
+    """Halaman pilihan metode pembayaran"""
+    pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
+    return render_template('pembayaran/pilih_metode.html', pembayaran=pembayaran)
+
+@bp.route('/proses/<int:pembayaran_id>/<string:metode>')
+@login_required
+def proses_pembayaran(pembayaran_id, metode):
+    """Halaman instruksi pembayaran berdasarkan metode"""
+    pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
+    if metode not in ['transfer', 'qris']:
+        flash('Metode pembayaran tidak valid.', 'danger')
+        return redirect(url_for('pembayaran.pilih_metode', pembayaran_id=pembayaran_id))
+    
+    return render_template('pembayaran/proses_pembayaran.html', 
+                           pembayaran=pembayaran, 
+                           metode=metode)
+
+@bp.route('/konfirmasi/<int:pembayaran_id>', methods=['POST'])
+@login_required
+def konfirmasi_pembayaran(pembayaran_id):
+    """Mencatat pembayaran yang sudah dilakukan setelah konfirmasi"""
     pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
 
-    # Update status pembayaran
+    # Simpan status pembayaran
     pembayaran.status = 'sudah_bayar'
     pembayaran.tanggal_bayar = datetime.now()
 
@@ -69,7 +103,7 @@ def bayar(pembayaran_id):
 
     db.session.commit()
 
-    flash(f'Pembayaran bulan ke-{pembayaran.bulan_ke} berhasil dicatat.', 'success')
+    flash(f'Pembayaran bulan ke-{pembayaran.bulan_ke} berhasil diproses dan dicatat.', 'success')
     return redirect(url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pembayaran.pengajuan_id))
 
 @bp.route('/api/update_denda')
