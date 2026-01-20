@@ -33,14 +33,15 @@ SIPINA adalah platform manajemen pembiayaan dan kredit nasabah modern berbasis w
 
 ---
 
-## 🔄 Pembaruan Terkini (Januari 2026)
+## 🔄 Pembaruan Terkini (Januari 2026 - Versi Terbaru)
 
-- **Mobile-First Optimization**: Implementasi **Bottom Navigation Bar** khusus perangkat mobile untuk kemudahan akses utama (Dashboard, Pengajuan, Profil) secara cepat.
-- **Responsive Data Tables**: Transformasi otomatis tabel data (Nasabah & Pengajuan) menjadi tampilan **"Card Mode"** pada layar kecil untuk pembacaan informasi yang lebih intuitif tanpa horizontal scroll.
-- **Immersive Hero Experience**: Penyesuaian Landing Page menjadi _full-screen immersion_ (100dvh) dengan background kustom yang tetap proporsional dan estetis di layar mobile.
-- **Smart Navbar & Menu**: Integrasi navbar transparan yang beradaptasi secara dinamis saat di-scroll, lengkap dengan desain **Custom 2-Line Burger Menu** berwarna putih kontras.
-- **Premium UI Refinements**: Optimasi tata letak grid statistik (2 kolom di mobile), penyelarasan konten tengah, serta perbaikan _padding_ dan _margin_ global untuk pengalaman pengguna yang lebih halus.
-- **Advanced Profile Systems**: Halaman edit profil mandiri dengan dukungan unggah foto (Avatar), manajemen keamanan user, serta fitur **Hapus Akun** dan **Hapus Foto Profil**.
+- **💳 Integrated Payment Gateway Simulation**: Implementasi fitur pilihan metode pembayaran untuk cicilan. Nasabah kini dapat memilih antara **Transfer Virtual Account** (dengan nomor VA otomatis) atau **QRIS Scan-to-Pay** yang dilengkapi dengan instruksi pembayaran langkah-demi-langkah.
+- **✨ Immersive Handshake Experience**: Redesain total Landing Page dengan mengadopsi _pervasive background image_ (tangan berjabat) yang terlihat di seluruh halaman. Menggunakan teknik **Glassmorphism** tingkat lanjut (20px blur) pada kartu fitur agar konten tetap terbaca jelas namun tetap mempertahankan estetika latar belakang yang luas.
+- **🛠️ UI Simplification & Security**: Penghapusan fitur pencarian global pada Top Bar untuk tampilan yang lebih minimalis. Membatasi visibilitas kolom "Aksi" pada tabel pembayaran hanya untuk nasabah, guna menjaga integritas data dari sisi administratif (Admin hanya dapat memantau).
+- **📈 Enhanced Credit Intelligence**: Perbaikan bug pada statistik nasabah di halaman profil serta penambahan metrik baru seperti total dana yang disetujui, rasio persetujuan pengajuan, dan total limit pinjaman aktif.
+- **🇮🇩 Indonesian Locale Optimization**: Penyesuaian abreviasi nominal keuangan dari format internasional ("k" & "M") menjadi lokal (**"jt"**) pada seluruh bagian dashboard, analytics, dan rincian angsuran untuk kenyamanan pembacaan pengguna.
+- **Profile & Security**: Sistem edit profil mandiri dengan dukungan foto profil (Avatar), manajemen keamanan user, serta fitur **Hapus Akun dan Foto**.
+- **Mobile-First UX**: Penambahan Bottom Navigation khusus perangkat mobile dan optimasi tabel ke bentuk kartu (Card Mode) untuk akses yang lebih intuitif di layar kecil.
 
 ---
 
