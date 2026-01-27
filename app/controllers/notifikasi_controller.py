@@ -8,18 +8,29 @@ bp = Blueprint('notifikasi', __name__, url_prefix='/notifikasi')
 @login_required
 def index():
     """Display system notifications page"""
-    # Get pengajuan menunggu persetujuan
-    pengajuan_menunggu = Pengajuan.query.filter_by(status='menunggu').all()
+    query_menunggu = Pengajuan.query.filter_by(status='menunggu')
+    query_disetujui = Pengajuan.query.filter_by(status='disetujui')
 
-    # Get pengajuan disetujui tapi belum dicairkan
-    pengajuan_disetujui = Pengajuan.query.filter_by(status='disetujui').all()
+    if current_user.role == 'nasabah':
+        # Filter khusus nasabah
+        from ..models.nasabah import Nasabah
+        nasabah = Nasabah.query.filter_by(user_id=current_user.id).first()
+        if nasabah:
+            query_menunggu = query_menunggu.filter_by(nasabah_id=nasabah.id)
+            query_disetujui = query_disetujui.filter_by(nasabah_id=nasabah.id)
+        else:
+            # Jika data nasabah belum ada, kosongkan list
+            query_menunggu = query_menunggu.filter_by(id=-1)
+            query_disetujui = query_disetujui.filter_by(id=-1)
+
+    pengajuan_menunggu = query_menunggu.all()
+    pengajuan_disetujui = query_disetujui.all()
 
     # For now, we'll show empty list for jatuh tempo since pembayaran model doesn't exist
+    # TODO: Implement pembayaran jatuh tempo filtering logic if needed later
     jatuh_tempo = []
 
-
     return render_template('notifikasi/notifikasi.html',
-
                          jatuh_tempo=jatuh_tempo,
                          pengajuan_menunggu=pengajuan_menunggu,
                          pengajuan_disetujui=pengajuan_disetujui)

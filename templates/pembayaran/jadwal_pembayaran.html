@@ -69,18 +69,23 @@
       <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Total Pengembalian</p>
     </div>
 
-    <!-- Progress -->
+    <!-- Sisa Tagihan & Progress -->
     <div class="card-glass p-6 group">
       <div class="flex items-center justify-between mb-4">
         <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
-          <i class="bi bi-pie-chart-fill text-xl"></i>
+          <i class="bi bi-hourglass-split text-xl"></i>
         </div>
-        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Progress</span>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Sisa Tagihan</span>
       </div>
-      <h3 class="text-3xl font-black text-amber-500">
-        {{ pembayaran_list|selectattr('status', 'equalto', 'sudah_bayar')|list|length }}<span class="text-slate-300 font-light text-xl">/{{ pengajuan.tenor }}</span>
+      <h3 class="text-2xl font-black text-amber-500 break-words">
+        Rp {{ '{:,.0f}'.format(pengajuan.sisa_tagihan) }}
       </h3>
-      <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Bulan Terbayar</p>
+      <div class="flex justify-between items-center mt-2">
+         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+           {{ pengajuan.tenor - (pembayaran_list|selectattr('status', 'equalto', 'sudah_bayar')|list|length) }} Bulan Lagi
+         </p>
+         <span class="text-[10px] font-bold text-slate-300 bg-slate-100 px-2 py-0.5 rounded-full" title="Progress">{{ pembayaran_list|selectattr('status', 'equalto', 'sudah_bayar')|list|length }}/{{ pengajuan.tenor }}</span>
+      </div>
     </div>
   </div>
 
@@ -134,6 +139,10 @@
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-wider">
                   <i class="bi bi-check-circle-fill"></i> Lunas
                 </span>
+              {% elif p.status == 'menunggu_verifikasi' %}
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                  <i class="bi bi-hourglass-split"></i> {% if current_user.role == 'admin' %}Cek Bukti{% else %}Verifikasi{% endif %}
+                </span>
               {% elif p.is_terlambat %}
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-wider animate-pulse">
                   <i class="bi bi-exclamation-triangle-fill"></i> Terlambat
@@ -158,11 +167,42 @@
             <td class="px-6 py-4">
               {% if p.status == 'sudah_bayar' %}
                 <span class="text-emerald-500 text-xs font-bold uppercase tracking-wider"><i class="bi bi-check-lg text-lg"></i> Selesai</span>
+              {% elif p.status == 'menunggu_verifikasi' %}
+                 <span class="text-yellow-600 text-xs font-bold uppercase tracking-wider"><i class="bi bi-hourglass-top"></i> Menunggu Admin</span>
               {% else %}
                 <a href="{{ url_for('pembayaran.bayar', pembayaran_id=p.id) }}" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all active:scale-95 gap-2">
                   <i class="bi bi-credit-card-fill"></i> Bayar
                 </a>
               {% endif %}
+            </td>
+            {% endif %}
+            {% if current_user.role == 'admin' %}
+            <td class="px-6 py-4">
+               {% if p.status == 'menunggu_verifikasi' %}
+                  <div class="flex items-center gap-2">
+                      {% if p.bukti_bayar %}
+                      <a href="{{ url_for('static', filename=p.bukti_bayar) }}" target="_blank" class="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200" title="Lihat Bukti">
+                          <i class="bi bi-image"></i>
+                      </a>
+                      {% endif %}
+                      <form action="{{ url_for('pembayaran.verifikasi_pembayaran', pembayaran_id=p.id) }}" method="POST" class="inline">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                          <button type="submit" class="p-2 bg-emerald-100 text-emerald-600 rounded-lg hover:bg-emerald-200" title="Verifikasi" onclick="return confirm('Verifikasi pembayaran ini?')">
+                              <i class="bi bi-check-lg"></i>
+                          </button>
+                      </form>
+                      <form action="{{ url_for('pembayaran.tolak_pembayaran', pembayaran_id=p.id) }}" method="POST" class="inline">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                          <button type="submit" class="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200" title="Tolak" onclick="return confirm('Tolak bukti pembayaran ini?')">
+                              <i class="bi bi-x-lg"></i>
+                          </button>
+                      </form>
+                  </div>
+               {% elif p.status == 'sudah_bayar' %}
+                   <span class="text-emerald-500 font-bold text-xs">Terverifikasi</span>
+               {% else %}
+                   <span class="text-slate-400 font-bold text-xs">-</span>
+               {% endif %}
             </td>
             {% endif %}
           </tr>

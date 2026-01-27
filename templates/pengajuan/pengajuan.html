@@ -110,6 +110,9 @@
               <div class="text-right lg:text-left">
                 <p class="text-sm font-black text-emerald-600 tracking-tight">Rp {{ '{:,.0f}'.format(p.jumlah_pinjaman) }}</p>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ p.tenor }} Bulan Masa Tenor</p>
+                {% if p.status == 'disetujui' %}
+                  <p class="text-[10px] font-bold text-amber-500 uppercase tracking-tighter mt-1">Sisa: Rp {{ '{:,.0f}'.format(p.sisa_tagihan) }}</p>
+                {% endif %}
               </div>
             </td>
             <td class="px-6 py-4" data-label="Tanggal">

@@ -150,3 +150,35 @@ def view(dokumen_id):
 
     return send_from_directory(file_path, filename, as_attachment=False)
 
+
+@bp.route('/verifikasi/<int:dokumen_id>', methods=['POST'])
+@login_required
+def verifikasi(dokumen_id):
+    """Verifikasi dokumen oleh admin"""
+    if current_user.role != 'admin':
+        flash('Akses ditolak.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    dokumen = Dokumen.query.get_or_404(dokumen_id)
+    dokumen.status = 'valid'
+    db.session.commit()
+    
+    flash(f'Dokumen {dokumen.jenis_dokumen_display} berhasil diverifikasi.', 'success')
+    return redirect(request.referrer or url_for('dashboard.index'))
+
+
+@bp.route('/tolak/<int:dokumen_id>', methods=['POST'])
+@login_required
+def tolak(dokumen_id):
+    """Tolak dokumen oleh admin"""
+    if current_user.role != 'admin':
+        flash('Akses ditolak.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    dokumen = Dokumen.query.get_or_404(dokumen_id)
+    dokumen.status = 'ditolak'
+    db.session.commit()
+    
+    flash(f'Dokumen {dokumen.jenis_dokumen_display} ditolak.', 'warning')
+    return redirect(request.referrer or url_for('dashboard.index'))
+

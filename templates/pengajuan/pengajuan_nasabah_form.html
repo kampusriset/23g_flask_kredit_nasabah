@@ -65,18 +65,108 @@
         {% endif %}
       </div>
 
-      <!-- Upload KTP -->
+       <!-- Rentang Gaji -->
       <div class="space-y-1">
-        {{ form.foto_ktp.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
-        {% if form.foto_ktp.errors %}
-          {{ form.foto_ktp(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-red-100 file:text-red-700 hover:file:bg-red-200') }}
+        {{ form.rentang_gaji.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+        {% if form.rentang_gaji.errors %}
+          {{ form.rentang_gaji(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900') }}
           <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
-            {% for e in form.foto_ktp.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+            {% for e in form.rentang_gaji.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
           </div>
         {% else %}
-          {{ form.foto_ktp(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-navy-50 file:text-navy-700 hover:file:bg-navy-100') }}
+           {{ form.rentang_gaji(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700') }}
         {% endif %}
-        <p class="text-[10px] text-slate-400 font-medium ml-1">Format: JPG, PNG (Max. 2MB)</p>
+      </div>
+
+      <div class="space-y-4 pt-4 border-t border-slate-50">
+          <p class="text-sm font-black text-slate-800 tracking-tight mb-2">Dokumen Persyaratan</p>
+          
+          <!-- Upload KTP -->
+          <div class="space-y-1">
+            {{ form.foto_ktp.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+            {{ form.foto_ktp(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-sm font-semibold text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-navy-50 file:text-navy-700 hover:file:bg-navy-100') }}
+            <p class="text-[10px] text-slate-400 font-medium ml-1">KTP Asli. Format: JPG, PNG.</p>
+          </div>
+
+          <!-- Upload KK -->
+          <div class="space-y-1">
+            {{ form.foto_kk.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+            {{ form.foto_kk(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-sm font-semibold text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-navy-50 file:text-navy-700 hover:file:bg-navy-100') }}
+            <p class="text-[10px] text-slate-400 font-medium ml-1">Kartu Keluarga. Format: JPG, PNG, PDF.</p>
+          </div>
+
+          <!-- Tempat Kerja -->
+          <div class="space-y-1">
+            {{ form.tempat_kerja.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+            {% if form.tempat_kerja.errors %}
+              {{ form.tempat_kerja(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 placeholder:text-red-300') }}
+              <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+                {% for e in form.tempat_kerja.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+              </div>
+            {% else %}
+               {{ form.tempat_kerja(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700 placeholder:text-slate-400', placeholder='Nama Instansi / Perusahaan') }}
+            {% endif %}
+          </div>
+
+          <!-- Posisi Pekerjaan -->
+          <div class="space-y-1">
+            {{ form.posisi_pekerjaan.label(class_='text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1') }}
+            {% if form.posisi_pekerjaan.errors %}
+              {{ form.posisi_pekerjaan(class_='w-full px-4 py-3 bg-red-50 border border-red-200 rounded-xl focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all text-sm font-semibold text-red-900 placeholder:text-red-300') }}
+              <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+                {% for e in form.posisi_pekerjaan.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+              </div>
+            {% else %}
+               {{ form.posisi_pekerjaan(class_='w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-gold-500/20 focus:bg-white transition-all text-sm font-semibold text-slate-700') }}
+            {% endif %}
+          </div>
+
+          <!-- Foto Selfie Camera UI -->
+          <div class="space-y-1">
+            <label class="text-[10px] font-black uppercase tracking-[2px] text-slate-400 ml-1">Foto Selfie (Wajib)</label>
+            
+            <div class="relative bg-slate-900 rounded-2xl overflow-hidden aspect-[3/4] md:aspect-video shadow-lg group">
+                <!-- Video Element -->
+                <video id="video" autoplay playsinline class="w-full h-full object-cover transform scale-x-[-1]"></video>
+                
+                <!-- Canvas for Capture (Hidden) -->
+                <canvas id="canvas" class="hidden"></canvas>
+                
+                <!-- Captured Photo Preview -->
+                <img id="photo-preview" class="absolute inset-0 w-full h-full object-cover hidden transform scale-x-[-1]" alt="Preview">
+
+                <!-- Face Guide Overlay -->
+                <div id="guide-overlay" class="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    <div class="w-48 h-64 border-4 border-white/50 border-dashed rounded-[50%] animate-pulse"></div>
+                    <p class="absolute bottom-4 text-white/80 text-xs font-bold bg-black/50 px-3 py-1 rounded-full">Paskan wajah di area ini</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-center justify-center gap-4">
+                    <button type="button" id="start-camera" class="px-4 py-2 bg-slate-700/80 hover:bg-slate-600 text-white rounded-full text-xs font-bold transition-all backdrop-blur-sm">
+                        <i class="bi bi-camera-video-fill"></i> Buka Kamera
+                    </button>
+                    <button type="button" id="capture-btn" class="w-12 h-12 rounded-full bg-white border-4 border-slate-200 flex items-center justify-center text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-transform active:scale-95" disabled>
+                        <i class="bi bi-circle-fill text-2xl text-emerald-500"></i>
+                    </button>
+                    <button type="button" id="retake-btn" class="px-4 py-2 bg-red-500/80 hover:bg-red-600 text-white rounded-full text-xs font-bold transition-all backdrop-blur-sm hidden">
+                        <i class="bi bi-arrow-counterclockwise"></i> Ulang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hidden File Input -->
+            <div class="hidden">
+                 {{ form.foto_selfie(id="foto_selfie_input") }}
+            </div>
+            
+            {% if form.foto_selfie.errors %}
+              <div class="text-red-500 text-xs font-bold mt-1 ml-1 flex items-center gap-1">
+                {% for e in form.foto_selfie.errors %}<i class="bi bi-exclamation-circle-fill"></i> {{ e }}{% endfor %}
+              </div>
+            {% endif %}
+            <p class="text-[10px] text-slate-400 font-medium ml-1">Pastikan wajah terlihat jelas dan sesuai panduan.</p>
+          </div>
       </div>
 
       <!-- Buttons -->
@@ -84,7 +174,7 @@
         <a href="{{ url_for('dashboard.index') }}" class="flex-1 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all text-sm text-center">
           Batal
         </a>
-        <button type="submit" class="flex-[2] px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-sm flex items-center justify-center gap-2">
+        <button type="submit" id="submit-btn" class="flex-[2] px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-sm flex items-center justify-center gap-2">
           <i class="bi bi-send-fill"></i>
           Ajukan Sekarang
         </button>
@@ -92,6 +182,85 @@
     </form>
   </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const photoPreview = document.getElementById('photo-preview');
+        const startBtn = document.getElementById('start-camera');
+        const captureBtn = document.getElementById('capture-btn');
+        const retakeBtn = document.getElementById('retake-btn');
+        const fileInput = document.getElementById('foto_selfie_input');
+        const guideOverlay = document.getElementById('guide-overlay');
+        let stream = null;
+
+        // Start Camera
+        startBtn.addEventListener('click', async () => {
+             try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                video.srcObject = stream;
+                startBtn.classList.add('hidden');
+                captureBtn.disabled = false;
+                guideOverlay.classList.remove('hidden');
+            } catch (err) {
+                console.error("Error accessing camera: ", err);
+                alert("Gagal mengakses kamera. Pastikan izin kamera diberikan.");
+            }
+        });
+
+        // Capture Photo
+        captureBtn.addEventListener('click', () => {
+            if (!stream) return;
+
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert to blob and file
+            canvas.toBlob(blob => {
+                const file = new File([blob], "selfie.jpg", { type: "image/jpeg" });
+                
+                // Create DataTransfer to set input files
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+
+                // Show preview
+                photoPreview.src = canvas.toDataURL('image/jpeg');
+                photoPreview.classList.remove('hidden');
+                video.classList.add('hidden');
+                
+                // UI updates
+                captureBtn.classList.add('hidden');
+                retakeBtn.classList.remove('hidden');
+                guideOverlay.classList.add('hidden');
+
+                // Stop stream
+                stream.getTracks().forEach(track => track.stop());
+            }, 'image/jpeg', 0.8);
+        });
+
+        // Retake Photo
+        retakeBtn.addEventListener('click', () => {
+             photoPreview.classList.add('hidden');
+             video.classList.remove('hidden');
+             retakeBtn.classList.add('hidden');
+             captureBtn.classList.remove('hidden');
+             captureBtn.disabled = false;
+             guideOverlay.classList.remove('hidden');
+             
+             // Clear input
+             fileInput.value = '';
+
+             // Restart camera
+             startBtn.click();
+        });
+    });
+</script>
 {% endblock %}
 
 

@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, Response
+from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, Response, request, current_app
+import os
+from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
 from .. import db
 from ..models.pengajuan import Pengajuan, Pembayaran
@@ -87,23 +89,94 @@ def konfirmasi_pembayaran(pembayaran_id):
     """Mencatat pembayaran yang sudah dilakukan setelah konfirmasi"""
     pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
 
+    # Handle Upload Bukti Bayar
+    if 'bukti_bayar' in request.files:
+        file = request.files['bukti_bayar']
+        if file and file.filename != '':
+            upload_dir = os.path.join(current_app.root_path, 'static', 'uploads', 'pembayaran')
+            os.makedirs(upload_dir, exist_ok=True)
+
+            filename = secure_filename(file.filename)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"bukti_{pembayaran.id}_{timestamp}_{filename}"
+            
+            file_path = os.path.join(upload_dir, filename)
+            file.save(file_path)
+            
+            pembayaran.bukti_bayar = f"uploads/pembayaran/{filename}"
+
     # Simpan status pembayaran
-    pembayaran.status = 'sudah_bayar'
+    # Jika ada bukti bayar, status menjadi menunggu verifikasi
+    pembayaran.status = 'menunggu_verifikasi'
     pembayaran.tanggal_bayar = datetime.now()
 
-    # Reset denda jika ada
-    pembayaran.denda = 0
+    # Reset denda jika ada (sementara hitung 0 dulu sampai diversifikasi)
+    # p.denda = 0  # Denda tetap tersimpan historynya, nanti admin yang validasi final
+
+    db.session.commit()
+
+    flash(f'Bukti pembayaran berhasil diupload. Mohon tunggu verifikasi admin.', 'success')
+    return redirect(url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pembayaran.pengajuan_id))
+
+@bp.route('/verifikasi/<int:pembayaran_id>', methods=['POST'])
+@login_required
+def verifikasi_pembayaran(pembayaran_id):
+    """Verifikasi pembayaran oleh admin"""
+    if current_user.role != 'admin':
+        flash('Akses ditolak.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
+    if pembayaran.status != 'menunggu_verifikasi':
+        flash('Hanya pembayaran dengan status menunggu verifikasi yang dapat diverifikasi.', 'danger')
+        return redirect(url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pembayaran.pengajuan_id))
+
+    pembayaran.status = 'sudah_bayar'
+    pembayaran.denda = 0 # Reset denda jika diverifikasi
 
     # Check if all payments are completed
     pengajuan = pembayaran.pengajuan
     all_payments = Pembayaran.query.filter_by(pengajuan_id=pengajuan.id).all()
-    if all(p.status == 'sudah_bayar' for p in all_payments):
+    # Note: current payment is already updated in session session but not committed, 
+    # so we can check logical state. 
+    # But checking DB state directly requires care.
+    # Since we set pembayaran.status above, and it shares session, checking objects works.
+    
+    # Check completeness
+    all_lunas = True
+    for p in all_payments:
+        if p.id == pembayaran.id:
+            if p.status != 'sudah_bayar': all_lunas = False # Should be 'sudah_bayar' as set above
+        elif p.status != 'sudah_bayar':
+            all_lunas = False
+            
+    if all_lunas:
         pengajuan.status = 'lunas'
         db.session.add(pengajuan)
 
     db.session.commit()
+    flash('Pembayaran berhasil diverifikasi.', 'success')
+    return redirect(url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pembayaran.pengajuan_id))
 
-    flash(f'Pembayaran bulan ke-{pembayaran.bulan_ke} berhasil diproses dan dicatat.', 'success')
+@bp.route('/tolak/<int:pembayaran_id>', methods=['POST'])
+@login_required
+def tolak_pembayaran(pembayaran_id):
+    """Tolak bukti pembayaran oleh admin"""
+    if current_user.role != 'admin':
+        flash('Akses ditolak.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    pembayaran = Pembayaran.query.get_or_404(pembayaran_id)
+    if pembayaran.status != 'menunggu_verifikasi':
+        flash('Hanya pembayaran dengan status menunggu verifikasi yang dapat ditolak.', 'danger')
+        return redirect(url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pembayaran.pengajuan_id))
+
+    pembayaran.status = 'belum_bayar'
+    # Optional: Delete uploaded file logic here if needed
+    pembayaran.bukti_bayar = None # Remove reference
+
+    db.session.commit()
+    flash('Bukti pembayaran ditolak. Status kembali menjadi belum bayar.', 'warning')
     return redirect(url_for('pembayaran.jadwal_pembayaran', pengajuan_id=pembayaran.pengajuan_id))
 
 @bp.route('/api/update_denda')

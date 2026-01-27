@@ -301,43 +301,68 @@ def ajukan():
             flash('Anda masih memiliki pembayaran yang belum lunas. Harap selesaikan semua pembayaran sebelum mengajukan kredit baru.', 'danger')
             return redirect(url_for('dashboard.index'))
 
+        # Validasi limit berdasarkan estimasi pendapatan dari rentang yang dipilih
+        # Ambil nilai bawah dari rentang gaji sebagai patokan aman
+        income_lower_bound = float(form.rentang_gaji.data)
+        
+        # Hitung estimasi angsuran
+        bunga_per_bulan = 0.02
+        total_pinjaman_dengan_bunga = form.jumlah_pinjaman.data * (1 + (bunga_per_bulan * form.tenor.data))
+        estimasi_angsuran = total_pinjaman_dengan_bunga / form.tenor.data
+        limit_angsuran = income_lower_bound * 0.3
+
+        if estimasi_angsuran > limit_angsuran:
+            flash(f'Pengajuan ditolak. Estimasi angsuran (Rp {estimasi_angsuran:,.0f}) melebihi 30% dari batas bawah pendapatan yang Anda pilih (Limit: Rp {limit_angsuran:,.0f}). Harap kurangi jumlah pinjaman atau perpanjang tenor.', 'danger')
+            return render_template('pengajuan/pengajuan_nasabah_form.html', form=form)
+
+        # Update penghasilan nasabah jika berbeda (opsional, untuk data terbaru)
+        if nasabah.penghasilan != income_lower_bound:
+             nasabah.penghasilan = income_lower_bound
+             db.session.add(nasabah)
+        
+        # Gabungkan Tempat Kerja dan Posisi ke Tujuan Pinjaman (Temporary solution to avoid schema change)
+        tujuan_lengkap = f"{form.tujuan.data}\n(Tempat Kerja: {form.tempat_kerja.data}, Posisi: {form.posisi_pekerjaan.data})"
+
         pengajuan = Pengajuan(
             nasabah_id=nasabah.id,
             jumlah_pinjaman=form.jumlah_pinjaman.data,
             tenor=form.tenor.data,
-            tujuan=form.tujuan.data
+            tujuan=tujuan_lengkap
         )
         db.session.add(pengajuan)
         db.session.commit()
 
-        # Handle KTP upload
-        if form.foto_ktp.data:
-            # Create upload directory if not exists
-            upload_dir = os.path.join(current_app.root_path, 'static', 'uploads', 'dokumen')
-            os.makedirs(upload_dir, exist_ok=True)
+        # Helper to process file upload
+        def save_document(file_storage, jenis, prefix):
+            if file_storage:
+                upload_dir = os.path.join(current_app.root_path, 'static', 'uploads', 'dokumen')
+                os.makedirs(upload_dir, exist_ok=True)
+                
+                filename = secure_filename(file_storage.filename)
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                filename = f"{prefix}_{pengajuan.id}_{timestamp}_{filename}"
+                
+                file_path = os.path.join(upload_dir, filename)
+                file_storage.save(file_path)
+                
+                dokumen = Dokumen(
+                    pengajuan_id=pengajuan.id,
+                    jenis_dokumen=jenis,
+                    nama_file=file_storage.filename,
+                    path_file=f"uploads/dokumen/{filename}",
+                    status='sudah_diupload',
+                    uploaded_by=current_user.id,
+                    uploaded_at=datetime.utcnow()
+                )
+                db.session.add(dokumen)
 
-            # Secure filename
-            filename = secure_filename(form.foto_ktp.data.filename)
-            # Add timestamp to avoid conflicts
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            filename = f"ktp_{pengajuan.id}_{timestamp}_{filename}"
-
-            # Save file
-            file_path = os.path.join(upload_dir, filename)
-            form.foto_ktp.data.save(file_path)
-
-            # Create dokumen record
-            dokumen = Dokumen(
-                pengajuan_id=pengajuan.id,
-                jenis_dokumen='ktp',
-                nama_file=form.foto_ktp.data.filename,  # original filename
-                path_file=f"uploads/dokumen/{filename}",  # relative path for web access
-                status='sudah_diupload',
-                uploaded_by=current_user.id,
-                uploaded_at=datetime.utcnow()
-            )
-            db.session.add(dokumen)
-            db.session.commit()
+        # Handle file uploads
+        save_document(form.foto_ktp.data, 'ktp', 'ktp')
+        save_document(form.foto_kk.data, 'kk', 'kk')
+        # save_document(form.foto_tempat_kerja.data, 'foto_tempat_kerja', 'kerja') # Removed
+        save_document(form.foto_selfie.data, 'foto_selfie', 'selfie')
+            
+        db.session.commit()
 
         flash('Pengajuan kredit berhasil diajukan. Silakan tunggu verifikasi dari petugas.', 'success')
         return redirect(url_for('dashboard.index'))

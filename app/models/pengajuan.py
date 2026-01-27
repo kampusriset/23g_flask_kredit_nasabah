@@ -41,6 +41,18 @@ class Pengajuan(db.Model):
             return 0
         return self.total_pinjaman_dengan_bunga / self.tenor
 
+    @property
+    def sisa_tagihan(self):
+        """Hitung total sisa tagihan (pokok + bunga + denda) yang belum dibayar"""
+        if not self.pembayaran:
+            return self.total_pinjaman_dengan_bunga if self.status == 'disetujui' else 0
+        
+        total_sisa = 0
+        for p in self.pembayaran:
+            if p.status != 'sudah_bayar':
+                total_sisa += (p.jumlah_bayar + p.denda)
+        return total_sisa
+
 
 class Pembayaran(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +61,8 @@ class Pembayaran(db.Model):
     jumlah_bayar = db.Column(db.Float, nullable=False)
     tanggal_jatuh_tempo = db.Column(db.Date, nullable=False)
     tanggal_bayar = db.Column(db.DateTime, nullable=True)
-    status = db.Column(db.String(50), default='belum_bayar')  # belum_bayar, sudah_bayar, terlambat
+    status = db.Column(db.String(50), default='belum_bayar')  # belum_bayar, menunggu_verifikasi, sudah_bayar, terlambat
+    bukti_bayar = db.Column(db.String(255), nullable=True)  # Path file bukti pembayaran
     denda = db.Column(db.Float, default=0)  # Denda keterlambatan
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -63,7 +76,7 @@ class Pembayaran(db.Model):
     @property
     def is_terlambat(self):
         """Check if payment is overdue"""
-        if self.status == 'sudah_bayar':
+        if self.status in ['sudah_bayar', 'menunggu_verifikasi']:
             return False
         today = datetime.now().date()
         return today > self.tanggal_jatuh_tempo

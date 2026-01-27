@@ -103,16 +103,43 @@
                   <h4 class="font-bold text-slate-800 text-sm">{{ dokumen.jenis_dokumen_display }}</h4>
                   <p class="text-xs text-slate-500 mt-0.5">{{ dokumen.nama_file }}</p>
                   
-                  {% if dokumen.status == 'sudah_diupload' %}
+                  {% if dokumen.status == 'valid' %}
                      <div class="mt-2 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
                       <i class="bi bi-check-circle-fill"></i>
-                      Terupload
+                      Valid / Terverifikasi
+                     </div>
+                  {% elif dokumen.status == 'ditolak' %}
+                     <div class="mt-2 flex items-center gap-1.5 text-xs font-bold text-red-600">
+                      <i class="bi bi-x-circle-fill"></i>
+                      Ditolak
+                     </div>
+                  {% elif dokumen.status == 'sudah_diupload' %}
+                     <div class="mt-2 flex items-center gap-1.5 text-xs font-bold text-blue-600">
+                      <i class="bi bi-info-circle-fill"></i>
+                      Menunggu Review
                      </div>
                   {% else %}
                      <div class="mt-2 flex items-center gap-1.5 text-xs font-bold text-amber-500">
                       <i class="bi bi-clock-fill"></i>
-                      Menunggu Upload
+                      Belum Upload
                      </div>
+                  {% endif %}
+
+                  {% if current_user.role == 'admin' and dokumen.status in ['sudah_diupload', 'ditolak'] %}
+                  <div class="flex gap-2 mt-3">
+                      <form action="{{ url_for('dokumen.verifikasi', dokumen_id=dokumen.id) }}" method="POST">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                          <button type="submit" class="px-3 py-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-lg text-[10px] font-bold transition-colors">
+                              Setujui
+                          </button>
+                      </form>
+                      <form action="{{ url_for('dokumen.tolak', dokumen_id=dokumen.id) }}" method="POST">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                          <button type="submit" class="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded-lg text-[10px] font-bold transition-colors">
+                              Tolak
+                          </button>
+                      </form>
+                  </div>
                   {% endif %}
                 </div>
              </div>

@@ -20,27 +20,37 @@ SIPINA adalah platform manajemen pembiayaan dan kredit nasabah modern berbasis w
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Flask (Python 3.11+)
-- **Database**: SQLite (Development) / MySQL Ready
-- **Frontend**: Tailwind CSS (CDN), Jinja2 Templates
-- **Icons**: Bootstrap Icons (Bi-Icons)
-- **Framework & Libraries**:
-  - Flask-Login (Authentication)
-  - Flask-SQLAlchemy (ORM)
-  - Flask-SocketIO (Realtime Chat)
-  - Flask-WTF (Form Handling & Validation)
-  - Chart.js (Data Visualization)
+### Backend (Server & Logika)
+
+- ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white) **Flask**: Framework utama (Python 3.11+).
+- ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white) **MySQL / SQLite**: Sistem penyimpanan data.
+- ![SQLAlchemy](https://img.shields.io/badge/sqlalchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white) **Flask-SQLAlchemy**: ORM Database.
+- ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101) **Flask-SocketIO**: Komunikasi realtime.
+
+### Frontend (Tampilan & Antarmuka)
+
+- ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) **Tailwind CSS**: Modern UI Styling.
+- ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black) **Jinja2**: Template Engine.
+- ![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white) **Chart.js**: Visualisasi statistik.
+- ![Bootstrap Icons](https://img.shields.io/badge/bootstrap%20icons-7952B3.svg?style=for-the-badge&logo=bootstrap&logoColor=white) **Bootstrap Icons**: Ikon vektor.
+
+### Utilitas & Keamanan
+
+- ![WTF](https://img.shields.io/badge/Flask--WTF-F7931E?style=for-the-badge&logo=flask&logoColor=white) **Flask-WTF**: Sistem formulir aman.
+- ![Login](https://img.shields.io/badge/Flask--Login-000000?style=for-the-badge&logo=flask&logoColor=white) **Flask-Login**: Manajemen otentikasi.
 
 ---
 
 ## 🔄 Pembaruan Terkini (Januari 2026 - Versi Terbaru)
 
+- **📝 Formulir Kredit Cerdas**: Transformasi total formulir pengajuan dengan input **Rentang Gaji** (dropdown) yang tervalidasi otomatis terhadap limit cicilan (Max 30%). Dilengkapi data pekerjaan detail (Nama Instansi & Posisi Jabatan) untuk analisis kredit yang lebih akurat.
+- **📸 Verifikasi Biometrik & Dokumen**: Integrasi fitur **Kamera Selfie Interaktif** di browser dengan panduan wajah dan validasi dokumen fisik (KTP, KK, Bukti Kerja) yang wajib diunggah untuk keamanan data.
+- **✅ Sistem Validasi Pembayaran**: Nasabah kini wajib mengunggah **Bukti Transfer/Screenshot** saat konfirmasi pembayaran. Status pembayaran otomatis menjadi _"Menunggu Verifikasi"_, memberikan kontrol penuh bagi Admin untuk memeriksa keaslian transaksi sebelum pelunasan.
+- **⚖️ Logika Review Bertingkat**: Admin memiliki akses untuk memverifikasi atau menolak **dokumen individual** dan **bukti pembayaran** secara spesifik, dengan notifikasi status yang jelas (Valid/Ditolak/Pending) pada sisi nasabah.
+- **🔔 Smart Notification System**: Penyaringan notifikasi berbasis peran (Role-Based). Nasabah hanya melihat aktivitas akun pribadinya sendiri, menjaga privasi data antar pengguna secara absolut.
 - **🌓 Ultra-Adaptive Dark Mode**: Implementasi sistem Mode Gelap yang komprehensif di seluruh interior aplikasi. Dilengkapi dengan _global CSS overrides_ untuk memastikan keterbacaan teks, kontras tabel, dan visibilitas badge status tetap optimal dalam kondisi cahaya rendah. Tema tersimpan secara permanen melalui _localStorage_.
 - **💀 Premium Skeleton State loading**: Integrasi pemuatan data berbasis _Skeleton Loader_ menggunakan sistem manager `SIPINA_Loading`. Memberikan pengalaman transisi data yang mulus (zero layout shift) pada dashboard dan sistem notifikasi, meningkatkan persepsi kecepatan aplikasi.
-- **💎 Refined Dark Glassmorphism**: Pengaplikasian efek _Frosted Glass_ yang lebih dalam pada kartu dashboard khusus untuk mode gelap, memberikan estetika visual yang modern dan eksklusif.
-- **✨ High-Contrast UI Overrides**: Optimalisasi elemen UI di seluruh modul (Daftar Pengajuan & Manajemen User) untuk mode gelap, termasuk pembaharuan otomatis warna input form, dropdown, dan penetrasi teks putih pada elemen-elemen berkontras rendah.
 - **🎨 Premium Landing Page Animations**: Implementasi animasi _scroll-triggered_ (staggered), efek shimmer pada kartu fitur, dan transisi navigasi yang responsif untuk kesan pertama yang memukau.
-- **💳 Payment Gateway Simulation**: Pilihan metode pembayaran modern (VA & QRIS) dengan instruksi interaktif untuk memudahkan simulasi transaksi cicilan nasabah.
 - **📱 Mobile-First UX Architecture**: Optimalisasi navigasi bawah (bottom-nav) dan transformasi tabel otomatis ke mode kartu pada perangkat mobile untuk penggunaan satu tangan yang lebih nyaman.
 
 ---
